@@ -1,0 +1,13 @@
+.env
+__pycache__/
+*.pyc
+.env
+.env.*
+.env.local
+.env.production
+venv/
+env/
+.venv/
+.DS_Store
+.vscode/
+.streamlit/
