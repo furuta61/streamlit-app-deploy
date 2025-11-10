@@ -200,9 +200,13 @@ def entry_direction(row4h) -> str:
         return "sell"
     return "hold"
 
-def build_order(symbol: str, row4h, decision: str, direction: str):
-    price = float(row4h["close"])
-    atr = float(row4h["atr"]) if not np.isnan(row4h["atr"]) else 0.0
+def build_order(symbol: str, row4h, decision: str, direction: str, price_override=None):
+    # price_override を優先して使う（テストや外部ソースから供給される価格）
+    if price_override is not None:
+        price = float(price_override)
+    else:
+        price = float(row4h["close"])
+    atr = float(row4h["atr"]) if not np.isnan(row4h.get("atr", np.nan)) else 0.0
 
     # WAITまたは方向不明ならIFDは空
     if decision == "WAIT" or direction == "hold":
@@ -345,7 +349,8 @@ def main():
             df = indicators(df)
             row4h = df.iloc[-1]
 
-            # For XAUUSD prefer TradingView price when CSV price looks anomalous (wrong scale/source)
+            # For XAUUSD decide price_to_use without modifying row4h (avoid SettingWithCopyWarning)
+            price_to_use = None
             if sym == "XAUUSD":
                 # Accept a few possible tradingview keys (some webhooks use different casings/aliases)
                 tvp = tv_prices.get("XAUUSD") or tv_prices.get("XAU") or tv_prices.get("GOLD")
@@ -358,23 +363,19 @@ def main():
                 # Reasonable bounds: gold in USD per troy oz typically between 300 and 5000.
                 if csv_price is None or csv_price < 300 or csv_price > 5000:
                     if tvp is not None:
-                        row4h["close"] = tvp
-                        row4h["open"] = tvp
-                        row4h["high"] = tvp
-                        row4h["low"] = tvp
+                        price_to_use = tvp
                         used_source = "tradingview"
                 else:
                     # Fallback: if CSV and TV differ by large percent (>20%), prefer TV
                     if tvp is not None:
                         try:
                             if abs(csv_price - tvp) / max(tvp, 1e-9) > 0.20:
-                                row4h["close"] = tvp
-                                row4h["open"] = tvp
-                                row4h["high"] = tvp
-                                row4h["low"] = tvp
+                                price_to_use = tvp
                                 used_source = "tradingview"
                         except Exception:
                             pass
+                if price_to_use is None:
+                    price_to_use = csv_price
                 # emit a short diagnostic so it's easier to trace in logs
                 print(f"[INFO] XAUUSD price selection: csv={csv_price} tv={tvp} -> used={used_source}", file=sys.stderr)
 
@@ -401,7 +402,7 @@ def main():
                 if direction == "hold" and decision != "WAIT":
                     decision = "WAIT"
 
-                od = build_order(sym, row4h, decision, direction)
+                od = build_order(sym, row4h, decision, direction, price_override=price_to_use)
                 orders.append(od)
 
         except Exception as e:
