@@ -12,6 +12,19 @@ if not api_key:
 
 client = OpenAI(api_key=api_key)
 
+# ======== API 状態チェック ==========
+def check_openai_status() -> str:
+    """OpenAI APIの状態を確認"""
+    try:
+        # 簡単なテストリクエスト
+        test_response = client.models.list()
+        if test_response:
+            return "🟢 OpenAI API Online"
+        else:
+            return "🔴 OpenAI API Error"
+    except Exception as e:
+        return f"🔴 OpenAI API Offline: {str(e)[:50]}"
+
 # ======== GPT Vision 価格抽出 ==========
 def extract_prices_gpt(image_bytes):
 
@@ -88,6 +101,17 @@ def make_ifd_table(symbol, entry, signal, direction):
 
 # ======== Streamlit UI ==========
 st.title("📈 CFD3_AutoSystem — IFD 自動生成")
+
+# サイドバーにAPI状態を表示
+with st.sidebar:
+    st.markdown("### 🔍 システム状態")
+    api_status = check_openai_status()
+    st.markdown(f"**{api_status}**")
+    st.markdown("---")
+    st.markdown("**使い方:**")
+    st.markdown("1. スクショをアップロード")
+    st.markdown("2. IFD生成ボタンをクリック")
+    st.markdown("3. 自動生成された表を確認")
 
 uploaded = st.file_uploader("スクショ画像をアップロード（PNG推奨）", type=["png", "jpg", "jpeg"])
 
