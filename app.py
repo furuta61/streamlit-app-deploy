@@ -117,6 +117,31 @@ uploaded = st.file_uploader("スクショ画像をアップロード（PNG推奨
 
 if uploaded:
     st.image(uploaded, caption="アップロードされたスクショ", use_column_width=True)
+    
+    # 各銘柄の方向とシグナルを選択
+    st.subheader("🎯 トレード設定")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown("**JP225**")
+        jp225_dir = st.selectbox("方向", ["buy", "sell"], key="jp225_dir", index=1)
+        jp225_sig = st.selectbox("シグナル", ["GO", "STRONG_GO"], key="jp225_sig", index=1)
+    
+    with col2:
+        st.markdown("**NAS100**")
+        nas100_dir = st.selectbox("方向", ["buy", "sell"], key="nas100_dir", index=0)
+        nas100_sig = st.selectbox("シグナル", ["GO", "STRONG_GO"], key="nas100_sig", index=0)
+    
+    with col3:
+        st.markdown("**GER40**")
+        ger40_dir = st.selectbox("方向", ["buy", "sell"], key="ger40_dir", index=1)
+        ger40_sig = st.selectbox("シグナル", ["GO", "STRONG_GO"], key="ger40_sig", index=1)
+    
+    with col4:
+        st.markdown("**XAUUSD**")
+        xauusd_dir = st.selectbox("方向", ["buy", "sell"], key="xauusd_dir", index=0)
+        xauusd_sig = st.selectbox("シグナル", ["GO", "STRONG_GO"], key="xauusd_sig", index=0)
 
     if st.button("IFD を生成する"):
         with st.spinner("GPT Vision が価格を解析中…"):
@@ -128,10 +153,10 @@ if uploaded:
         st.subheader("🧾 IFD テーブル（自動生成）")
 
         commands = [
-            ("JP225", "sell", "STRONG_GO"),
-            ("NAS100", "buy", "GO"),
-            ("GER40", "sell", "STRONG_GO"),
-            ("XAUUSD", "buy", "GO"),
+            ("JP225", jp225_dir, jp225_sig),
+            ("NAS100", nas100_dir, nas100_sig),
+            ("GER40", ger40_dir, ger40_sig),
+            ("XAUUSD", xauusd_dir, xauusd_sig),
         ]
 
         # 各銘柄テーブルをMarkdownで表示
