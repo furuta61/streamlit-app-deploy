@@ -4,14 +4,15 @@ import requests
 
 # --- Cloud / Local 両対応インポート ---
 try:
-    # 通常ローカル環境用
+    # ローカルで起動する場合
     from webhook_mail.main import analyze_image_with_ai
 except ModuleNotFoundError:
-    # Streamlit Cloud 環境用（ルートに移動してモジュール解決）
+    # Streamlit Cloud環境では親ディレクトリを検索パスに追加して再インポート
     current_dir = os.path.dirname(__file__)
-    parent_dir = os.path.abspath(os.path.join(current_dir, '..'))
+    parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
     sys.path.append(parent_dir)
-    from webhook_mail.main import analyze_image_with_ai
+    import webhook_mail.main as main
+    analyze_image_with_ai = main.analyze_image_with_ai
 
 """
 API接続先の決定ルール:
