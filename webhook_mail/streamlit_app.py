@@ -18,13 +18,19 @@ if USE_API:
 else:
     st.caption("Mode: Direct (Streamlitが直接AI解析とIFD生成)")
 
-    # 直呼び出し用のインポート準備（repo ルートをパスに追加）
-    repo_root = Path(__file__).resolve().parents[1]
-    if str(repo_root) not in sys.path:
-        sys.path.insert(0, str(repo_root))
-    # Vision解析とIFD生成を内部利用
-    from webhook_mail.main import analyze_image_with_ai  # type: ignore
-    import manual30_ifd  # type: ignore
+    # 直呼び出し用のインポート準備
+    # Streamlit Cloud は Main file path (webhook_mail/streamlit_app.py) を起点とするため
+    # 同階層の main.py を直接インポート
+    try:
+        from main import analyze_image_with_ai  # type: ignore
+        import manual30_ifd  # type: ignore
+    except ImportError:
+        # ローカル実行時は親ディレクトリからインポート
+        repo_root = Path(__file__).resolve().parents[1]
+        if str(repo_root) not in sys.path:
+            sys.path.insert(0, str(repo_root))
+        from webhook_mail.main import analyze_image_with_ai  # type: ignore
+        import manual30_ifd  # type: ignore
 
 st.set_page_config(page_title="CFD3_AutoSystem IFD 自動生成（テスト版）")
 
