@@ -1,0 +1,24 @@
+{
+  "30": {
+    "JP225": {
+      "error": "Invalid comparison between dtype=datetime64[ns] and date"
+    },
+    "GOLD": {
+      "error": "Invalid comparison between dtype=datetime64[ns] and date"
+    },
+    "TOPIX": {
+      "error": "Invalid comparison between dtype=datetime64[ns] and date"
+    }
+  },
+  "60": {
+    "JP225": {
+      "error": "Invalid comparison between dtype=datetime64[ns] and date"
+    },
+    "GOLD": {
+      "error": "Invalid comparison between dtype=datetime64[ns] and date"
+    },
+    "TOPIX": {
+      "error": "Invalid comparison between dtype=datetime64[ns] and date"
+    }
+  }
+}

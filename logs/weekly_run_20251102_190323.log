@@ -1,0 +1,4 @@
+[2025年 11月 2日 日曜日 19時03分23秒 JST] Starting weekly_events_update.py (strict)
+RUN START 2025-11-02T19:03:24.728843
+2025-11-02 19:03:24,778 ERROR Local file not found: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/scripts/events.csv
+[2025年 11月 2日 日曜日 19時03分24秒 JST] Finished weekly_events_update.py exit=0

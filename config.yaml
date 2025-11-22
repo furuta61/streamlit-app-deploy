@@ -1,0 +1,8 @@
+data_path: "./data/"
+output_path: "./output/"
+symbols:
+  JP225: "FOREXCOM:JP225"
+  NAS100: "FOREXCOM:NAS100"
+  XAUUSD: "TVC:GOLD"
+  GER40: "FOREXCOM:GER40"
+# yfinance で直接取得できない場合は get_data.py の mapping を編集してください

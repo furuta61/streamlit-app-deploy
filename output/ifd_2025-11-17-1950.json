@@ -1,0 +1,16 @@
+{
+  "run_id": "2025-11-17-1950",
+  "capital_jpy": 900000,
+  "per_lot_allocation_jpy": 300000,
+  "trade_mode": "DAY30M",
+  "news_lock": false,
+  "orders": [],
+  "display_meta": {
+    "scale": {
+      "XAUUSD": 100.0
+    },
+    "decimals": {
+      "XAUUSD": 1
+    }
+  }
+}

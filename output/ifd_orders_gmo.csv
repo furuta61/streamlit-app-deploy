@@ -1,0 +1,7 @@
+Symbol,Side,OrderType,Entry,TP,SL,Qty,Comment
+JP225,買,IFD,51200,52400,50500,1,decision=STRONG_GO;rating=None
+NQ100,買,IFD,17900,18258,17721,1,decision=GO;rating=4.8
+XAUUSD,買,IFD,2375.50,2411.13,2356.50,0.1,decision=GO;rating=4.8
+GER40,買,IFD,18450,18782,18284,1,decision=GO;rating=4.8
+XAGUSD,買,IFD,28.42,29.13,28.08,1,decision=GO;rating=4.8
+NGAS,買,IFD,3.020,3.111,2.975,1,decision=GO;rating=4.8

@@ -1,0 +1,67 @@
+{
+  "run_id": "2025-11-17-2213",
+  "capital_jpy": 900000,
+  "per_lot_allocation_jpy": 300000,
+  "trade_mode": "DAY6H",
+  "news_lock": false,
+  "orders": [
+    {
+      "instrument": "GER40",
+      "direction": "sell",
+      "signal_rating": 6,
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_order": {
+        "type": "market",
+        "price": 23876.6
+      },
+      "order_type": "成行",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 23851.6
+            },
+            "stop_loss": {
+              "price": 23884.9
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 23839.1
+            },
+            "stop_loss": {
+              "price": 23884.9
+            },
+            "trailing_stop": {
+              "activate_after": 23839.1,
+              "distance": 175.9
+            }
+          }
+        }
+      ],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      },
+      "display_prices": {
+        "entry_price": 23876.6,
+        "tp1": 23851.6,
+        "tp2": 23839.1,
+        "sl": 23884.9
+      }
+    }
+  ],
+  "display_meta": {
+    "scale": {
+      "XAUUSD": 100.0
+    },
+    "decimals": {
+      "XAUUSD": 1
+    }
+  }
+}

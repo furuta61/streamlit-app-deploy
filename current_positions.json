@@ -1,0 +1,34 @@
+[
+  {
+    "symbol": "DE40",
+    "direction": "buy",
+    "entry_time": "2025-11-04T13:00:00",
+    "entry_price": 24000,
+    "lots": 5,
+    "note": "手動登録: 13時にSTRONG_GOで買いエントリー、ロット減らした"
+  },
+  {
+    "symbol": "NASDAQ_MINI",
+    "direction": "buy",
+    "entry_time": "2025-11-04T13:00:00",
+    "entry_price": 26000,
+    "lots": 5,
+    "note": "手動登録: ロット数を1口減らした"
+  },
+  {
+    "symbol": "JP225",
+    "direction": "buy",
+    "entry_time": "2025-11-04T13:00:00",
+    "entry_price": 39500,
+    "lots": 3,
+    "note": "手動登録: 様子見状態"
+  },
+  {
+    "symbol": "GOLD_SPOT",
+    "direction": "buy",
+    "entry_time": "2025-11-04T13:15:56",
+    "entry_price": 4000.5,
+    "lots": 6,
+    "note": "自動追跡: 2025-11-04 13:15にSTRONG_GO通知"
+  }
+]

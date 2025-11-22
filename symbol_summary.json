@@ -1,0 +1,37 @@
+{
+  "AAPL": {
+    "count": 60,
+    "used_mode": "yfinance",
+    "mismatch_mean": 0.8419943012482438
+  },
+  "DE40": {
+    "count": 720,
+    "used_mode": "twelve",
+    "mismatch_mean": null
+  },
+  "GOLD": {
+    "count": 50,
+    "used_mode": "yfinance",
+    "mismatch_mean": 0.9705765653566653
+  },
+  "JP225": {
+    "count": 59,
+    "used_mode": "yfinance",
+    "mismatch_mean": 0.9981963596617034
+  },
+  "MSFT": {
+    "count": 60,
+    "used_mode": "yfinance",
+    "mismatch_mean": 0.9260346455638577
+  },
+  "NASDAQ": {
+    "count": 60,
+    "used_mode": "yfinance",
+    "mismatch_mean": 0.9915665984099822
+  },
+  "SP500": {
+    "count": 720,
+    "used_mode": "twelve",
+    "mismatch_mean": null
+  }
+}

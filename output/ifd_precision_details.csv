@@ -1,0 +1,5 @@
+instrument,decision,csv,sample_index,entry,tp,sl,tp_index,sl_index,outcome
+JP225,GO,data/JP225_60.csv,80,50176.0,50186.0,49086.0,81.0,,WIN
+JP225,GO,data/JP225_60.csv,81,50176.0,50186.0,49086.0,,,NONE
+JP225,GO,data/JP225_60.csv,82,50176.0,50186.0,49086.0,,,NONE
+NAS100,GO,data/NAS100_60.csv,90,25828.0,25878.0,25382.0,,,NONE

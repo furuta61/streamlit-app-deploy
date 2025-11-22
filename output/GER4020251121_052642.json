@@ -1,0 +1,41 @@
+{
+  "run_id": "20251121_052642",
+  "trade_mode": "SYSTEM_4H",
+  "orders": [
+    {
+      "instrument": "GER40",
+      "direction": "buy",
+      "decision": "GO",
+      "lots": 4,
+      "entry_order": {
+        "type": "limit",
+        "price": 23200.0
+      },
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 23210.0
+            },
+            "stop_loss": {
+              "price": 23197.0
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 23215.0
+            },
+            "stop_loss": {
+              "price": 23197.0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "tp2_price": 23215.0
+}

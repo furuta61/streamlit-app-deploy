@@ -1,0 +1,16 @@
+=== AUTO RUN START 2025-10-28T05:45:45Z ===
+Using venv python: /Users/otomi/Desktop/CFD3_AutoSystem/.venv/bin/python
+2025-10-28 14:45:45 === get_data.py start ===
+2025-10-28 14:45:45 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-10-28 14:45:46 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=83
+2025-10-28 14:45:46 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-10-28 14:45:46 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-10-28 14:45:46 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-10-28 14:45:46 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-10-28 14:45:46 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-10-28 14:45:47 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=234
+2025-10-28 14:45:48 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=302
+2025-10-28 14:45:48 === get_data.py end ===
+Wrote: /Users/otomi/Desktop/CFD3_AutoSystem/output/entry_result.json, /Users/otomi/Desktop/CFD3_AutoSystem/output/entry_result.md
+✅ IFD提案を生成しました: ./output/ifd_proposals.json, ./output/ifd_proposals.md
+=== AUTO RUN END 2025-10-28T05:45:49Z ===

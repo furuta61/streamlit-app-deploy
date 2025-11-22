@@ -1,0 +1,28 @@
+# Streamlit用Dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# システムパッケージ
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Python依存関係
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt streamlit
+
+# アプリケーションコード
+COPY webhook_mail/streamlit_app.py webhook_mail/
+
+# Streamlit設定
+RUN mkdir -p ~/.streamlit
+RUN echo '[server]\nheadless = true\nport = 8501\nenableCORS = false\nenableXsrfProtection = false' > ~/.streamlit/config.toml
+
+# ヘルスチェック
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8501/_stcore/health || exit 1
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "webhook_mail/streamlit_app.py", "--server.address", "0.0.0.0"]

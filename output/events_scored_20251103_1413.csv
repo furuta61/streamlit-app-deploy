@@ -1,0 +1,4 @@
+﻿text,date,combined_score,signal,entry,TP,SL,entry_source,lot_size,risk_amount,auto_tp_applied,auto_tp_reason
+US NFP (Non-Farm Payrolls) - Strong Expected,2025-11-03 22:30:00,0.9,BUY,4012.4,5512.4,3262.4,GOLD_SPOT,6.0,50000.0,False,
+Fed Interest Rate Decision - Hawkish Stance,2025-11-07 03:00:00,0.85,BUY,4012.4,5512.4,3262.4,GOLD_SPOT,6.0,50000.0,False,
+Japan GDP Report - Better than Expected,2025-11-14 08:50:00,0.82,BUY,4012.4,4712.4,3662.4,GOLD_SPOT,4.0,50000.0,False,

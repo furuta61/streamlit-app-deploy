@@ -1,0 +1,12 @@
+{
+  "etf": "1321.T",
+  "index": "^N225",
+  "days": 243,
+  "mean_abs_pct": 2.675263362661589,
+  "max_abs_pct": 4.532564975957321,
+  "pearson_corr": 0.9986374327609818,
+  "decision": "use_high_accuracy",
+  "mean_threshold_pct": 0.5,
+  "max_threshold_pct": 1.5,
+  "timestamp": "2025-11-05T15:53:29.322276Z"
+}

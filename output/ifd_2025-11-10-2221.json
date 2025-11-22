@@ -1,0 +1,202 @@
+{
+  "run_id": "2025-11-10-2221",
+  "capital_jpy": 900000,
+  "per_lot_allocation_jpy": 300000,
+  "trade_mode": "DAY6H",
+  "news_lock": false,
+  "orders": [
+    {
+      "instrument": "JP225",
+      "direction": "buy",
+      "signal_rating": 6,
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_order": {
+        "type": "limit",
+        "price": 50176.4
+      },
+      "order_type": "指値",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 50815.6
+            },
+            "stop_loss": {
+              "price": 48844.7
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 51135.2
+            },
+            "stop_loss": {
+              "price": 48844.7
+            },
+            "trailing_stop": {
+              "activate_after": 51135.2,
+              "distance": 532.7
+            }
+          }
+        }
+      ],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      }
+    },
+    {
+      "instrument": "NAS100",
+      "direction": "buy",
+      "signal_rating": 6,
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_order": {
+        "type": "limit",
+        "price": 25828.3
+      },
+      "order_type": "指値",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 26086.0
+            },
+            "stop_loss": {
+              "price": 25291.3
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 26214.9
+            },
+            "stop_loss": {
+              "price": 25291.3
+            },
+            "trailing_stop": {
+              "activate_after": 26214.9,
+              "distance": 214.8
+            }
+          }
+        }
+      ],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      }
+    },
+    {
+      "instrument": "XAUUSD",
+      "direction": "hold",
+      "signal_rating": 2,
+      "decision": "WAIT",
+      "lots": 0,
+      "entry_order": {
+        "type": "-",
+        "price": 2375.5
+      },
+      "order_type": "-",
+      "ifd_legs": [],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      }
+    },
+    {
+      "instrument": "US30",
+      "direction": "buy",
+      "signal_rating": 6,
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_order": {
+        "type": "limit",
+        "price": 47147.0
+      },
+      "order_type": "指値",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 47266.6
+            },
+            "stop_loss": {
+              "price": 46897.8
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 47326.4
+            },
+            "stop_loss": {
+              "price": 46897.8
+            },
+            "trailing_stop": {
+              "activate_after": 47326.4,
+              "distance": 99.7
+            }
+          }
+        }
+      ],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      }
+    },
+    {
+      "instrument": "COPPER",
+      "direction": "buy",
+      "signal_rating": 6,
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_order": {
+        "type": "limit",
+        "price": 4.6869
+      },
+      "order_type": "指値",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 4.6994
+            },
+            "stop_loss": {
+              "price": 4.6608
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 4.7057
+            },
+            "stop_loss": {
+              "price": 4.6608
+            },
+            "trailing_stop": {
+              "activate_after": 4.7057,
+              "distance": 0.0105
+            }
+          }
+        }
+      ],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      }
+    }
+  ]
+}

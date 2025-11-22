@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cfd3.autosystem.daily</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/otomi/Desktop/CFD3_AutoSystem/.venv/bin/python3</string>
+    <string>/Users/otomi/Desktop/CFD3_AutoSystem/bin/daily_monitor.py</string>
+  </array>
+  <!-- Run every 5 minutes; the wrapper enforces the 07:00-00:45 window -->
+  <key>StartInterval</key>
+  <integer>300</integer>
+  <key>StandardOutPath</key>
+  <string>/Users/otomi/Desktop/CFD3_AutoSystem/logs/daily_run.out</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/otomi/Desktop/CFD3_AutoSystem/logs/daily_run.err</string>
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>

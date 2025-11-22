@@ -1,0 +1,294 @@
+{
+  "e3c6b163ca60f9b61ce48a9e1f1375df": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "cbcf9e59b19337190f2c4a5b0602c7c2": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "80797479cf0dee7c8a2c277602caf0ae": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "d17ef94449f885996eac613597893a15": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "f40bd5c4a8592810012ff8d14e3a1578": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "183e208ff845cfad94d119e937a44a6e": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "c4b2d38170a27e710c307f4ed9532224": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "7e891aaacba4aa8253b422249eb5b49f": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "6ff8831c9b443b02517b715c140d67dc": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "fe75975d7ad004b5edbfd50ee04a7968": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "38ebe8c530c47cee538f6f9c2c52f2c3": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "18ea0096dea4161fd9577a0e4e8e46bb": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "a1e994d56f8fba2182670405b83c8639": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "11a20bb334b135fc3fd3469df77f00ae": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "6aefd62d392274433927d863717ed54c": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "df9e15dd665500cde6e0336252451aa5": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "0dbfcdf7defe09214a4977f513d31e7c": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "629878264e3041f9d1031c20e311fa19": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "f01b3d134085084a623fdbda5b8db1b8": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "421ac5548ea59a770742ae182978fffb": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "140459571461c7959fa3ceb5cf15e348": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "f72142cfd75db4beb91465a6576b63ae": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "534e699e52dd3bb8fc01f1b6ed889fb6": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "1ab62df14615e7619bdcbca24640c682": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "efa9f5aec875ad4288d95195b2b70ee9": {
+    "processed_at": 0,
+    "legacy": true
+  },
+  "JP225::51200.00::STRONG_GO": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-07T01:00:00Z",
+    "price": 51200.0,
+    "signal": "STRONG_GO",
+    "processed_at": 1763131938.461403,
+    "reason": "stale"
+  },
+  "JP225::51200.00::GO": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T12:27:05Z",
+    "price": 51200.0,
+    "signal": "GO",
+    "processed_at": 1763131938.4561658,
+    "reason": "stale"
+  },
+  "XAUUSD::2375.50::GO": {
+    "symbol": "XAUUSD",
+    "timestamp": "2025-11-06T12:27:06Z",
+    "price": 2375.5,
+    "signal": "GO",
+    "processed_at": 1763131938.4565,
+    "reason": "stale"
+  },
+  "XAGUSD::28.42::GO": {
+    "symbol": "XAGUSD",
+    "timestamp": "2025-11-06T12:27:06Z",
+    "price": 28.42,
+    "signal": "GO",
+    "processed_at": 1763131938.4567418,
+    "reason": "stale"
+  },
+  "NGAS::3.02::GO": {
+    "symbol": "NGAS",
+    "timestamp": "2025-11-06T12:27:07Z",
+    "price": 3.02,
+    "signal": "GO",
+    "processed_at": 1763131938.457726,
+    "reason": "stale"
+  },
+  "GER40::18450.00::GO": {
+    "symbol": "GER40",
+    "timestamp": "2025-11-06T12:27:08Z",
+    "price": 18450.0,
+    "signal": "GO",
+    "processed_at": 1763131938.457941,
+    "reason": "stale"
+  },
+  "NAS100::18800.00::GO": {
+    "symbol": "NAS100",
+    "timestamp": "2025-11-06T12:27:08Z",
+    "price": 18800.0,
+    "signal": "GO",
+    "processed_at": 1763131938.4581618,
+    "reason": "stale"
+  },
+  "NQ100::17900.00::STRONG_GO": {
+    "symbol": "NQ100",
+    "timestamp": "2025-11-06T13:30:12Z",
+    "price": 17900.0,
+    "signal": "STRONG_GO",
+    "processed_at": 1763131938.4598668,
+    "reason": "stale"
+  },
+  "XAUUSD::2375.50::STRONG_GO": {
+    "symbol": "XAUUSD",
+    "timestamp": "2025-11-06T13:15:00Z",
+    "price": 2375.5,
+    "signal": "STRONG_GO",
+    "processed_at": 1763131938.4612212,
+    "reason": "stale"
+  },
+  "XAGUSD::28.42::STRONG_GO": {
+    "symbol": "XAGUSD",
+    "timestamp": "2025-11-06T13:30:13Z",
+    "price": 28.42,
+    "signal": "STRONG_GO",
+    "processed_at": 1763131938.460258,
+    "reason": "stale"
+  },
+  "NGAS::3.02::STRONG_GO": {
+    "symbol": "NGAS",
+    "timestamp": "2025-11-06T13:30:14Z",
+    "price": 3.02,
+    "signal": "STRONG_GO",
+    "processed_at": 1763131938.46046,
+    "reason": "stale"
+  },
+  "GER40::18450.00::STRONG_GO": {
+    "symbol": "GER40",
+    "timestamp": "2025-11-06T13:30:15Z",
+    "price": 18450.0,
+    "signal": "STRONG_GO",
+    "processed_at": 1763131938.4606578,
+    "reason": "stale"
+  },
+  "JP225::NA::STRONG_GO": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-10T06:36:14.206636",
+    "price": null,
+    "signal": "STRONG_GO",
+    "processed_at": 1763131938.461885,
+    "reason": "stale"
+  },
+  "US30::47147.00::None": {
+    "symbol": "US30",
+    "timestamp": "2025-11-10T09:10:09.120075",
+    "price": 47147.0,
+    "signal": null,
+    "processed_at": 1763131938.462075,
+    "reason": "stale"
+  },
+  "JP225::50176.40::TEST": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-11T00:00:00Z",
+    "price": 50176.4,
+    "signal": "TEST",
+    "processed_at": 1763131938.462262,
+    "reason": "stale"
+  },
+  "XAUUSD::4199.00::STRONG_GO": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763109219,
+    "price": 4199.0,
+    "signal": "STRONG_GO",
+    "processed_at": 1763131938.462858,
+    "reason": "stale"
+  },
+  "XAUUSD::4200.00::STRONG_GO": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763122116,
+    "price": 4200.0,
+    "signal": "STRONG_GO",
+    "processed_at": 1763132118.710318,
+    "reason": "stale"
+  },
+  "3578931a0d5b373f4d00b505e4f4b21a5ab7b4f5b747d7d768a2ea780fb77972": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763112669.71515,
+    "price": 4200.0,
+    "signal": "STRONG_GO",
+    "processed_at": 1763132675.087442,
+    "reason": "stale"
+  },
+  "64fb111b3288d0a7341e744c74fbbd58763a72720cdcbfe83c1d6f9f15b629be": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763132492.865752,
+    "price": 4076.185,
+    "signal": "STRONG_GO",
+    "processed_at": 1763132536.09061,
+    "reason": "duplicate_guard"
+  },
+  "cb99a0a066d09bc58f8a4a247794fc0afe676cb37d773304875931d7f8132471": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763132670.71515,
+    "price": 4071.56,
+    "signal": "STRONG_GO",
+    "processed_at": 1763132675.086417,
+    "reason": "duplicate_guard"
+  },
+  "6f1b9122f202aa7fa562d119b6f702532781b6fb0b72eb744828eca0c10106f5": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763132727.073004,
+    "price": 4074.47,
+    "signal": "STRONG_GO",
+    "processed_at": 1763132729.844924,
+    "reason": "suppressed"
+  },
+  "2138627527bf51062320538c6b0b0f08b49f6bb0bdc1030a5cbd5e93c702db0a": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763132875.072869,
+    "price": 4071.835,
+    "signal": "STRONG_GO",
+    "processed_at": 1763132882.3355892,
+    "reason": "ifd_written"
+  },
+  "e3fe4b8b9fff236597a4a71c950efa9d4c9ac8f37ea928719846ac928d3a160a": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763134001.0,
+    "price": 4076.765,
+    "signal": "STRONG_GO",
+    "processed_at": 1763133287.721782,
+    "reason": "suppressed"
+  },
+  "e984ea3d25c1e025ac78b94262292482f243b035c5b5b0e67279bb6f5f9e2e1d": {
+    "symbol": "XAUUSD",
+    "timestamp": 1600000000.0,
+    "price": 3500.0,
+    "signal": "WAIT",
+    "processed_at": 1763133287.7231512,
+    "reason": "stale"
+  }
+}

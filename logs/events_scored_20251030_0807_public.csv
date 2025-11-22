@@ -1,0 +1,3 @@
+﻿text,date,combined_score,signal,entry,TP,SL,entry_source,lot_size,risk_amount
+Test Buy,2025-10-30 09:10:00,0.8,BUY,152.7,153.46,152.24,USDJPY,21739.1304,10000.0
+Test Sell,2025-10-30 09:11:00,-0.8,SELL,152.7,153.46,152.24,USDJPY,21739.1304,10000.0

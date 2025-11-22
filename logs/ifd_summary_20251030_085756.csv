@@ -1,0 +1,2 @@
+text,date,combined_score,GOLD,USDJPY,JP225,NASDAQ,volatility,sentiment,confidence,reasons,numeric,signal,entry,TP,SL,entry_source,type,lot_size,risk_amount
+Strong Buy Example,2025-10-30 09:00:00,0.9,3959.699951171875,152.70599365234375,,,,Neutral,0.5,dry-run,0,BUY,3959.7,5459.7,3209.7,GOLD,STRONG_GO,8.0,599999.96

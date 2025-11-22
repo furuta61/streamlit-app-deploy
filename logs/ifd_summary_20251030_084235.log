@@ -1,0 +1,9 @@
+==== IFD SUMMARY LOG ====
+Generated: 2025-10-30 08:42:35.432683
+
+| text               | signal   | type      | entry_source   |   lot_size |   risk_amount |   entry |      TP |      SL |   combined_score |
+|--------------------|----------|-----------|----------------|------------|---------------|---------|---------|---------|------------------|
+| Strong Buy Example | BUY      | STRONG_GO | GOLD           |       8.00 |     599999.96 | 3958.20 | 5458.20 | 3208.20 |             0.90 |
+| Normal Buy Example | BUY      | GO        | GOLD           |       2.00 |      89999.99 | 3958.20 | 4858.20 | 3508.20 |             0.80 |
+
+==== END LOG ====

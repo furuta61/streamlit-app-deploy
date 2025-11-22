@@ -1,0 +1,50 @@
+[2025年 11月 2日 日曜日 19時18分03秒 JST] Starting weekly_events_update.py (strict)
+RUN START 2025-11-02T19:18:04.630140
+2025-11-02 19:18:04,687 INFO Using local events file: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/scripts/events.csv
+/Users/otomi/Desktop/vs code/CFD3_AutoSystem/weekly_events_update.py:396: FutureWarning: The default fill_method='pad' in Series.pct_change is deprecated and will be removed in a future version. Either fill in any non-leading NA values prior to calling pct_change or specify 'fill_method=None' to not fill NA values.
+  vol = market_df['JP225'].pct_change().rolling(14, min_periods=3).std()
+2025-11-02 19:18:04,705 INFO Merged market data into events; added columns: TOPIX,TOPIX_source,JP225,NASDAQ,GOLD,USDJPY,GOLD_SPOT,GOLD_SPOT_source,GOLD_SPOT_interval,NASDAQ_MINI,NASDAQ_MINI_source,NASDAQ_MINI_interval,volatility
+2025-11-02 19:18:04,706 INFO Row 0 -> calling GPT (len prompt=472)
+2025-11-02 19:18:06,084 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-02 19:18:06,100 INFO Row 1 -> calling GPT (len prompt=472)
+2025-11-02 19:18:07,443 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-02 19:18:07,463 INFO Saved public/internal CSV to logs: /Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1918_public.csv, /Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1918_internal.csv
+2025-11-02 19:18:07,465 INFO Detected LOCAL_GOOGLE_DRIVE environment variable: /Users/otomi/Google ドライブ
+2025-11-02 19:18:07,466 INFO Wrote cleaned scored CSV to /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/events_scored_20251102_1918.csv
+📥 Using cached market data (13 minutes old): /Users/otomi/Desktop/CFD3_AutoSystem/market_data.csv
+✅ IFD提案列を追加しました（signal / entry / TP / SL / entry_source）
+✅ lot_size計算を追加しました（残高=1000000JPY, リスク=1%）
+✅ Balanced ルールで TRADE を採用しました（件数=1）
+
+==== RUN START (2025-11-02 19:18:07) ====
+
+
+📊 出力サマリー（主要列）:
+| text               | signal   | type      | entry_source   |   lot_size |   risk_amount |   entry |      TP |      SL |   combined_score |
+|--------------------|----------|-----------|----------------|------------|---------------|---------|---------|---------|------------------|
+| Strong Buy Example | BUY      | STRONG_GO | GOLD_SPOT      |       6.00 |      50000.00 | 4010.40 | 5510.40 | 3260.40 |             0.90 |
+
+✅ ログ保存完了: /Users/otomi/Desktop/CFD3_AutoSystem/logs/ifd_summary_20251102_191807.log
+✅ CSV保存完了: /Users/otomi/Desktop/CFD3_AutoSystem/logs/ifd_summary_20251102_191807.csv
+🧹 同一シンボルの強い方だけを採用（同点は最新→type優先）: 1 / 1 行
+✅ 公開用CSV保存: /Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1918_public.csv
+✅ 内部用CSV保存: /Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1918_internal.csv
+
+✅ ログ保存完了: /Users/otomi/Desktop/CFD3_AutoSystem/logs/ifd_summary_20251102_191807.log
+✅ CSV保存完了: /Users/otomi/Desktop/CFD3_AutoSystem/logs/ifd_summary_20251102_191807.csv
+
+📊 最新のIFD結果（/Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1918_internal.csv）
+
+╒══════════════════╕
+│   combined_score │
+╞══════════════════╡
+│             0.90 │
+├──────────────────┤
+│             0.80 │
+╘══════════════════╛
+==== RUN END (2025-11-02 19:18:07) ====
+
+✅ 出力クリーンアップ完了
+✅ Driveフォルダに保存完了: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/events_scored_20251102_1918.csv
+RUN END 2025-11-02T19:18:07.466340
+[2025年 11月 2日 日曜日 19時18分07秒 JST] Finished weekly_events_update.py exit=0

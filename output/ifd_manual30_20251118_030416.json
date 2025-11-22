@@ -1,0 +1,29 @@
+{
+  "run_id": "20251118_030416",
+  "trade_mode": "MANUAL_30M",
+  "orders": [
+    {
+      "instrument": "JP225",
+      "direction": "sell",
+      "decision": "STRONG_GO",
+      "lots": 1,
+      "entry_order": {
+        "type": "limit",
+        "price": 49215.0
+      },
+      "ifd_legs": [
+        {
+          "name": "IFD-30M",
+          "oco": {
+            "take_profit": {
+              "price": 49200.0
+            },
+            "stop_loss": {
+              "price": 49230.0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

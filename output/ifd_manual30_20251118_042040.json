@@ -1,0 +1,29 @@
+{
+  "run_id": "20251118_042040",
+  "trade_mode": "MANUAL_30M",
+  "orders": [
+    {
+      "instrument": "NAS100",
+      "direction": "buy",
+      "decision": "GO",
+      "lots": 1,
+      "entry_order": {
+        "type": "limit",
+        "price": 24719.4
+      },
+      "ifd_legs": [
+        {
+          "name": "IFD-30M",
+          "oco": {
+            "take_profit": {
+              "price": 24754.4
+            },
+            "stop_loss": {
+              "price": 24684.4
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

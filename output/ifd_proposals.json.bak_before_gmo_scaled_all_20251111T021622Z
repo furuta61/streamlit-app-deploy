@@ -1,0 +1,175 @@
+{
+  "run_id": "20251111T004813Z_gmo_scaled_tv_override_gmo_scaled_all",
+  "orders": [
+    {
+      "instrument": "JP225",
+      "decision": "GO",
+      "lots": 4,
+      "entry_price": 50176.3984,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 50186.3985
+            },
+            "stop_loss": {
+              "price": 49086.3898
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 50386.4001
+            },
+            "stop_loss": {
+              "price": 49086.3898
+            },
+            "trailing_stop": {
+              "activate_after": 50386,
+              "distance": 300
+            }
+          }
+        }
+      ]
+    },
+    {
+      "instrument": "NAS100",
+      "decision": "GO",
+      "lots": 4,
+      "entry_price": 25828.2891,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 25878.2896
+            },
+            "stop_loss": {
+              "price": 25382.2841
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 25928.2902
+            },
+            "stop_loss": {
+              "price": 25382.2841
+            },
+            "trailing_stop": {
+              "activate_after": 25928,
+              "distance": 300
+            }
+          }
+        }
+      ]
+    },
+    {
+      "instrument": "XAUUSD",
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_price": 3948.57,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 3970.7272
+            },
+            "stop_loss": {
+              "price": 3786.8207
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 3979.0382
+            },
+            "stop_loss": {
+              "price": 6849.4517
+            },
+            "trailing_stop": {
+              "activate_after": 4005.06,
+              "distance": 300
+            }
+          }
+        }
+      ]
+    },
+    {
+      "instrument": "US30",
+      "decision": "GO",
+      "lots": 4,
+      "entry_price": 47472.3,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 47486.0601
+            },
+            "stop_loss": {
+              "price": 46371.493
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 47692.4614
+            },
+            "stop_loss": {
+              "price": 46371.493
+            },
+            "trailing_stop": {
+              "activate_after": 34660,
+              "distance": 300
+            }
+          }
+        }
+      ]
+    },
+    {
+      "instrument": "COPPER",
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_price": 4.08,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 6.08
+            },
+            "stop_loss": {
+              "price": 3.92
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 6.13
+            },
+            "stop_loss": {
+              "price": 3.92
+            },
+            "trailing_stop": {
+              "activate_after": 6.13,
+              "distance": 300
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

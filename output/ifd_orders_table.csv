@@ -1,0 +1,12 @@
+instrument,decision,side,lots,entry,tp1,tp2,sl,source,run_id
+JP225,GO,BUY,4,50880.9,51256.4,51456.4,50156.4,kabu.click-sec_screenshot,20251113T2110Z_screenshot_reflect
+NAS100,GO,BUY,4,25564.3,25727.01,25777.01,25231.01,kabu.click-sec_screenshot,20251113T2110Z_screenshot_reflect
+XAUUSD,STRONG_GO,BUY,6,4234.50,4239.29,4247.6,4055.38,kabu.click-sec_screenshot,20251113T2110Z_screenshot_reflect
+US30,GO,BUY,4,48312.2,48476.2,48681.2,47369.2,kabu.click-sec_screenshot,20251113T2110Z_screenshot_reflect
+COPPER,STRONG_GO,BUY,6,5.081,7.573,7.639,4.882,kabu.click-sec_screenshot,20251113T2110Z_screenshot_reflect
+Instrument,Decision,Lots,Entry,TP1,TP2,SL,Trailing_activate_after,Trailing_distance,Notes
+JP225,GO,4,51246.8,51256.4,51456.4,50156.4,51456.4,300,"IFD-2 trailing (screenshot BID)"
+NAS100,GO,4,25677.0,25727.01,25777.01,25231.01,25777.01,300,"IFD-2 trailing (screenshot BID)"
+XAUUSD,STRONG_GO,6,4217.13,4239.29,4247.6,4055.38,4258.88,300,"IFD-2 trailing (screenshot BID)"
+US30,GO,4,48462.2,48476.2,48681.2,47369.2,48681.2,300,"IFD-2 trailing (screenshot BID)"
+COPPER,STRONG_GO,6,5.081,7.573,7.639,4.882,7.639,300,"SBI display (3 decimal)"

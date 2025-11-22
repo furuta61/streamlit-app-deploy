@@ -1,0 +1,28 @@
+{
+  "old": {
+    "ifd_path": "output/backtest/ifd_old.jsonl",
+    "generated": 34,
+    "metrics": {
+      "total_trades": 34,
+      "win_rate": 0.29411764705882354,
+      "profit_factor": 2.2534036162071907,
+      "total_return": 0.03218965646699634,
+      "max_drawdown": -0.1224789770010322,
+      "avg_win": 0.022534036162071912,
+      "avg_loss": -0.010000000000000002
+    }
+  },
+  "new": {
+    "ifd_path": "output/backtest/ifd_new.jsonl",
+    "generated": 34,
+    "metrics": {
+      "total_trades": 34,
+      "win_rate": 0.29411764705882354,
+      "profit_factor": 2.2534036162071907,
+      "total_return": 0.03218965646699634,
+      "max_drawdown": -0.1224789770010322,
+      "avg_win": 0.022534036162071912,
+      "avg_loss": -0.010000000000000002
+    }
+  }
+}

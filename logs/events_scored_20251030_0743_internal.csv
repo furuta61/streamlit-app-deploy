@@ -1,0 +1,3 @@
+﻿text,date,combined_score,signal,entry,TP,SL,entry_source,lot_size,risk_amount
+Test Buy,2025-10-30 09:10:00,0.8,BUY,3941.1,3960.8,3929.3,GOLD,847.4576,10000.0
+Test Sell,2025-10-30 09:11:00,-0.8,SELL,3941.1,3960.8,3929.3,GOLD,847.4576,10000.0

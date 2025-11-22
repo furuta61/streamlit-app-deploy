@@ -1,0 +1,102 @@
+[2025年 11月 2日 日曜日 19時04分50秒 JST] Starting weekly_events_update.py (strict)
+RUN START 2025-11-02T19:04:51.059136
+2025-11-02 19:04:51,108 INFO Using local events file: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/scripts/events.csv
+/Users/otomi/Desktop/vs code/CFD3_AutoSystem/market_data_fetch.py:69: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  tmp = yf.download(cand, start=start, end=end, interval=per_sym_interval)["Close"]
+2025-11-02 19:04:52,720 ERROR HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: TSE:TOPIX"}}}
+[*********************100%***********************]  1 of 1 completed
+2025-11-02 19:04:52,956 ERROR 
+1 Failed download:
+2025-11-02 19:04:52,956 ERROR ['TSE:TOPIX']: YFTzMissingError('possibly delisted; no timezone found')
+/Users/otomi/Desktop/vs code/CFD3_AutoSystem/market_data_fetch.py:69: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  tmp = yf.download(cand, start=start, end=end, interval=per_sym_interval)["Close"]
+2025-11-02 19:04:54,538 ERROR HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: TVC:TOPIX"}}}
+[*********************100%***********************]  1 of 1 completed
+2025-11-02 19:04:54,780 ERROR 
+1 Failed download:
+2025-11-02 19:04:54,780 ERROR ['TVC:TOPIX']: YFTzMissingError('possibly delisted; no timezone found')
+/Users/otomi/Desktop/vs code/CFD3_AutoSystem/market_data_fetch.py:69: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  tmp = yf.download(cand, start=start, end=end, interval=per_sym_interval)["Close"]
+[*********************100%***********************]  1 of 1 completed
+2025-11-02 19:04:55,034 ERROR 
+1 Failed download:
+2025-11-02 19:04:55,034 ERROR ['^TOPX']: YFPricesMissingError('possibly delisted; no price data found  (1d 2025-10-03 19:04:51.115222 -> 2025-11-02 19:04:51.115222)')
+/Users/otomi/Desktop/vs code/CFD3_AutoSystem/market_data_fetch.py:69: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  tmp = yf.download(cand, start=start, end=end, interval=per_sym_interval)["Close"]
+[*********************100%***********************]  1 of 1 completed
+2025-11-02 19:04:55,245 ERROR 
+1 Failed download:
+2025-11-02 19:04:55,245 ERROR ['TOPIX']: YFPricesMissingError('possibly delisted; no price data found  (1d 2025-10-03 19:04:51.115222 -> 2025-11-02 19:04:51.115222)')
+/Users/otomi/Desktop/vs code/CFD3_AutoSystem/market_data_fetch.py:103: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  raw = yf.download(etf_ticker, start=start, end=end, interval='1d')
+[*********************100%***********************]  1 of 1 completed
+2025-11-02 19:04:56,945 ERROR $GOLD360: possibly delisted; no price data found  (period=30d) (Yahoo error = "No data found, symbol may be delisted")
+2025-11-02 19:04:57,532 ERROR $GOLD360: possibly delisted; no price data found  (period=30d) (Yahoo error = "No data found, symbol may be delisted")
+/Users/otomi/Desktop/vs code/CFD3_AutoSystem/weekly_events_update.py:397: FutureWarning: The default fill_method='pad' in Series.pct_change is deprecated and will be removed in a future version. Either fill in any non-leading NA values prior to calling pct_change or specify 'fill_method=None' to not fill NA values.
+  vol = market_df['JP225'].pct_change().rolling(14, min_periods=3).std()
+2025-11-02 19:04:57,922 INFO Merged market data into events; added columns: TOPIX,TOPIX_source,JP225,NASDAQ,GOLD,USDJPY,GOLD_SPOT,GOLD_SPOT_source,GOLD_SPOT_interval,NASDAQ_MINI,NASDAQ_MINI_source,NASDAQ_MINI_interval,volatility
+2025-11-02 19:04:57,923 INFO Row 0 -> calling GPT (len prompt=472)
+2025-11-02 19:05:00,291 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-02 19:05:00,325 INFO Row 1 -> calling GPT (len prompt=472)
+2025-11-02 19:05:02,435 INFO HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-02 19:05:02,465 INFO Saved public/internal CSV to logs: /Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1905_public.csv, /Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1905_internal.csv
+2025-11-02 19:05:02,468 INFO Detected LOCAL_GOOGLE_DRIVE environment variable: /Users/otomi/Google ドライブ
+2025-11-02 19:05:02,469 INFO Wrote cleaned scored CSV to /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/events_scored_20251102_1905.csv
+📈 Fetching market data from 2025-10-03 to 2025-11-02...
+🔎 Trying TOPIX candidate: TSE:TOPIX (interval=1d)
+⚠️ Candidate TSE:TOPIX returned no data
+🔎 Trying TOPIX candidate: TVC:TOPIX (interval=1d)
+⚠️ Candidate TVC:TOPIX returned no data
+🔎 Trying TOPIX candidate: ^TOPX (interval=1d)
+⚠️ Candidate ^TOPX returned no data
+🔎 Trying TOPIX candidate: TOPIX (interval=1d)
+⚠️ Candidate TOPIX returned no data
+🔁 TOPIX candidates failed — trying ETF fallback: 1306.T (interval=1d)
+✅ TOPIX ETF fallback succeeded: 1306.T mapped to TOPIX
+🔎 Trying JP225 candidate: 1321.T (interval=1d)
+✅ Fetched JP225 using 1321.T
+🔎 Trying NASDAQ candidate: NQ=F (interval=1h)
+✅ Fetched NASDAQ using NQ=F
+🔎 Trying GOLD candidate: GOLD360 (interval=1h)
+⚠️ Candidate GOLD360 for GOLD returned no data
+🔎 Trying GOLD candidate: GC=F (interval=1h)
+✅ Fetched GOLD using GC=F
+🔎 Trying USDJPY candidate: JPY=X (interval=1h)
+✅ Fetched USDJPY using JPY=X
+✅ Downloaded 720 rows.
+✅ IFD提案列を追加しました（signal / entry / TP / SL / entry_source）
+✅ lot_size計算を追加しました（残高=1000000JPY, リスク=1%）
+✅ Balanced ルールで TRADE を採用しました（件数=1）
+
+==== RUN START (2025-11-02 19:05:02) ====
+
+
+📊 出力サマリー（主要列）:
+| text               | signal   | type      | entry_source   |   lot_size |   risk_amount |   entry |      TP |      SL |   combined_score |
+|--------------------|----------|-----------|----------------|------------|---------------|---------|---------|---------|------------------|
+| Strong Buy Example | BUY      | STRONG_GO | GOLD_SPOT      |       6.00 |      50000.00 | 4010.40 | 5510.40 | 3260.40 |             0.90 |
+
+✅ ログ保存完了: /Users/otomi/Desktop/CFD3_AutoSystem/logs/ifd_summary_20251102_190502.log
+✅ CSV保存完了: /Users/otomi/Desktop/CFD3_AutoSystem/logs/ifd_summary_20251102_190502.csv
+🧹 同一シンボルの強い方だけを採用（同点は最新→type優先）: 1 / 1 行
+✅ 公開用CSV保存: /Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1905_public.csv
+✅ 内部用CSV保存: /Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1905_internal.csv
+
+✅ ログ保存完了: /Users/otomi/Desktop/CFD3_AutoSystem/logs/ifd_summary_20251102_190502.log
+✅ CSV保存完了: /Users/otomi/Desktop/CFD3_AutoSystem/logs/ifd_summary_20251102_190502.csv
+
+📊 最新のIFD結果（/Users/otomi/Desktop/CFD3_AutoSystem/logs/events_scored_20251102_1905_internal.csv）
+
+╒══════════════════╕
+│   combined_score │
+╞══════════════════╡
+│             0.90 │
+├──────────────────┤
+│             0.80 │
+╘══════════════════╛
+==== RUN END (2025-11-02 19:05:02) ====
+
+✅ 出力クリーンアップ完了
+✅ Driveフォルダに保存完了: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/events_scored_20251102_1905.csv
+RUN END 2025-11-02T19:05:02.469338
+[2025年 11月 2日 日曜日 19時05分02秒 JST] Finished weekly_events_update.py exit=0

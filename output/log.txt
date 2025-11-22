@@ -1,0 +1,230 @@
+2025-10-28 13:28:04 === get_data.py start ===
+2025-10-28 13:28:04 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-10-28 13:28:06 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=80
+2025-10-28 13:28:06 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-10-28 13:28:06 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-10-28 13:28:06 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-10-28 13:28:06 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-10-28 13:28:06 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-10-28 13:28:07 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=231
+2025-10-28 13:28:07 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=302
+2025-10-28 13:28:07 === get_data.py end ===
+2025-10-28 13:30:35 === get_data.py start ===
+2025-10-28 13:30:35 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-10-28 13:30:36 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=80
+2025-10-28 13:30:36 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-10-28 13:30:36 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-10-28 13:30:36 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-10-28 13:30:36 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-10-28 13:30:36 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-10-28 13:30:36 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=231
+2025-10-28 13:30:37 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=302
+2025-10-28 13:30:37 === get_data.py end ===
+2025-10-28T04:30:37.281886 ERROR analyze_entry.py
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 371, in _prep_values
+    values = ensure_float64(values)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/algos_common_helper.pxi", line 42, in pandas._libs.algos.ensure_float64
+ValueError: could not convert string to float: '^N225'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 452, in _apply_series
+    values = self._prep_values(obj._values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 373, in _prep_values
+    raise TypeError(f"cannot handle this type -> {values.dtype}") from err
+TypeError: cannot handle this type -> object
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 179, in <module>
+    main()
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 158, in main
+    r = analyze_symbol(key, cfg)
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 100, in analyze_symbol
+    results['sma25_30'] = float(sma(close30,25).iloc[-1])
+                                ^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 28, in sma
+    return series.rolling(n).mean()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 2259, in mean
+    return super().mean(
+           ^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 1625, in mean
+    return self._apply(window_func, name="mean", numeric_only=numeric_only)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 619, in _apply
+    return self._apply_columnwise(homogeneous_func, name, numeric_only)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 472, in _apply_columnwise
+    return self._apply_series(homogeneous_func, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 454, in _apply_series
+    raise DataError("No numeric types to aggregate") from err
+pandas.errors.DataError: No numeric types to aggregate
+
+2025-10-28 13:35:18 === get_data.py start ===
+2025-10-28 13:35:18 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-10-28 13:35:19 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=80
+2025-10-28 13:35:19 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-10-28 13:35:19 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-10-28 13:35:19 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-10-28 13:35:19 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-10-28 13:35:19 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-10-28 13:35:19 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=231
+2025-10-28 13:35:20 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=302
+2025-10-28 13:35:20 === get_data.py end ===
+2025-10-28T04:35:20.337473 ERROR analyze_entry.py
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3812, in get_loc
+    return self._engine.get_loc(casted_key)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/index.pyx", line 167, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/index.pyx", line 196, in pandas._libs.index.IndexEngine.get_loc
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7088, in pandas._libs.hashtable.PyObjectHashTable.get_item
+  File "pandas/_libs/hashtable_class_helper.pxi", line 7096, in pandas._libs.hashtable.PyObjectHashTable.get_item
+KeyError: 'Close'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 204, in <module>
+    main()
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 183, in main
+    r = analyze_symbol(key, cfg)
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 123, in analyze_symbol
+    close30 = df30['Close']
+              ~~~~^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/frame.py", line 4113, in __getitem__
+    indexer = self.columns.get_loc(key)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/indexes/base.py", line 3819, in get_loc
+    raise KeyError(key) from err
+KeyError: 'Close'
+
+2025-10-28 13:40:37 === get_data.py start ===
+2025-10-28 13:40:37 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-10-28 13:40:39 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=80
+2025-10-28 13:40:39 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-10-28 13:40:39 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-10-28 13:40:40 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-10-28 13:40:40 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-10-28 13:40:40 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-10-28 13:40:40 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=232
+2025-10-28 13:40:40 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=302
+2025-10-28 13:40:40 === get_data.py end ===
+2025-10-28T04:40:40.878736 ERROR analyze_entry.py
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 371, in _prep_values
+    values = ensure_float64(values)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "pandas/_libs/algos_common_helper.pxi", line 42, in pandas._libs.algos.ensure_float64
+ValueError: could not convert string to float: '^N225'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 452, in _apply_series
+    values = self._prep_values(obj._values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 373, in _prep_values
+    raise TypeError(f"cannot handle this type -> {values.dtype}") from err
+TypeError: cannot handle this type -> object
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 214, in <module>
+    main()
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 193, in main
+    r = analyze_symbol(key, cfg)
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 135, in analyze_symbol
+    results['sma25_30'] = float(sma(close30,25).iloc[-1])
+                                ^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/analyze_entry.py", line 29, in sma
+    return series.rolling(n).mean()
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 2259, in mean
+    return super().mean(
+           ^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 1625, in mean
+    return self._apply(window_func, name="mean", numeric_only=numeric_only)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 619, in _apply
+    return self._apply_columnwise(homogeneous_func, name, numeric_only)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 472, in _apply_columnwise
+    return self._apply_series(homogeneous_func, name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/pandas/core/window/rolling.py", line 454, in _apply_series
+    raise DataError("No numeric types to aggregate") from err
+pandas.errors.DataError: No numeric types to aggregate
+
+2025-10-28 13:47:24 === get_data.py start ===
+2025-10-28 13:47:24 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-10-28 13:47:24 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=81
+2025-10-28 13:47:25 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-10-28 13:47:25 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-10-28 13:47:25 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-10-28 13:47:25 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-10-28 13:47:25 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-10-28 13:47:25 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=232
+2025-10-28 13:47:26 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=302
+2025-10-28 13:47:26 === get_data.py end ===
+2025-10-28 14:39:15 === get_data.py start ===
+2025-10-28 14:39:15 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-10-28 14:39:16 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=82
+2025-10-28 14:39:16 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-10-28 14:39:16 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-10-28 14:39:16 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-10-28 14:39:16 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-10-28 14:39:16 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-10-28 14:39:16 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=233
+2025-10-28 14:39:17 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=302
+2025-10-28 14:39:17 === get_data.py end ===
+2025-10-28 14:45:45 === get_data.py start ===
+2025-10-28 14:45:45 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-10-28 14:45:46 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=83
+2025-10-28 14:45:46 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-10-28 14:45:46 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-10-28 14:45:46 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-10-28 14:45:46 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-10-28 14:45:46 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-10-28 14:45:47 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=234
+2025-10-28 14:45:48 Saved /Users/otomi/Desktop/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=302
+2025-10-28 14:45:48 === get_data.py end ===
+2025-11-17 16:37:30 === get_data.py start ===
+2025-11-17 16:37:30 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-11-17 16:37:31 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=84
+2025-11-17 16:37:31 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-11-17 16:37:31 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-11-17 16:37:33 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-11-17 16:37:33 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-11-17 16:37:33 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-11-17 16:37:33 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=235
+2025-11-17 16:37:34 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=305
+2025-11-17 16:37:34 Fetching GER40 TV:FOREXCOM:GER40 -> yf:^GDAXI
+2025-11-17 16:37:34 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/GER40/FOREXCOM_GER40_31.csv rows=119
+2025-11-17 16:37:34 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/GER40/FOREXCOM_GER40_241.csv rows=180
+2025-11-17 16:37:34 === get_data.py end ===
+2025-11-17 16:39:16 === get_data.py start ===
+2025-11-17 16:39:16 Fetching JP225 TV:FOREXCOM:JP225 -> yf:^N225
+2025-11-17 16:39:17 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_31.csv rows=84
+2025-11-17 16:39:17 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/JP225/FOREXCOM_JP225_241.csv rows=120
+2025-11-17 16:39:17 Fetching NAS100 TV:FOREXCOM:NAS100 -> yf:^NDX
+2025-11-17 16:39:17 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_31.csv rows=91
+2025-11-17 16:39:18 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/NAS100/FOREXCOM_NAS100_241.csv rows=120
+2025-11-17 16:39:18 Fetching XAUUSD TV:TVC:GOLD -> yf:GC=F
+2025-11-17 16:39:18 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_31.csv rows=235
+2025-11-17 16:39:18 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/XAUUSD/TVC_GOLD_241.csv rows=305
+2025-11-17 16:39:18 Fetching GER40 TV:FOREXCOM:GER40 -> yf:^GDAXI
+2025-11-17 16:39:18 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/GER40/FOREXCOM_GER40_31.csv rows=119
+2025-11-17 16:39:19 Saved /Users/otomi/Desktop/vs code/CFD3_AutoSystem/./data/GER40/FOREXCOM_GER40_241.csv rows=180
+2025-11-17 16:39:19 === get_data.py end ===

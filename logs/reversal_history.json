@@ -1,0 +1,173 @@
+[
+  {
+    "symbol": "DE40",
+    "symbol_jp": "ドイツ40",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 0.8333333333333334,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 24000,
+    "detected_at": "2025-11-05T17:51:05.689656"
+  },
+  {
+    "symbol": "JP225",
+    "symbol_jp": "日経225",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 0.8,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 39500,
+    "detected_at": "2025-11-05T17:51:05.965190"
+  },
+  {
+    "symbol": "DE40",
+    "symbol_jp": "ドイツ40",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 0.8,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 24000,
+    "detected_at": "2025-11-05T18:52:38.051639"
+  },
+  {
+    "symbol": "JP225",
+    "symbol_jp": "日経225",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 0.8,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 39500,
+    "detected_at": "2025-11-05T18:52:38.364534"
+  },
+  {
+    "symbol": "GOLD_SPOT",
+    "symbol_jp": "金スポット",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 1.0,
+    "entry_time": "2025-11-04 13:15",
+    "entry_price": 4000.5,
+    "detected_at": "2025-11-05T18:52:38.585067"
+  },
+  {
+    "symbol": "DE40",
+    "symbol_jp": "ドイツ40",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 1.0,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 24000,
+    "detected_at": "2025-11-05T19:52:53.225081"
+  },
+  {
+    "symbol": "JP225",
+    "symbol_jp": "日経225",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 0.8,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 39500,
+    "detected_at": "2025-11-05T19:52:53.536845"
+  },
+  {
+    "symbol": "NASDAQ_MINI",
+    "symbol_jp": "米国NQ100ミニ",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 1.0,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 26000,
+    "detected_at": "2025-11-05T19:56:53.322313"
+  },
+  {
+    "symbol": "DE40",
+    "symbol_jp": "ドイツ40",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 1.0,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 24000,
+    "detected_at": "2025-11-05T20:53:01.045791"
+  },
+  {
+    "symbol": "JP225",
+    "symbol_jp": "日経225",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 0.8,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 39500,
+    "detected_at": "2025-11-05T20:53:01.529305"
+  },
+  {
+    "symbol": "NASDAQ_MINI",
+    "symbol_jp": "米国NQ100ミニ",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 1.0,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 26000,
+    "detected_at": "2025-11-05T20:57:10.842642"
+  },
+  {
+    "symbol": "GOLD_SPOT",
+    "symbol_jp": "金スポット",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 1.0,
+    "entry_time": "2025-11-04 13:15",
+    "entry_price": 4000.5,
+    "detected_at": "2025-11-05T21:10:03.354997"
+  },
+  {
+    "symbol": "DE40",
+    "symbol_jp": "ドイツ40",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 1.0,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 24000,
+    "current_price": 23857.400390625,
+    "unrealized_pct": 0.5941650390625,
+    "detected_at": "2025-11-05T21:53:39.043748"
+  },
+  {
+    "symbol": "JP225",
+    "symbol_jp": "日経225",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 0.8,
+    "entry_time": "2025-11-04 13:00",
+    "entry_price": 39500,
+    "current_price": 50153.91015625,
+    "unrealized_pct": -26.971924446202532,
+    "detected_at": "2025-11-05T21:53:39.457451"
+  },
+  {
+    "symbol": "GOLD_SPOT",
+    "symbol_jp": "金スポット",
+    "reversal_type": "買い → 売り",
+    "old_direction": "buy",
+    "new_direction": "sell",
+    "strength": 1.0,
+    "entry_time": "2025-11-04 13:15",
+    "entry_price": 4000.5,
+    "current_price": 3978.300048828125,
+    "unrealized_pct": 0.554929413120235,
+    "detected_at": "2025-11-05T22:11:21.258453"
+  }
+]

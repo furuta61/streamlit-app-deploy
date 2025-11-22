@@ -1,0 +1,9 @@
+==== IFD SUMMARY LOG ====
+Generated: 2025-10-30 07:31:15.127672
+
+| text      | signal   | entry_source   |   entry |      TP |      SL |   combined_score |
+|-----------|----------|----------------|---------|---------|---------|------------------|
+| Test Buy  | BUY      | GOLD           | 3941.10 | 3960.80 | 3929.30 |             0.80 |
+| Test Sell | SELL     | GOLD           | 3941.10 | 3960.80 | 3929.30 |            -0.80 |
+
+==== END LOG ====

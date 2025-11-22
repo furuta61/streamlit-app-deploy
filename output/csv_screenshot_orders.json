@@ -1,0 +1,254 @@
+{
+  "run_id": "2025-11-07-1613",
+  "capital_jpy": 900000,
+  "per_lot_allocation_jpy": 300000,
+  "trade_mode": "DAY6H",
+  "orders": [
+    {
+      "instrument": "JP225",
+      "direction": "buy",
+      "signal_rating": 8,
+      "decision": "STRONG_GO",
+      "lots": 4,
+      "entry_order": {
+        "type": "market",
+        "price": 50276.37
+      },
+      "order_type": "成行",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 51433.0
+            },
+            "stop_loss": {
+              "price": 49774.0
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 51690.16
+            },
+            "stop_loss": {
+              "price": 49774.0
+            },
+            "trailing_stop": {
+              "activate_after": 51433.0,
+              "distance": 150.71
+            }
+          }
+        }
+      ],
+      "cut_condition": {}
+    },
+    {
+      "instrument": "NQ100",
+      "direction": "buy",
+      "signal_rating": 8,
+      "decision": "STRONG_GO",
+      "lots": 4,
+      "entry_order": {
+        "type": "market",
+        "price": 25130.04
+      },
+      "order_type": "成行",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 25633.0
+            },
+            "stop_loss": {
+              "price": 24879.0
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 25761.16
+            },
+            "stop_loss": {
+              "price": 24879.0
+            },
+            "trailing_stop": {
+              "activate_after": 25633.0,
+              "distance": 75.31
+            }
+          }
+        }
+      ],
+      "cut_condition": {}
+    },
+    {
+      "instrument": "XAUUSD",
+      "direction": "buy",
+      "signal_rating": 8,
+      "decision": "STRONG_GO",
+      "lots": 4,
+      "entry_order": {
+        "type": "market",
+        "price": 4014.4
+      },
+      "order_type": "成行",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 4074.62
+            },
+            "stop_loss": {
+              "price": 3982.28
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 4094.99
+            },
+            "stop_loss": {
+              "price": 3982.28
+            },
+            "trailing_stop": {
+              "activate_after": 4074.62,
+              "distance": 9.64
+            }
+          }
+        }
+      ],
+      "cut_condition": {}
+    },
+    {
+      "instrument": "XAGUSD",
+      "direction": "buy",
+      "signal_rating": 8,
+      "decision": "STRONG_GO",
+      "lots": 4,
+      "entry_order": {
+        "type": "market",
+        "price": 48.49
+      },
+      "order_type": "成行",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 49.71
+            },
+            "stop_loss": {
+              "price": 47.91
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 49.96
+            },
+            "stop_loss": {
+              "price": 47.91
+            },
+            "trailing_stop": {
+              "activate_after": 49.71,
+              "distance": 0.18
+            }
+          }
+        }
+      ],
+      "cut_condition": {}
+    },
+    {
+      "instrument": "NGAS",
+      "direction": "buy",
+      "signal_rating": 8,
+      "decision": "STRONG_GO",
+      "lots": 4,
+      "entry_order": {
+        "type": "market",
+        "price": 4.4
+      },
+      "order_type": "成行",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 4.53
+            },
+            "stop_loss": {
+              "price": 4.34
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 4.56
+            },
+            "stop_loss": {
+              "price": 4.34
+            },
+            "trailing_stop": {
+              "activate_after": 4.53,
+              "distance": 0.02
+            }
+          }
+        }
+      ],
+      "cut_condition": {}
+    },
+    {
+      "instrument": "GER40",
+      "direction": "buy",
+      "signal_rating": 8,
+      "decision": "STRONG_GO",
+      "lots": 4,
+      "entry_order": {
+        "type": "market",
+        "price": 23734.02
+      },
+      "order_type": "成行",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 24161.0
+            },
+            "stop_loss": {
+              "price": 23520.0
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 24281.8
+            },
+            "stop_loss": {
+              "price": 23520.0
+            },
+            "trailing_stop": {
+              "activate_after": 24161.0,
+              "distance": 64.21
+            }
+          }
+        }
+      ],
+      "cut_condition": {}
+    }
+  ]
+}

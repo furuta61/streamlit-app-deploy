@@ -1,0 +1,2 @@
+﻿text,date,combined_score,signal,entry,TP,SL,entry_source,lot_size,risk_amount,auto_tp_applied,auto_tp_reason
+Strong Buy Example,2025-10-30 09:00:00,0.9,BUY,4010.4,4032.39,3977.42,GOLD_SPOT,6.0,19787.94,True,"atr=10.9942, rsi=47.05, mom=-0.0008"

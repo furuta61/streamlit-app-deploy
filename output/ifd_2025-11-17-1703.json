@@ -1,0 +1,98 @@
+{
+  "run_id": "2025-11-17-1703",
+  "capital_jpy": 900000,
+  "per_lot_allocation_jpy": 300000,
+  "trade_mode": "DAY4H",
+  "news_lock": false,
+  "orders": [
+    {
+      "instrument": "JP225",
+      "direction": "hold",
+      "signal_rating": 2,
+      "decision": "WAIT",
+      "lots": 0,
+      "entry_order": {
+        "type": "-",
+        "price": 50354.3
+      },
+      "order_type": "-",
+      "ifd_legs": [],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      },
+      "display_prices": {
+        "entry_price": 50354.3
+      }
+    },
+    {
+      "instrument": "NAS100",
+      "direction": "hold",
+      "signal_rating": 2,
+      "decision": "WAIT",
+      "lots": 0,
+      "entry_order": {
+        "type": "-",
+        "price": 25011.5
+      },
+      "order_type": "-",
+      "ifd_legs": [],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      },
+      "display_prices": {
+        "entry_price": 25011.5
+      }
+    },
+    {
+      "instrument": "XAUUSD",
+      "direction": "hold",
+      "signal_rating": 2,
+      "decision": "WAIT",
+      "lots": 0,
+      "entry_order": {
+        "type": "-",
+        "price": 4077.8
+      },
+      "order_type": "-",
+      "ifd_legs": [],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      },
+      "display_prices": {
+        "entry_price": 407780.0
+      }
+    },
+    {
+      "instrument": "GER40",
+      "direction": "sell",
+      "signal_rating": 2,
+      "decision": "WAIT",
+      "lots": 0,
+      "entry_order": {
+        "type": "-",
+        "price": 23876.6
+      },
+      "order_type": "-",
+      "ifd_legs": [],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      },
+      "display_prices": {
+        "entry_price": 23876.6
+      }
+    }
+  ],
+  "valid_until": "2025-11-17T12:03:39.115819Z",
+  "display_meta": {
+    "scale": {
+      "XAUUSD": 100.0
+    },
+    "decimals": {
+      "XAUUSD": 1
+    }
+  }
+}

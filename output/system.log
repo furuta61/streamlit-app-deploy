@@ -1,0 +1,813 @@
+2025-11-06 23:15:20,708 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-06 23:15:22,676 [ERROR] CFD3: yfinance error for JP225: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2025-11-06 23:15:22,676 [WARNING] CFD3: ⚠️ Screener not available for JP225
+2025-11-06 23:15:22,677 [INFO] CFD3: ✅ IFD appended: JP225 WAIT TP=52378.0 SL=50688.0
+2025-11-06 23:15:22,677 [INFO] CFD3: [DryRun email] 🚨 WAIT - JP225
+JP225 @51200.0
+Rating: 0.75
+TP: 52378.0 / SL: 50688.0
+ScreenerSrc: NA
+Time: 2025-11-06T13:15:00Z
+
+2025-11-06 23:15:22,677 [ERROR] CFD3: ❌ Loop error: cannot access local variable '_CACHE' where it is not associated with a value
+2025-11-06 23:26:18,183 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-06 23:26:20,345 [ERROR] CFD3: yfinance error for JP225: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2025-11-06 23:26:20,346 [WARNING] CFD3: ⚠️ Screener not available for JP225
+2025-11-06 23:26:20,346 [INFO] CFD3: ✅ IFD appended: JP225 WAIT TP=52378.0 SL=50688.0
+2025-11-06 23:26:20,346 [INFO] CFD3: [DryRun email] 🚨 WAIT - JP225
+JP225 @51200.0
+Rating: 0.75
+TP: 52378.0 / SL: 50688.0
+ScreenerSrc: NA
+Time: 2025-11-06T13:15:00Z
+
+2025-11-06 23:26:20,347 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:26:20,347 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:26:20,347 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:26:20,347 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:26:20,347 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:26:20,347 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:26:20,347 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:26:20,347 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:37,068 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-06 23:39:37,069 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:37,069 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:37,069 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:37,069 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:37,069 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:37,069 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:37,069 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:37,069 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:37,069 [WARNING] CFD3: ⚠️ Skipped duplicate JP225 @2025-11-06T13:15:00Z
+2025-11-06 23:39:39,063 [ERROR] CFD3: yfinance error for JP225: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2025-11-06 23:39:39,063 [WARNING] CFD3: ⚠️ Screener not available for JP225
+2025-11-06 23:39:39,064 [INFO] CFD3: ✅ IFD appended: JP225 WAIT TP=52378.0 SL=50688.0
+2025-11-06 23:39:39,064 [INFO] CFD3: [DryRun email] 🚨 WAIT - JP225
+JP225 @51200.0
+Rating: 0.75
+TP: 52378.0 / SL: 50688.0
+ScreenerSrc: NA
+Time: 2025-11-06T11:54:58Z
+
+2025-11-06 23:55:28,159 [INFO] CFD3: SLACK_WEBHOOK_URL not set; skipping Slack
+2025-11-06 23:55:28,159 [INFO] CFD3: Email config not set; skipping email send
+2025-11-07 00:09:02,116 [INFO] CFD3: SLACK_WEBHOOK_URL not set; skipping Slack
+2025-11-07 00:09:02,272 [ERROR] CFD3: Email送信失敗: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1006)
+2025-11-07 00:10:55,450 [INFO] CFD3: SLACK_WEBHOOK_URL not set; skipping Slack
+2025-11-07 00:10:58,360 [INFO] CFD3: Email送信完了
+2025-11-14 20:20:07,656 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-14 20:20:07,656 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684308s)
+2025-11-14 20:20:07,656 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684308s)
+2025-11-14 20:20:07,657 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684308s)
+2025-11-14 20:20:07,657 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684308s)
+2025-11-14 20:20:07,657 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684308s)
+2025-11-14 20:20:07,657 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684308s)
+2025-11-14 20:20:07,657 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684308s)
+2025-11-14 20:20:07,657 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684308s)
+2025-11-14 20:20:07,657 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684308s)
+2025-11-14 20:20:07,657 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 689110s)
+2025-11-14 20:20:07,658 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 689053s)
+2025-11-14 20:20:07,658 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 688589s)
+2025-11-14 20:20:07,658 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 687927s)
+2025-11-14 20:20:07,658 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 687183s)
+2025-11-14 20:20:07,658 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 687182s)
+2025-11-14 20:20:07,658 [WARNING] CFD3: ⏳ Skipped stale alert for XAGUSD (age 687182s)
+2025-11-14 20:20:07,659 [WARNING] CFD3: ⏳ Skipped stale alert for NGAS (age 687181s)
+2025-11-14 20:20:07,659 [WARNING] CFD3: ⏳ Skipped stale alert for GER40 (age 687180s)
+2025-11-14 20:20:07,659 [WARNING] CFD3: ⏳ Skipped stale alert for NAS100 (age 687180s)
+2025-11-14 20:20:07,659 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 684397s)
+2025-11-14 20:20:07,660 [WARNING] CFD3: ⏳ Skipped stale alert for NQ100 (age 684397s)
+2025-11-14 20:20:07,660 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 684397s)
+2025-11-14 20:20:07,660 [WARNING] CFD3: ⏳ Skipped stale alert for XAGUSD (age 684397s)
+2025-11-14 20:20:07,660 [WARNING] CFD3: ⏳ Skipped stale alert for NGAS (age 684397s)
+2025-11-14 20:20:07,660 [WARNING] CFD3: ⏳ Skipped stale alert for GER40 (age 684397s)
+2025-11-14 20:20:07,660 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 683396s)
+2025-11-14 20:20:07,660 [WARNING] CFD3: ⏳ Skipped stale alert for NQ100 (age 683396s)
+2025-11-14 20:20:07,661 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 683395s)
+2025-11-14 20:20:07,661 [WARNING] CFD3: ⏳ Skipped stale alert for XAGUSD (age 683395s)
+2025-11-14 20:20:07,661 [WARNING] CFD3: ⏳ Skipped stale alert for NGAS (age 683394s)
+2025-11-14 20:20:07,661 [WARNING] CFD3: ⏳ Skipped stale alert for GER40 (age 683393s)
+2025-11-14 20:20:07,661 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 681608s)
+2025-11-14 20:20:07,662 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 681308s)
+2025-11-14 20:20:07,662 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 684308s)
+2025-11-14 20:20:07,662 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 642008s)
+2025-11-14 20:20:07,662 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 395768s)
+2025-11-14 20:20:07,663 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 395033s)
+2025-11-14 20:20:07,663 [WARNING] CFD3: ⏳ Skipped stale alert for US30 (age 385799s)
+2025-11-14 20:20:07,663 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 300008s)
+2025-11-14 20:20:18,864 [INFO] CFD3: 👋 Stopped.
+2025-11-14 23:52:18,451 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-14 23:52:18,451 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697038s)
+2025-11-14 23:52:18,452 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697038s)
+2025-11-14 23:52:18,452 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697038s)
+2025-11-14 23:52:18,452 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697038s)
+2025-11-14 23:52:18,453 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697038s)
+2025-11-14 23:52:18,453 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697038s)
+2025-11-14 23:52:18,453 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697038s)
+2025-11-14 23:52:18,453 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697038s)
+2025-11-14 23:52:18,453 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697038s)
+2025-11-14 23:52:18,454 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 701840s)
+2025-11-14 23:52:18,454 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 701783s)
+2025-11-14 23:52:18,454 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 701319s)
+2025-11-14 23:52:18,455 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 700657s)
+2025-11-14 23:52:18,456 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 699913s)
+2025-11-14 23:52:18,456 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 699912s)
+2025-11-14 23:52:18,456 [WARNING] CFD3: ⏳ Skipped stale alert for XAGUSD (age 699912s)
+2025-11-14 23:52:18,457 [WARNING] CFD3: ⏳ Skipped stale alert for NGAS (age 699911s)
+2025-11-14 23:52:18,457 [WARNING] CFD3: ⏳ Skipped stale alert for GER40 (age 699910s)
+2025-11-14 23:52:18,458 [WARNING] CFD3: ⏳ Skipped stale alert for NAS100 (age 699910s)
+2025-11-14 23:52:18,458 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 697127s)
+2025-11-14 23:52:18,458 [WARNING] CFD3: ⏳ Skipped stale alert for NQ100 (age 697127s)
+2025-11-14 23:52:18,458 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 697127s)
+2025-11-14 23:52:18,459 [WARNING] CFD3: ⏳ Skipped stale alert for XAGUSD (age 697127s)
+2025-11-14 23:52:18,459 [WARNING] CFD3: ⏳ Skipped stale alert for NGAS (age 697127s)
+2025-11-14 23:52:18,459 [WARNING] CFD3: ⏳ Skipped stale alert for GER40 (age 697127s)
+2025-11-14 23:52:18,459 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 696126s)
+2025-11-14 23:52:18,459 [WARNING] CFD3: ⏳ Skipped stale alert for NQ100 (age 696126s)
+2025-11-14 23:52:18,460 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 696125s)
+2025-11-14 23:52:18,460 [WARNING] CFD3: ⏳ Skipped stale alert for XAGUSD (age 696125s)
+2025-11-14 23:52:18,460 [WARNING] CFD3: ⏳ Skipped stale alert for NGAS (age 696124s)
+2025-11-14 23:52:18,460 [WARNING] CFD3: ⏳ Skipped stale alert for GER40 (age 696123s)
+2025-11-14 23:52:18,460 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 694338s)
+2025-11-14 23:52:18,461 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 694038s)
+2025-11-14 23:52:18,461 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 697038s)
+2025-11-14 23:52:18,461 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 654738s)
+2025-11-14 23:52:18,461 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 408499s)
+2025-11-14 23:52:18,461 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 407764s)
+2025-11-14 23:52:18,462 [WARNING] CFD3: ⏳ Skipped stale alert for US30 (age 398529s)
+2025-11-14 23:52:18,462 [WARNING] CFD3: ⏳ Skipped stale alert for JP225 (age 312738s)
+2025-11-14 23:52:18,462 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 12719s)
+2025-11-14 23:52:18,462 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 12718s)
+2025-11-14 23:52:18,462 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 22719s)
+2025-11-14 23:52:32,593 [INFO] CFD3: 👋 Stopped.
+2025-11-14 23:53:45,173 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-14 23:55:18,706 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-14 23:55:18,709 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4074.325 rel=0.0308 -> preferring screener
+2025-11-14 23:55:18,709 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-14 23:55:18,709 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4074.325 rel=0.0308 -> preferring screener
+2025-11-14 23:55:18,710 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 10003s)
+2025-11-14 23:56:37,969 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-14 23:56:58,230 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-14 23:56:58,232 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4073.775 rel=0.0310 -> preferring screener
+2025-11-14 23:56:58,233 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-14 23:56:58,233 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4073.775 rel=0.0310 -> preferring screener
+2025-11-14 23:56:58,233 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 10004s)
+2025-11-15 00:01:34,668 [WARNING] CFD3: ⚠️ Skipped duplicate XAUUSD @1763132491.865752
+2025-11-15 00:01:34,673 [WARNING] CFD3: ⚠️ Skipped duplicate XAUUSD @1763132492.865752
+2025-11-15 00:01:34,674 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 20003s)
+2025-11-15 00:02:15,710 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-15 00:02:16,082 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:02:16,083 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4076.185 rel=0.0304 -> preferring screener
+2025-11-15 00:02:16,087 [INFO] CFD3: ✅ IFD appended: XAUUSD WAIT TP=4137.33 SL=4043.58
+2025-11-15 00:02:16,089 [INFO] CFD3: [DryRun email] 🚨 WAIT - XAUUSD
+XAUUSD @4076.185
+Rating: 0.05
+TP: 4137.33 / SL: 4043.58
+ScreenerSrc: tradingview
+Time: 1763132491.865752
+
+2025-11-15 00:02:16,089 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:02:16,090 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4076.185 rel=0.0304 -> preferring screener
+2025-11-15 00:02:16,090 [WARNING] CFD3: ⚠️ Skipped duplicate XAUUSD @1763132492.865752 (entry=4076.185)
+2025-11-15 00:02:16,091 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 20044s)
+2025-11-15 00:04:34,758 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-15 00:04:35,079 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:04:35,080 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4071.56 rel=0.0315 -> preferring screener
+2025-11-15 00:04:35,084 [INFO] CFD3: ✅ IFD appended: XAUUSD WAIT TP=4132.63 SL=4038.99
+2025-11-15 00:04:35,085 [INFO] CFD3: [DryRun email] 🚨 WAIT - XAUUSD
+XAUUSD @4071.56
+Rating: 0.95
+TP: 4132.63 / SL: 4038.99
+ScreenerSrc: tradingview
+Time: 1763132669.71515
+
+2025-11-15 00:04:35,085 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:04:35,085 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4071.56 rel=0.0315 -> preferring screener
+2025-11-15 00:04:35,086 [WARNING] CFD3: ⚠️ Skipped duplicate XAUUSD @1763132670.71515 (entry=4071.56)
+2025-11-15 00:04:35,087 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 20005s)
+2025-11-15 00:05:29,501 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-15 00:05:29,829 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:05:29,830 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4074.47 rel=0.0308 -> preferring screener
+2025-11-15 00:05:29,838 [INFO] CFD3: ✅ IFD appended: XAUUSD WAIT TP=4135.59 SL=4041.87
+2025-11-15 00:05:29,842 [INFO] CFD3: [DryRun email] 🚨 WAIT - XAUUSD
+XAUUSD @4074.47
+Rating: 0.95
+TP: 4135.59 / SL: 4041.87
+ScreenerSrc: tradingview
+Time: 1763132725.073004
+
+2025-11-15 00:05:29,843 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:05:29,843 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4074.47 rel=0.0308 -> preferring screener
+2025-11-15 00:05:29,843 [WARNING] CFD3: 🚫 Suppressed WAIT for XAUUSD @4074.47 (count 1 in 900s)
+2025-11-15 00:05:29,844 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:05:29,844 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4074.47 rel=0.0308 -> preferring screener
+2025-11-15 00:05:29,844 [WARNING] CFD3: 🚫 Suppressed WAIT for XAUUSD @4074.47 (count 2 in 900s)
+2025-11-15 00:08:01,986 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-15 00:08:02,324 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:08:02,325 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4071.835 rel=0.0315 -> preferring screener
+2025-11-15 00:08:02,334 [INFO] CFD3: ✅ IFD appended: XAUUSD WAIT TP=4132.91 SL=4039.26
+2025-11-15 00:08:02,336 [INFO] CFD3: [DryRun email] 🚨 WAIT - XAUUSD
+XAUUSD @4071.835
+Rating: 0.95
+TP: 4132.91 / SL: 4039.26
+ScreenerSrc: tradingview
+Time: 1763132875.072869
+
+2025-11-15 00:14:47,322 [INFO] CFD3: 🚀 Monitoring (fused) ...
+2025-11-15 00:14:47,716 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:14:47,717 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.0 screener=4076.765 rel=0.0302 -> preferring screener
+2025-11-15 00:14:47,720 [INFO] CFD3: ✅ IFD appended: XAUUSD WAIT TP=4137.92 SL=4044.15 mode=MANUAL
+2025-11-15 00:14:47,721 [INFO] CFD3: [DryRun email] 🚨 WAIT - XAUUSD
+XAUUSD @4076.765
+Rating: -0.05
+TP: 4137.92 / SL: 4044.15
+ScreenerSrc: tradingview
+Time: 1763134000.0
+
+2025-11-15 00:14:47,721 [INFO] CFD3: 📊 Screener for XAUUSD: src=tradingview used=XAUUSD ATR=None
+2025-11-15 00:14:47,721 [WARNING] CFD3: ⚠️ Price mismatch for XAUUSD: payload=4200.1 screener=4076.765 rel=0.0303 -> preferring screener
+2025-11-15 00:14:47,721 [WARNING] CFD3: 🚫 Suppressed WAIT for XAUUSD @4076.765 (count 1 in 900s)
+2025-11-15 00:14:47,723 [WARNING] CFD3: ⏳ Skipped stale alert for XAUUSD (age 163133288s)
+2025-11-15 00:15:02,648 [INFO] CFD3: 👋 Stopped.
+2025-11-15 01:09:07,576 [INFO] CFD3: GMORealtimeClient started for JP225/NQ100/XAUUSD/GER40
+2025-11-15 01:09:08,027 [ERROR] CFD3: tradingview_ta error for japan/JP225USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:09:08,426 [ERROR] CFD3: tradingview_ta error for japan/N225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:09:09,161 [ERROR] CFD3: tradingview_ta error for japan/JP225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:09:09,756 [ERROR] CFD3: tradingview_ta error for japan/JAPAN225CFD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:09:10,789 [ERROR] CFD3: yfinance error for JP225: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2025-11-15 01:09:10,789 [WARNING] CFD3: get_screener_auto: no data source succeeded for JP225
+2025-11-15 01:09:11,154 [ERROR] CFD3: tradingview_ta error for america/NQ1!
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:09:11,510 [ERROR] CFD3: tradingview_ta error for america/NAS100USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:09:12,805 [ERROR] CFD3: tradingview_ta error for cfd/DE40EUR
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:09:13,104 [ERROR] CFD3: tradingview_ta error for cfd/GER40
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:16:02,397 [INFO] CFD3: GMORealtimeClient started for JP225/NQ100/XAUUSD/GER40
+2025-11-15 01:16:03,014 [ERROR] CFD3: tradingview_ta error for japan/JP225USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:16:03,373 [ERROR] CFD3: tradingview_ta error for japan/N225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:16:03,983 [ERROR] CFD3: tradingview_ta error for japan/JP225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:16:04,454 [ERROR] CFD3: tradingview_ta error for japan/JAPAN225CFD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:16:05,226 [ERROR] CFD3: yfinance error for JP225 (^N225): The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+2025-11-15 01:16:05,226 [WARNING] CFD3: get_screener_auto: no data source succeeded for JP225
+2025-11-15 01:16:05,924 [ERROR] CFD3: tradingview_ta error for america/NQ1!
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:16:06,314 [ERROR] CFD3: tradingview_ta error for america/NAS100USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:16:07,448 [ERROR] CFD3: tradingview_ta error for cfd/DE40EUR
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:16:07,840 [ERROR] CFD3: tradingview_ta error for cfd/GER40
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:26:09,806 [INFO] CFD3: GMORealtimeClient started for JP225/NQ100/XAUUSD/GER40
+2025-11-15 01:26:10,344 [ERROR] CFD3: tradingview_ta error for japan/JP225USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:26:10,836 [ERROR] CFD3: tradingview_ta error for japan/N225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:26:11,363 [ERROR] CFD3: tradingview_ta error for japan/JP225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:26:11,887 [ERROR] CFD3: tradingview_ta error for japan/JAPAN225CFD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:26:13,106 [INFO] CFD3: droplevel(0) on MultiIndex df for JP225 (^N225). cols=['^N225', '^N225', '^N225', '^N225', '^N225']
+2025-11-15 01:26:13,106 [WARNING] CFD3: yfinance df has no Close column for JP225 (^N225). cols=['^N225', '^N225', '^N225', '^N225', '^N225']
+2025-11-15 01:26:13,106 [WARNING] CFD3: get_screener_auto: no data source succeeded for JP225
+2025-11-15 01:26:13,405 [ERROR] CFD3: tradingview_ta error for america/NQ1!
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:26:13,825 [ERROR] CFD3: tradingview_ta error for america/NAS100USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:26:15,351 [ERROR] CFD3: tradingview_ta error for cfd/DE40EUR
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:26:15,712 [ERROR] CFD3: tradingview_ta error for cfd/GER40
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 368, in get_indicators
+    raise Exception("Exchange or symbol not found.")
+Exception: Exchange or symbol not found.
+2025-11-15 01:28:34,474 [INFO] CFD3: GMORealtimeClient started for JP225/NQ100/XAUUSD/GER40
+2025-11-15 01:28:34,743 [ERROR] CFD3: tradingview_ta error for japan/JP225USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:35,023 [ERROR] CFD3: tradingview_ta error for japan/N225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:35,328 [ERROR] CFD3: tradingview_ta error for japan/JP225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:35,512 [ERROR] CFD3: tradingview_ta error for japan/JAPAN225CFD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:37,553 [INFO] CFD3: xs('Close', level=0) flattened MultiIndex df for JP225 (^N225). cols=['^N225']
+2025-11-15 01:28:37,553 [WARNING] CFD3: yfinance df has no Close column for JP225 (^N225). cols=['^N225']
+2025-11-15 01:28:37,553 [WARNING] CFD3: get_screener_auto: no data source succeeded for JP225
+2025-11-15 01:28:39,135 [ERROR] CFD3: tradingview_ta error for america/NQ1!
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:40,294 [ERROR] CFD3: tradingview_ta error for america/NAS100USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:41,300 [ERROR] CFD3: tradingview_ta error for america/NDX
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:42,759 [INFO] CFD3: xs('Close', level=0) flattened MultiIndex df for NQ100 (^NDX). cols=['^NDX']
+2025-11-15 01:28:42,759 [WARNING] CFD3: yfinance df has no Close column for NQ100 (^NDX). cols=['^NDX']
+2025-11-15 01:28:42,759 [WARNING] CFD3: get_screener_auto: no data source succeeded for NQ100
+2025-11-15 01:28:43,725 [ERROR] CFD3: tradingview_ta error for cfd/XAUUSD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:44,038 [ERROR] CFD3: tradingview_ta error for forex/XAUUSD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:44,217 [ERROR] CFD3: tradingview_ta error for cfd/GOLD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:44,779 [INFO] CFD3: xs('Close', level=0) flattened MultiIndex df for XAUUSD (GC=F). cols=['GC=F']
+2025-11-15 01:28:44,779 [WARNING] CFD3: yfinance df has no Close column for XAUUSD (GC=F). cols=['GC=F']
+2025-11-15 01:28:44,779 [WARNING] CFD3: get_screener_auto: no data source succeeded for XAUUSD
+2025-11-15 01:28:45,120 [ERROR] CFD3: tradingview_ta error for cfd/DE40EUR
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:45,480 [ERROR] CFD3: tradingview_ta error for cfd/GER40
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:45,736 [ERROR] CFD3: tradingview_ta error for germany/DAX
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:28:46,177 [INFO] CFD3: xs('Close', level=0) flattened MultiIndex df for GER40 (^GDAXI). cols=['^GDAXI']
+2025-11-15 01:28:46,177 [WARNING] CFD3: yfinance df has no Close column for GER40 (^GDAXI). cols=['^GDAXI']
+2025-11-15 01:28:46,177 [WARNING] CFD3: get_screener_auto: no data source succeeded for GER40
+2025-11-15 01:29:36,117 [INFO] CFD3: GMORealtimeClient started for JP225/NQ100/XAUUSD/GER40
+2025-11-15 01:29:36,509 [ERROR] CFD3: tradingview_ta error for japan/JP225USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:36,768 [ERROR] CFD3: tradingview_ta error for japan/N225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:37,745 [ERROR] CFD3: tradingview_ta error for japan/JP225
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:38,358 [ERROR] CFD3: tradingview_ta error for japan/JAPAN225CFD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:39,309 [INFO] CFD3: xs('Close', level=0) flattened MultiIndex df for JP225 (^N225). cols=['^N225']
+2025-11-15 01:29:39,309 [INFO] CFD3: renamed ticker-like column to Close for JP225 (^N225). cols=['Close']
+2025-11-15 01:29:39,504 [ERROR] CFD3: tradingview_ta error for america/NQ1!
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:39,699 [ERROR] CFD3: tradingview_ta error for america/NAS100USD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:39,887 [ERROR] CFD3: tradingview_ta error for america/NDX
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:40,420 [INFO] CFD3: xs('Close', level=0) flattened MultiIndex df for NQ100 (^NDX). cols=['^NDX']
+2025-11-15 01:29:40,420 [INFO] CFD3: renamed ticker-like column to Close for NQ100 (^NDX). cols=['Close']
+2025-11-15 01:29:40,657 [ERROR] CFD3: tradingview_ta error for cfd/XAUUSD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:40,892 [ERROR] CFD3: tradingview_ta error for forex/XAUUSD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:41,093 [ERROR] CFD3: tradingview_ta error for cfd/GOLD
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:41,556 [INFO] CFD3: xs('Close', level=0) flattened MultiIndex df for XAUUSD (GC=F). cols=['GC=F']
+2025-11-15 01:29:41,556 [INFO] CFD3: renamed ticker-like column to Close for XAUUSD (GC=F). cols=['Close']
+2025-11-15 01:29:41,885 [ERROR] CFD3: tradingview_ta error for cfd/DE40EUR
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:42,129 [ERROR] CFD3: tradingview_ta error for cfd/GER40
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:42,435 [ERROR] CFD3: tradingview_ta error for germany/DAX
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/app/mygpt_screener.py", line 65, in _get_tv_screener
+    analysis = h.get_analysis()
+               ^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 387, in get_analysis
+    return calculate(indicators=self.get_indicators(), indicators_key=self.indicators, screener=self.screener, symbol=self.symbol, exchange=self.exchange, interval=self.interval)
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/tradingview_ta/main.py", line 358, in get_indicators
+    raise Exception("Can't access TradingView's API. HTTP status code: {}. Check for invalid symbol, exchange, or indicators.".format(
+Exception: Can't access TradingView's API. HTTP status code: 429. Check for invalid symbol, exchange, or indicators.
+2025-11-15 01:29:42,850 [INFO] CFD3: xs('Close', level=0) flattened MultiIndex df for GER40 (^GDAXI). cols=['^GDAXI']
+2025-11-15 01:29:42,850 [INFO] CFD3: renamed ticker-like column to Close for GER40 (^GDAXI). cols=['Close']

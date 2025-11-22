@@ -1,0 +1,8 @@
+==== IFD SUMMARY LOG ====
+Generated: 2025-10-30 06:52:37.307092
+
+     text                date  impact    GOLD     USDJPY  NASDAQ  JP225  combined_score  GOLD     USDJPY  NASDAQ  JP225  volatility sentiment  confidence reasons  numeric signal  entry      TP      SL entry_source
+ Test Buy 2025-10-30 09:10:00     0.7 2381.32 152.595993   15600  38450             0.8   NaN 152.595993     NaN    NaN         NaN   Neutral         0.5 dry-run        0    BUY  38450 38642.0 38335.0        JP225
+Test Sell 2025-10-30 09:11:00     0.7 2381.32 152.595993   15600  38450            -0.8   NaN 152.595993     NaN    NaN         NaN   Neutral         0.5 dry-run        0   SELL  38450 38642.0 38335.0        JP225
+
+==== END LOG ====

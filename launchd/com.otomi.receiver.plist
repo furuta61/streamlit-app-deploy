@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Launchd service name -->
+    <key>Label</key>
+    <string>com.otomi.receiver</string>
+
+    <!-- 実行コマンド -->
+    <key>ProgramArguments</key>
+    <array>
+        <!-- 仮想環境内の Python を指定 -->
+        <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/bin/python3</string>
+        <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/receiver.py</string>
+    </array>
+
+    <!-- 環境変数 -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>TV_WEBHOOK_SECRET</key>
+        <string>mysecret123</string>
+    </dict>
+
+    <!-- ログ出力 -->
+    <key>StandardOutPath</key>
+    <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/logs/receiver.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/logs/receiver_error.log</string>
+
+    <!-- 設定: 再起動と起動タイミング -->
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- 実行ディレクトリ -->
+    <key>WorkingDirectory</key>
+    <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem</string>
+</dict>
+</plist>

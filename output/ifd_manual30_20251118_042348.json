@@ -1,0 +1,29 @@
+{
+  "run_id": "20251118_042348",
+  "trade_mode": "MANUAL_30M",
+  "orders": [
+    {
+      "instrument": "XAUUSD",
+      "direction": "buy",
+      "decision": "GO",
+      "lots": 1,
+      "entry_order": {
+        "type": "limit",
+        "price": 4010.33
+      },
+      "ifd_legs": [
+        {
+          "name": "IFD-30M",
+          "oco": {
+            "take_profit": {
+              "price": 4015.0
+            },
+            "stop_loss": {
+              "price": 4005.66
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

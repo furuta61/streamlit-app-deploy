@@ -1,0 +1,419 @@
+#!/usr/bin/env python3
+"""
+post_run_automation.py
+CFD3_AutoSystem：出力確認 → Drive同期 → 通知 一括自動化
+
+Usage:
+  - Configure env vars: CFD3_FROM, CFD3_TO
+  - Store email password in Keychain: keyring.set_password('CFD3_MAIL', '<from_addr>', '<app-password>')
+"""
+
+import os
+import subprocess
+import pandas as pd
+from datetime import datetime
+from pathlib import Path
+import smtplib
+from email.mime.text import MIMEText
+import keyring
+
+
+# Configuration
+OUTPUT_DIR = Path.home() / "Desktop/CFD3_AutoSystem/output_production"
+DRIVE_DIR = Path.home() / "Google ドライブ/CFD3Pro"
+
+
+def load_email_credentials():
+    from_addr = os.environ.get('CFD3_FROM')
+    to_addr = os.environ.get('CFD3_TO')
+    pwd = None
+    if from_addr:
+        try:
+            pwd = keyring.get_password('CFD3_MAIL', from_addr)
+        except Exception:
+            pwd = None
+    return from_addr, to_addr, pwd
+
+
+def summary_csv(path: Path):
+    if not path.exists():
+        print(f"❌ ファイルが存在しません: {path}")
+        return None
+    df = pd.read_csv(path)
+    print(f"✅ 読み込み完了: {path}")
+    print(f"📊 行数: {len(df)} / 列数: {len(df.columns)}")
+    print("🪣 列名:", list(df.columns))
+    print("\n--- データサンプル ---")
+    print(df.head(5))
+    return df
+
+
+def find_latest_csv(output_dir: Path):
+    if not output_dir.exists():
+        print(f"❌ Output dir does not exist: {output_dir}")
+        return None
+    csvs = list(output_dir.glob("events_scored_*.csv"))
+    if not csvs:
+        print(f"❌ No events_scored_*.csv found in {output_dir}")
+        return None
+    latest = max(csvs, key=lambda p: p.stat().st_mtime)
+    print(f"🕒 最新ファイルを検出: {latest}")
+    return latest
+
+
+def sync_to_drive(src: Path, drive_dir: Path):
+    if not src.exists():
+        print(f"❌ コピー元が見つかりません: {src}")
+        return None
+    drive_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    dest = drive_dir / f"events_scored_{timestamp}.csv"
+    subprocess.run(["cp", str(src), str(dest)], check=True)
+    print(f"✅ Driveフォルダに保存完了: {dest}")
+    return dest
+
+
+def send_email(subject: str, body: str, from_addr: str, to_addr: str, password: str, smtp_server: str = 'smtp.gmail.com', smtp_port: int = 587):
+    try:
+        msg = MIMEText(body, "plain", "utf-8")
+        msg['Subject'] = subject
+        msg['From'] = from_addr
+        msg['To'] = to_addr
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(from_addr, password)
+            server.send_message(msg)
+        print("📨 通知メールを送信しました。")
+    except Exception as e:
+        print(f"⚠️ メール送信に失敗しました: {e}")
+
+
+def extract_strong_signals(df: pd.DataFrame):
+    if 'signal' not in df.columns or 'confidence' not in df.columns:
+        return None
+    strong = df[(df['signal'].isin(['BUY', 'SELL'])) & (df['confidence'] > 0.8)]
+    if strong.empty:
+        print("📭 Strongシグナルは検出されませんでした。メール送信をスキップ。")
+        return None
+    print(f"📨 {len(strong)}件のStrongシグナルを検出、メール送信します。")
+    cols = [c for c in ['datetime', 'signal', 'confidence', 'entry', 'TP', 'SL'] if c in strong.columns]
+    return strong[cols]
+
+
+def main():
+    print("=== CFD3_AutoSystem Post-Run Automation ===")
+    latest = find_latest_csv(OUTPUT_DIR)
+    if latest is None:
+        return
+    df = summary_csv(latest)
+    if df is None:
+        return
+
+    drive_path = sync_to_drive(latest, DRIVE_DIR)
+
+    body = (
+        f"✅ CFD3 AutoSystem が完了しました。\n\n"
+        f"出力ファイル: {drive_path}\n"
+        f"行数: {len(df)}\n"
+        f"列名: {', '.join(df.columns[:8])}...\n"
+        f"時刻: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+    )
+
+    from_addr, to_addr, pwd = load_email_credentials()
+    if from_addr and to_addr and pwd:
+        print("🔐 Email credentials found. Preparing to send notifications for strong signals.")
+        enabled = True
+    else:
+        enabled = False
+        if not from_addr or not to_addr:
+            print("❗ Email: Set CFD3_FROM and CFD3_TO environment variables to enable sending.")
+        if from_addr and not pwd:
+            print("❗ Email password not found in Keychain. Use: keyring.set_password('CFD3_MAIL', '<from_addr>', '<app-password>')")
+
+    if enabled:
+        signals = extract_strong_signals(df)
+        if signals is not None:
+            msg_body = "【CFD3 AutoSystem】Strong Signals Detected:\n\n" + signals.to_string(index=False)
+            send_email("CFD3 AutoSystem: STRONG TRADE ALERT", msg_body, from_addr, to_addr, pwd)
+        else:
+            print("📭 Strongシグナル無しのため、メール送信は行われません。")
+    else:
+        print("✉️ メール通知は無効です（設定不足または意図的に無効）。")
+
+    print("🎯 すべての処理が完了しました。")
+
+
+if __name__ == '__main__':
+    main()
+#!/usr/bin/env python3
+# ======================================================
+# post_run_automation.py
+# CFD3_AutoSystem：出力確認 → Drive同期 → 通知 一括自動化
+# ======================================================
+
+import os
+import subprocess
+import pandas as pd
+from datetime import datetime
+from pathlib import Path
+import smtplib
+from email.mime.text import MIMEText
+import keyring
+
+# === 設定部分（必要に応じて変更） =====================
+
+# 出力ディレクトリ
+OUTPUT_DIR = Path.home() / "Desktop/CFD3_AutoSystem/output_production"
+
+# Drive 同期フォルダ
+DRIVE_DIR = Path.home() / "Google ドライブ/CFD3Pro"
+
+# 結果ファイル: 自動検出（find_latest_csv を使う）
+CSV_FILE = None
+
+# メール設定は環境変数 CFD3_FROM / CFD3_TO を利用し、パスワードは Keychain(keyring) に保存してください。
+# 例: export CFD3_FROM=you@example.com; export CFD3_TO=ops@example.com
+# keyring.set_password('CFD3_MAIL', 'you@example.com', '<app-password>')
+
+
+def load_email_credentials():
+    """Load email credentials from env/keyring. Returns (from_addr, to_addr, password) or (None, None, None)."""
+    from_addr = os.environ.get('CFD3_FROM')
+    to_addr = os.environ.get('CFD3_TO')
+    pwd = None
+    if from_addr:
+        try:
+            pwd = keyring.get_password('CFD3_MAIL', from_addr)
+        except Exception:
+            if __name__ == '__main__':
+                main()
+
+def summary_csv(path: Path):
+    """CSVの基本情報をサマリ表示"""
+    if not path.exists():
+        print(f"❌ ファイルが存在しません: {path}")
+        return None
+
+    df = pd.read_csv(path)
+    print(f"✅ 読み込み完了: {path}")
+    print(f"📊 行数: {len(df)} / 列数: {len(df.columns)}")
+    print("🪣 列名:", list(df.columns))
+    print("\n--- データサンプル ---")
+    print(df.head(5))
+    return df
+
+
+def find_latest_csv(output_dir: Path):
+    """Output dir 内の events_scored_*.csv を一覧し、最終更新日時が最新のファイルを返す"""
+    if not output_dir.exists():
+        print(f"❌ Output dir does not exist: {output_dir}")
+        return None
+    csvs = list(output_dir.glob("events_scored_*.csv"))
+    if not csvs:
+        print(f"❌ No events_scored_*.csv found in {output_dir}")
+        return None
+    latest = max(csvs, key=lambda p: p.stat().st_mtime)
+    print(f"🕒 最新ファイルを検出: {latest}")
+    return latest
+
+
+def sync_to_drive(src: Path, drive_dir: Path):
+    """Drive 同期フォルダにコピー"""
+    if not src.exists():
+        print(f"❌ コピー元が見つかりません: {src}")
+        return None
+
+    drive_dir.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+    dest = drive_dir / f"events_scored_{timestamp}.csv"
+    subprocess.run(["cp", str(src), str(dest)], check=True)
+    print(f"✅ Driveフォルダに保存完了: {dest}")
+    return dest
+
+
+def send_email(subject: str, body: str):
+    """完了通知メールを送信"""
+    if not ENABLE_EMAIL:
+        print("✉️ メール通知は無効です（ENABLE_EMAIL=False）")
+        return
+    try:
+        msg = MIMEText(body, "plain", "utf-8")
+        msg["Subject"] = subject
+        msg["From"] = FROM_ADDR
+        msg["To"] = TO_ADDR
+
+        #!/usr/bin/env python3
+        # ======================================================
+        # post_run_automation.py
+        # CFD3_AutoSystem：出力確認 → Drive同期 → 通知 一括自動化
+        # ======================================================
+
+        import os
+        import subprocess
+        import pandas as pd
+        from datetime import datetime
+        from pathlib import Path
+        import smtplib
+        from email.mime.text import MIMEText
+        import keyring
+
+        # === 設定部分（必要に応じて変更） =====================
+
+        # 出力ディレクトリ
+        OUTPUT_DIR = Path.home() / "Desktop/CFD3_AutoSystem/output_production"
+
+        # Drive 同期フォルダ
+        DRIVE_DIR = Path.home() / "Google ドライブ/CFD3Pro"
+
+        # 結果ファイル: 自動検出（find_latest_csv を使う）
+        CSV_FILE = None
+
+        # 通知メール設定（オプション）
+        # デフォルトでは無効。実行時に環境変数または Keychain から読み取れる場合に有効化します。
+        ENABLE_EMAIL = False
+        SMTP_SERVER = os.environ.get('CFD3_SMTP_SERVER', 'smtp.gmail.com')
+        SMTP_PORT = int(os.environ.get('CFD3_SMTP_PORT', 587))
+        # FROM/TO は環境変数 CFD3_FROM / CFD3_TO で指定できます
+        FROM_ADDR = os.environ.get('CFD3_FROM') or None
+        TO_ADDR = os.environ.get('CFD3_TO') or None
+        # EMAIL_PASS は Keychain に保存してください: keyring.set_password('CFD3_MAIL', '<from_addr>', '<app-password>')
+        EMAIL_PASS = None
+
+
+        def load_email_credentials():
+            """Populate FROM/TO/PASS from env and Keychain if available.
+
+            - FROM/TO: environment variables CFD3_FROM / CFD3_TO
+            - EMAIL_PASS: keyring service 'CFD3_MAIL' with username == FROM_ADDR
+            """
+            from_addr = FROM_ADDR
+            to_addr = TO_ADDR
+            email_pass = None
+            if from_addr:
+                try:
+                    email_pass = keyring.get_password('CFD3_MAIL', from_addr)
+                except Exception:
+                    email_pass = None
+            return from_addr, to_addr, email_pass
+
+
+        def summary_csv(path: Path):
+            """CSVの基本情報をサマリ表示"""
+            if not path.exists():
+                print(f"❌ ファイルが存在しません: {path}")
+                return None
+
+            df = pd.read_csv(path)
+            print(f"✅ 読み込み完了: {path}")
+            print(f"📊 行数: {len(df)} / 列数: {len(df.columns)}")
+            print("🪣 列名:", list(df.columns))
+            print("\n--- データサンプル ---")
+            print(df.head(5))
+            return df
+
+
+        def find_latest_csv(output_dir: Path):
+            """Output dir 内の events_scored_*.csv を一覧し、最終更新日時が最新のファイルを返す"""
+            if not output_dir.exists():
+                print(f"❌ Output dir does not exist: {output_dir}")
+                return None
+            csvs = list(output_dir.glob("events_scored_*.csv"))
+            if not csvs:
+                print(f"❌ No events_scored_*.csv found in {output_dir}")
+                return None
+            latest = max(csvs, key=lambda p: p.stat().st_mtime)
+            print(f"🕒 最新ファイルを検出: {latest}")
+            return latest
+
+
+        def sync_to_drive(src: Path, drive_dir: Path):
+            """Drive 同期フォルダにコピー"""
+            if not src.exists():
+                print(f"❌ コピー元が見つかりません: {src}")
+                return None
+
+            drive_dir.mkdir(parents=True, exist_ok=True)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M")
+            dest = drive_dir / f"events_scored_{timestamp}.csv"
+            subprocess.run(["cp", str(src), str(dest)], check=True)
+            print(f"✅ Driveフォルダに保存完了: {dest}")
+            return dest
+
+
+        def send_email(subject: str, body: str, from_addr: str, to_addr: str, password: str):
+            """完了通知メールを送信（必要な情報を引数で受け取る）"""
+            try:
+                msg = MIMEText(body, "plain", "utf-8")
+                msg["Subject"] = subject
+                msg["From"] = from_addr
+                msg["To"] = to_addr
+
+                with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+                    server.starttls()
+                    server.login(from_addr, password)
+                    server.send_message(msg)
+                print("📨 通知メールを送信しました。")
+            except Exception as e:
+                print(f"⚠️ メール送信に失敗しました: {e}")
+
+
+        # === 強いトレードシグナルの抽出 ===
+        def extract_strong_signals(df: pd.DataFrame):
+            if "signal" not in df.columns or "confidence" not in df.columns:
+                return None
+            strong = df[(df["signal"].isin(["BUY", "SELL"])) & (df["confidence"] > 0.8)]
+            if strong.empty:
+                print("📭 Strongシグナルは検出されませんでした。メール送信をスキップ。")
+                return None
+            print(f"📨 {len(strong)}件のStrongシグナルを検出、メール送信します。")
+            # Ensure expected columns exist
+            cols = [c for c in ["datetime", "signal", "confidence", "entry", "TP", "SL"] if c in strong.columns]
+            return strong[cols]
+
+
+        def main():
+            print("=== CFD3_AutoSystem Post-Run Automation ===")
+            latest = find_latest_csv(OUTPUT_DIR)
+            if latest is None:
+                return
+            df = summary_csv(latest)
+
+            if df is not None:
+                drive_path = sync_to_drive(latest, DRIVE_DIR)
+
+                body = (
+                    f"✅ CFD3 AutoSystem が完了しました。\n\n"
+                    f"出力ファイル: {drive_path}\n"
+                    f"行数: {len(df)}\n"
+                    f"列名: {', '.join(df.columns[:8])}...\n"
+                    f"時刻: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+                )
+
+                # Try to load credentials from env/keyring; enable email only if we have from/to/password
+                from_addr, to_addr, email_pass = load_email_credentials()
+                if from_addr and to_addr and email_pass:
+                    print("🔐 Email credentials found in env/keyring. Email notifications enabled.")
+                    ENABLE = True
+                else:
+                    ENABLE = False
+                    if not (from_addr and to_addr):
+                        print("❗ Email: FROM/TO not configured. Set CFD3_FROM and CFD3_TO env vars to enable sending.")
+                    if from_addr and not email_pass:
+                        print("❗ Email password not found in Keychain. Store with: keyring.set_password('CFD3_MAIL', '<from_addr>', '<app-password>')")
+
+                # Strong シグナルのみメール送信
+                if ENABLE:
+                    signals = extract_strong_signals(df)
+                    if signals is not None:
+                        msg_body = "【CFD3 AutoSystem】Strong Signals Detected:\n\n" + signals.to_string(index=False)
+                        send_email("CFD3 AutoSystem: STRONG TRADE ALERT", msg_body, from_addr, to_addr, email_pass)
+                    else:
+                        print("📭 Strongシグナル無しのため、メール送信は行われません。")
+                else:
+                    print("✉️ メール通知は無効です（設定不足または意図的に無効）。")
+
+            print("🎯 すべての処理が完了しました。")
+
+
+        if __name__ == "__main__":
+            main()

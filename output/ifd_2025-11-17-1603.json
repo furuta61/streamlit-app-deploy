@@ -1,0 +1,88 @@
+{
+  "run_id": "2025-11-17-1603",
+  "capital_jpy": 900000,
+  "per_lot_allocation_jpy": 300000,
+  "trade_mode": "DAY4H",
+  "news_lock": false,
+  "orders": [
+    {
+      "instrument": "XAUUSD",
+      "direction": "hold",
+      "signal_rating": 2,
+      "decision": "WAIT",
+      "lots": 0,
+      "entry_order": {
+        "type": "-",
+        "price": 4012.75
+      },
+      "order_type": "-",
+      "ifd_legs": [],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      },
+      "display_prices": {
+        "entry_price": 401275.0
+      }
+    },
+    {
+      "instrument": "US30",
+      "direction": "buy",
+      "signal_rating": 6,
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_order": {
+        "type": "market",
+        "price": 47147.0
+      },
+      "order_type": "成行",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 47167.0
+            },
+            "stop_loss": {
+              "price": 47140.3
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 47177.0
+            },
+            "stop_loss": {
+              "price": 47140.3
+            },
+            "trailing_stop": {
+              "activate_after": 47177.0,
+              "distance": 99.7
+            }
+          }
+        }
+      ],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      },
+      "display_prices": {
+        "entry_price": 47147.0,
+        "tp1": 47167.0,
+        "tp2": 47177.0,
+        "sl": 47140.3
+      }
+    }
+  ],
+  "valid_until": "2025-11-17T11:03:12.769065Z",
+  "display_meta": {
+    "scale": {
+      "XAUUSD": 100.0
+    },
+    "decimals": {
+      "XAUUSD": 1
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "total_rows": 83,
+  "screener_price_present": 35,
+  "incoming_price_present": 0,
+  "entry_price_present": 83,
+  "diff_screener_stats": {
+    "count": 35,
+    "mean": 1807.0600548689704,
+    "median": 19.934999542236326,
+    "std": 2938.28156420608,
+    "min": -342.23828125,
+    "max": 7719.515625
+  },
+  "pct_diff_screener_stats": {
+    "count": 35,
+    "mean": 35.049604900080496,
+    "median": 42.31787612106626,
+    "std": 28.053091442683826,
+    "min": -0.6684341430664062,
+    "max": 70.65446868402533
+  },
+  "diff_incoming_stats": {},
+  "pct_diff_incoming_stats": {},
+  "screener_gt_0_5pct": 0.42168674698795183,
+  "screener_gt_2pct": 0.2891566265060241,
+  "incoming_gt_0_5pct": 0.0,
+  "incoming_gt_2pct": 0.0,
+  "by_symbol": {
+    "GER40": {
+      "rows": 10,
+      "screener_present": 5,
+      "incoming_present": 0,
+      "mean_pct_diff_screener": 30.145236280487808,
+      "median_pct_diff_screener": 30.146722560975608,
+      "mean_pct_diff_incoming": NaN
+    },
+    "JP225": {
+      "rows": 36,
+      "screener_present": 11,
+      "incoming_present": 0,
+      "mean_pct_diff_screener": -0.6684341430664062,
+      "median_pct_diff_screener": -0.6684341430664062,
+      "mean_pct_diff_incoming": NaN
+    },
+    "NGAS": {
+      "rows": 9,
+      "screener_present": 5,
+      "incoming_present": 0,
+      "mean_pct_diff_screener": 42.649003212025626,
+      "median_pct_diff_screener": 42.31787612106626,
+      "mean_pct_diff_incoming": NaN
+    },
+    "NQ100": {
+      "rows": 9,
+      "screener_present": 4,
+      "incoming_present": 0,
+      "mean_pct_diff_screener": 43.12578561452514,
+      "median_pct_diff_screener": 43.12578561452514,
+      "mean_pct_diff_incoming": NaN
+    },
+    "XAGUSD": {
+      "rows": 9,
+      "screener_present": 5,
+      "incoming_present": 0,
+      "mean_pct_diff_screener": 70.33075095061932,
+      "median_pct_diff_screener": 70.35538675414264,
+      "mean_pct_diff_incoming": NaN
+    },
+    "XAUUSD": {
+      "rows": 10,
+      "screener_present": 5,
+      "incoming_present": 0,
+      "mean_pct_diff_screener": 69.19217048055673,
+      "median_pct_diff_screener": 69.3033066229478,
+      "mean_pct_diff_incoming": NaN
+    }
+  }
+}

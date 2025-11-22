@@ -1,0 +1,224 @@
+{
+  "efa9f5aec875ad4288d95195b2b70ee9": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T13:15:00Z",
+    "processed_at": "2025-11-06T15:57:54.267791",
+    "reason": null
+  },
+  "f01b3d134085084a623fdbda5b8db1b8": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T11:54:58Z",
+    "processed_at": "2025-11-06T15:58:37.047168",
+    "reason": null
+  },
+  "d17ef94449f885996eac613597893a15": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T11:55:55Z",
+    "processed_at": "2025-11-06T15:58:49.308483",
+    "reason": null
+  },
+  "df9e15dd665500cde6e0336252451aa5": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T12:03:39Z",
+    "processed_at": "2025-11-06T15:59:02.791605",
+    "reason": null
+  },
+  "421ac5548ea59a770742ae182978fffb": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T12:14:41Z",
+    "processed_at": "2025-11-06T15:59:15.349977",
+    "reason": null
+  },
+  "6aefd62d392274433927d863717ed54c": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T12:27:05Z",
+    "processed_at": "2025-11-06T15:59:28.472660",
+    "reason": null
+  },
+  "18ea0096dea4161fd9577a0e4e8e46bb": {
+    "symbol": "XAUUSD",
+    "timestamp": "2025-11-06T12:27:06Z",
+    "processed_at": "2025-11-06T15:59:42.458327",
+    "reason": null
+  },
+  "140459571461c7959fa3ceb5cf15e348": {
+    "symbol": "XAGUSD",
+    "timestamp": "2025-11-06T12:27:06Z",
+    "processed_at": "2025-11-06T15:59:56.031662",
+    "reason": null
+  },
+  "0dbfcdf7defe09214a4977f513d31e7c": {
+    "symbol": "NGAS",
+    "timestamp": "2025-11-06T12:27:07Z",
+    "processed_at": "2025-11-06T16:00:08.913233",
+    "reason": null
+  },
+  "fe75975d7ad004b5edbfd50ee04a7968": {
+    "symbol": "GER40",
+    "timestamp": "2025-11-06T12:27:08Z",
+    "processed_at": "2025-11-06T16:00:21.747101",
+    "reason": null
+  },
+  "534e699e52dd3bb8fc01f1b6ed889fb6": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T13:13:31Z",
+    "processed_at": "2025-11-06T16:00:35.323193",
+    "reason": null
+  },
+  "f72142cfd75db4beb91465a6576b63ae": {
+    "symbol": "NQ100",
+    "timestamp": "2025-11-06T13:13:31Z",
+    "processed_at": "2025-11-06T16:00:49.250235",
+    "reason": null
+  },
+  "183e208ff845cfad94d119e937a44a6e": {
+    "symbol": "XAUUSD",
+    "timestamp": "2025-11-06T13:13:31Z",
+    "processed_at": "2025-11-06T16:01:01.970657",
+    "reason": null
+  },
+  "a1e994d56f8fba2182670405b83c8639": {
+    "symbol": "XAGUSD",
+    "timestamp": "2025-11-06T13:13:31Z",
+    "processed_at": "2025-11-06T16:01:14.408369",
+    "reason": null
+  },
+  "1ab62df14615e7619bdcbca24640c682": {
+    "symbol": "NGAS",
+    "timestamp": "2025-11-06T13:13:31Z",
+    "processed_at": "2025-11-06T16:01:27.601469",
+    "reason": null
+  },
+  "11a20bb334b135fc3fd3469df77f00ae": {
+    "symbol": "GER40",
+    "timestamp": "2025-11-06T13:13:31Z",
+    "processed_at": "2025-11-06T16:01:40.828869",
+    "reason": null
+  },
+  "e3c6b163ca60f9b61ce48a9e1f1375df": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T13:30:12Z",
+    "processed_at": "2025-11-06T16:01:56.391173",
+    "reason": null
+  },
+  "cbcf9e59b19337190f2c4a5b0602c7c2": {
+    "symbol": "NQ100",
+    "timestamp": "2025-11-06T13:30:12Z",
+    "processed_at": "2025-11-06T16:02:09.663669",
+    "reason": null
+  },
+  "629878264e3041f9d1031c20e311fa19": {
+    "symbol": "XAUUSD",
+    "timestamp": "2025-11-06T13:30:13Z",
+    "processed_at": "2025-11-06T16:02:23.752329",
+    "reason": null
+  },
+  "c4b2d38170a27e710c307f4ed9532224": {
+    "symbol": "XAGUSD",
+    "timestamp": "2025-11-06T13:30:13Z",
+    "processed_at": "2025-11-06T16:02:36.463045",
+    "reason": null
+  },
+  "38ebe8c530c47cee538f6f9c2c52f2c3": {
+    "symbol": "NGAS",
+    "timestamp": "2025-11-06T13:30:14Z",
+    "processed_at": "2025-11-06T16:02:51.568486",
+    "reason": null
+  },
+  "6ff8831c9b443b02517b715c140d67dc": {
+    "symbol": "GER40",
+    "timestamp": "2025-11-06T13:30:15Z",
+    "processed_at": "2025-11-06T16:03:04.739318",
+    "reason": null
+  },
+  "80797479cf0dee7c8a2c277602caf0ae": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T14:00:00Z",
+    "processed_at": "2025-11-06T16:03:18.956664",
+    "reason": null
+  },
+  "7e891aaacba4aa8253b422249eb5b49f": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-06T14:05:00Z",
+    "processed_at": "2025-11-06T16:03:32.227149",
+    "reason": null
+  },
+  "f40bd5c4a8592810012ff8d14e3a1578": {
+    "symbol": "XAUUSD",
+    "timestamp": "2025-11-06T13:15:00Z",
+    "processed_at": "2025-11-06T16:03:44.610198",
+    "reason": null
+  },
+  "5fa171ab6cd3665c9dab686454ccac0c": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-07T01:00:00Z",
+    "processed_at": "2025-11-06T16:04:00.771438",
+    "reason": null
+  },
+  "9f387e24bd96b1befff35dea3ca10c58": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-10T06:23:59.932238",
+    "processed_at": "2025-11-10T06:24:02.960476",
+    "reason": null
+  },
+  "ae7679f9dbcf5853ebd697d404c8126e": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-10T06:36:14.206636",
+    "processed_at": "2025-11-10T06:36:16.813368",
+    "reason": null
+  },
+  "d55d1e43efb3df6505e3313517f59585": {
+    "symbol": "JP225",
+    "timestamp": "2025-11-11T00:00:00Z",
+    "processed_at": "2025-11-11T02:06:32.013973",
+    "reason": null
+  },
+  "6341e1e242e6a3f8deb1d3e81fc64a0b": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763119219,
+    "processed_at": "2025-11-14T11:20:23.079316",
+    "reason": null
+  },
+  "d30b9bd247904e80a67dbe1efae17001": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763119220,
+    "processed_at": "2025-11-14T11:20:33.536616",
+    "reason": null
+  },
+  "48d8fb91259ac1f51d516cd43a361f32": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763109219,
+    "processed_at": "2025-11-14T11:20:44.059749",
+    "reason": null
+  },
+  "d765461a2f1ab864df9e071997e7e36d": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763131953,
+    "processed_at": "2025-11-14T14:52:35.566841",
+    "reason": null
+  },
+  "7fe985f962c1c0518718f29392e49abc": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763131954,
+    "processed_at": "2025-11-14T14:52:46.215119",
+    "reason": null
+  },
+  "9b58ca26b5d7d6190f4161ea56346493": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763121953,
+    "processed_at": "2025-11-14T14:52:56.769707",
+    "reason": null
+  },
+  "d462304fe65375af215f57c21b830c63": {
+    "symbol": "XAUUSD",
+    "timestamp": 1763134001.0,
+    "processed_at": "2025-11-14T15:12:39.580040",
+    "reason": null
+  },
+  "6ab0162ab127640747d1cf1e54d50537": {
+    "symbol": "XAUUSD",
+    "timestamp": 1600000000.0,
+    "processed_at": "2025-11-14T15:12:50.399034",
+    "reason": null
+  }
+}

@@ -1,0 +1,3 @@
+﻿text,date,combined_score,signal,type,entry,TP,SL,entry_source,lot_size,risk_amount
+Strong Buy Example,2025-10-30 09:00:00,0.9,BUY,STRONG_GO,3958.2,5458.2,3208.2,GOLD,8.0,599999.96
+Normal Buy Example,2025-10-30 09:01:00,0.8,BUY,GO,3958.2,4858.2,3508.2,GOLD,2.0,89999.99

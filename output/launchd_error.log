@@ -1,0 +1,12 @@
+/Users/otomi/Desktop/CFD3_AutoSystem/get_data.py:67: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  df = yf.download(tickers=yf_ticker, period=period, interval=interval, progress=False)
+/Users/otomi/Desktop/CFD3_AutoSystem/get_data.py:67: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  df = yf.download(tickers=yf_ticker, period=period, interval=interval, progress=False)
+/Users/otomi/Desktop/CFD3_AutoSystem/get_data.py:67: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  df = yf.download(tickers=yf_ticker, period=period, interval=interval, progress=False)
+/Users/otomi/Desktop/CFD3_AutoSystem/get_data.py:67: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  df = yf.download(tickers=yf_ticker, period=period, interval=interval, progress=False)
+/Users/otomi/Desktop/CFD3_AutoSystem/get_data.py:67: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  df = yf.download(tickers=yf_ticker, period=period, interval=interval, progress=False)
+/Users/otomi/Desktop/CFD3_AutoSystem/get_data.py:67: FutureWarning: YF.download() has changed argument auto_adjust default to True
+  df = yf.download(tickers=yf_ticker, period=period, interval=interval, progress=False)

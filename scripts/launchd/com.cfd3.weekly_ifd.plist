@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cfd3.weekly_ifd</string>
+
+  <!-- ProgramArguments: run zsh -l with the wrapper script -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-l</string>
+    <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/scripts/run_weekly_ifd.sh</string>
+  </array>
+
+  <!-- StartCalendarInterval: Monday 08:30 -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key>
+    <integer>2</integer>
+    <key>Hour</key>
+    <integer>8</integer>
+    <key>Minute</key>
+    <integer>30</integer>
+  </dict>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem</string>
+
+  <key>StandardOutPath</key>
+  <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/logs/launchd_weekly_ifd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/logs/launchd_weekly_ifd.err.log</string>
+
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>KeepAlive</key>
+  <false/>
+</dict>
+</plist>

@@ -1,0 +1,105 @@
+{
+  "run_id": "20251113T0746Z_broker_aligned_now",
+  "orders": [
+    {
+      "instrument": "JP225",
+      "decision": "GO",
+      "lots": 4,
+      "entry_price": 51246.8,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": { "take_profit": { "price": 51256.4 }, "stop_loss": { "price": 50156.4 } }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": { "price": 51456.4 },
+            "stop_loss": { "price": 50156.4 },
+            "trailing_stop": { "activate_after": 51456.4, "distance": 300 }
+          }
+        }
+      ]
+    },
+    {
+      "instrument": "NAS100",
+      "decision": "GO",
+      "lots": 4,
+      "entry_price": 25677.0,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": { "take_profit": { "price": 25727.01 }, "stop_loss": { "price": 25231.01 } }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": { "price": 25777.01 },
+            "stop_loss": { "price": 25231.01 },
+            "trailing_stop": { "activate_after": 25777.01, "distance": 300 }
+          }
+        }
+      ]
+    },
+    {
+      "instrument": "XAUUSD",
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_price": 4217.13,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": { "take_profit": { "price": 4239.29 }, "stop_loss": { "price": 4055.38 } }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": { "price": 4247.6 },
+            "stop_loss": { "price": 4055.38 },
+            "trailing_stop": { "activate_after": 4258.88, "distance": 300 }
+          }
+        }
+      ]
+    },
+    {
+      "instrument": "US30",
+      "decision": "GO",
+      "lots": 4,
+      "entry_price": 48462.2,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": { "take_profit": { "price": 48476.2 }, "stop_loss": { "price": 47369.2 } }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": { "price": 48681.2 },
+            "stop_loss": { "price": 47369.2 },
+            "trailing_stop": { "activate_after": 48681.2, "distance": 300 }
+          }
+        }
+      ]
+    },
+    {
+      "instrument": "COPPER",
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_price": 5.081,
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": { "take_profit": { "price": 7.573 }, "stop_loss": { "price": 4.882 } }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": { "price": 7.639 },
+            "stop_loss": { "price": 4.882 },
+            "trailing_stop": { "activate_after": 7.639, "distance": 300 }
+          }
+        }
+      ]
+    }
+  ]
+}

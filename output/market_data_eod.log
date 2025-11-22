@@ -1,0 +1,97 @@
+1762352359.476619	requests missing or EOD_API_KEY not set
+1762353057.460296	EOD fetch error for N225: 401 Client Error: Unauthorized for url: https://eodhistoricaldata.com/api/real-time/N225?api_token=your_eod_api_key_here&fmt=json
+1762353471.726349	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225
+1762353472.368431	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225
+1762353472.368577	Raw response (truncated): Unauthenticated
+1762353472.3689768	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.L
+1762353473.068088	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.L
+1762353473.068537	Raw response (truncated): Unauthenticated
+1762353473.068712	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.T
+1762353473.75633	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.T
+1762353473.756747	Raw response (truncated): Unauthenticated
+1762353473.757139	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225
+1762353474.410003	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225
+1762353474.410227	Raw response (truncated): Unauthenticated
+1762353474.410461	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.L
+1762353475.167177	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.L
+1762353475.1675441	Raw response (truncated): Unauthenticated
+1762353475.167694	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.T
+1762353475.8350039	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.T
+1762353475.835405	Raw response (truncated): Unauthenticated
+1762353475.83565	All EOD attempts failed for N225
+1762356763.715568	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225
+1762356764.381954	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225
+1762356764.382174	Raw response (truncated): Unauthenticated
+1762356764.382308	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.L
+1762356764.987833	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.L
+1762356764.9882398	Raw response (truncated): Unauthenticated
+1762356764.988436	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.T
+1762356765.588309	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.T
+1762356765.588949	Raw response (truncated): Unauthenticated
+1762356765.589408	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225
+1762356766.197563	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225
+1762356766.1980958	Raw response (truncated): Unauthenticated
+1762356766.198379	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.L
+1762356766.804239	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.L
+1762356766.804342	Raw response (truncated): Unauthenticated
+1762356766.804397	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.T
+1762356767.417705	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.T
+1762356767.418059	Raw response (truncated): Unauthenticated
+1762356767.418245	All EOD attempts failed for N225
+1762357348.7985961	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225
+1762357349.401953	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225
+1762357349.4021919	Raw response (truncated): Unauthenticated
+1762357349.402427	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.L
+1762357350.0191412	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.L
+1762357350.020092	Raw response (truncated): Unauthenticated
+1762357350.0204768	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.T
+1762357350.6292	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.T
+1762357350.6298501	Raw response (truncated): Unauthenticated
+1762357350.630224	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225
+1762357351.233255	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225
+1762357351.23439	Raw response (truncated): Unauthenticated
+1762357351.234943	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.L
+1762357351.854034	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.L
+1762357351.8546612	Raw response (truncated): Unauthenticated
+1762357351.855402	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.T
+1762357352.492805	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.T
+1762357352.493483	Raw response (truncated): Unauthenticated
+1762357352.4938502	All EOD attempts failed for N225
+1762357800.580031	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225
+1762357801.295313	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225
+1762357801.295678	Raw response (truncated): Unauthenticated
+1762357801.295906	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.L
+1762357801.9029078	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.L
+1762357801.903363	Raw response (truncated): Unauthenticated
+1762357801.903667	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.T
+1762357802.511196	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.T
+1762357802.511584	Raw response (truncated): Unauthenticated
+1762357802.51181	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225
+1762357803.168756	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225
+1762357803.169436	Raw response (truncated): Unauthenticated
+1762357803.169943	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.L
+1762357803.81285	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.L
+1762357803.813052	Raw response (truncated): Unauthenticated
+1762357803.813282	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.T
+1762357804.441161	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.T
+1762357804.4417632	Raw response (truncated): Unauthenticated
+1762357804.4421902	All EOD attempts failed for N225
+1762357815.577995	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225
+1762357816.17873	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225
+1762357816.179266	Raw response (truncated): Unauthenticated
+1762357816.179586	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.L
+1762357816.851545	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.L
+1762357816.852201	Raw response (truncated): Unauthenticated
+1762357816.8526452	Trying EOD URL: https://eodhistoricaldata.com/api/real-time/N225.T
+1762357817.479409	EOD HTTP 401 for https://eodhistoricaldata.com/api/real-time/N225.T
+1762357817.480212	Raw response (truncated): Unauthenticated
+1762357817.480654	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225
+1762357818.091905	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225
+1762357818.092612	Raw response (truncated): Unauthenticated
+1762357818.093058	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.L
+1762357818.706054	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.L
+1762357818.706437	Raw response (truncated): Unauthenticated
+1762357818.706608	Trying EOD URL: https://eodhistoricaldata.com/api/eod/N225.T
+1762357819.325512	EOD HTTP 401 for https://eodhistoricaldata.com/api/eod/N225.T
+1762357819.326157	Raw response (truncated): Unauthenticated
+1762357819.326475	All EOD attempts failed for N225

@@ -1,0 +1,8 @@
+==== IFD SUMMARY LOG ====
+Generated: 2025-10-30 11:00:25.654217
+
+| text               | signal   | type      | entry_source   |   lot_size |   risk_amount |   entry |      TP |      SL |   combined_score |
+|--------------------|----------|-----------|----------------|------------|---------------|---------|---------|---------|------------------|
+| Strong Buy Example | BUY      | STRONG_GO | USDJPY         |       8.00 |  600002400.39 |  152.51 | 1652.51 | -597.49 |             0.90 |
+
+==== END LOG ====

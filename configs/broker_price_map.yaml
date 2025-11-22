@@ -1,0 +1,43 @@
+# Broker price/display mapping for instruments
+# Fields:
+#  - symbol_aliases: list of names that may appear in tradingview or internal outputs
+#  - display_decimals: number of decimals the broker (SBI etc.) shows
+#  - scale_factor: multiply internal price by this factor to match broker display (optional)
+#  - tick: minimum price increment (optional)
+
+COPPER:
+  symbol_aliases: [COPPER, XCUUSD, HG1!, "COPPER_USD"]
+  display_decimals: 3
+  tick: 0.001
+  # scale_factor derived from observed SBI vs internal values (example: 4.08 -> 5.081)
+  scale_factor: 1.0
+
+JP225:
+  symbol_aliases: [JP225, "NIKKEI225", "NI225"]
+  display_decimals: 0
+  tick: 1
+  scale_factor: 1.0
+
+NAS100:
+  symbol_aliases: [NAS100, "NASDAQ100", "NAS100"]
+  display_decimals: 1
+  tick: 0.1
+  scale_factor: 1.0
+
+US30:
+  symbol_aliases: [US30, "DOW30", "DJI"]
+  display_decimals: 0
+  tick: 1
+  scale_factor: 1.0
+
+XAUUSD:
+  symbol_aliases: [XAUUSD, GOLD, "GOLD_USD"]
+  display_decimals: 2
+  tick: 0.01
+  scale_factor: 1.0
+
+XAGUSD:
+  symbol_aliases: [XAGUSD, SILVER, "SILVER_USD"]
+  display_decimals: 2
+  tick: 0.01
+  scale_factor: 1.0

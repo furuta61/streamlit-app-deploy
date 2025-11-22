@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cfd3.autosystem.continuous</string>
+  
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/bin/run_continuous_monitor.sh</string>
+  </array>
+  
+  <!-- システム起動時に自動起動 -->
+  <key>RunAtLoad</key>
+  <true/>
+  
+  <!-- プロセスが終了したら自動的に再起動 -->
+  <key>KeepAlive</key>
+  <true/>
+  
+  <!-- ログファイル -->
+  <key>StandardOutPath</key>
+  <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/logs/continuous_monitor.out</string>
+  
+  <key>StandardErrorPath</key>
+  <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/logs/continuous_monitor.err</string>
+  
+  <!-- 環境変数 -->
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  
+  <!-- 作業ディレクトリ -->
+  <key>WorkingDirectory</key>
+  <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem</string>
+  
+</dict>
+</plist>

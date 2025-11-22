@@ -1,0 +1,50 @@
+2025-11-02 01:19:17,199 INFO Using Twelve API key from env/Keychain
+2025-11-02 01:19:17,200 INFO Processing JP225
+2025-11-02 01:35:31,560 INFO __main__: Using Twelve API key from env/Keychain
+2025-11-02 01:35:31,560 INFO __main__: Processing JP225
+2025-11-02 02:00:40,562 WARNING __main__:   ⚠️ JP225: mismatch 0.998 (>0.05) -> yfinance 1321.T
+2025-11-02 02:00:40,564 INFO __main__: Processing NASDAQ
+2025-11-02 02:01:49,892 WARNING __main__:   ⚠️ NASDAQ: mismatch 0.992 (>0.05) -> yfinance QQQ
+2025-11-02 02:01:49,894 INFO __main__: Processing SP500
+2025-11-02 02:01:53,319 INFO __main__:   yfinance missing -> using twelve (source=FSXR8)
+2025-11-02 02:01:53,326 INFO __main__: Processing DE40
+2025-11-02 02:03:06,531 INFO __main__:   yfinance missing -> using twelve (source=DAX)
+2025-11-02 02:03:06,537 INFO __main__: Processing GOLD
+2025-11-02 02:03:10,325 WARNING __main__:   ⚠️ GOLD: mismatch 0.971 (>0.02) -> yfinance GC=F
+2025-11-02 02:03:10,328 INFO __main__: Processing AAPL
+2025-11-02 02:03:11,470 WARNING __main__:   ⚠️ AAPL: mismatch 0.842 (>0.05) -> yfinance AAPL
+2025-11-02 02:03:11,473 INFO __main__: Processing MSFT
+2025-11-02 02:03:12,815 WARNING __main__:   ⚠️ MSFT: mismatch 0.926 (>0.05) -> yfinance MSFT
+2025-11-02 02:03:12,835 INFO __main__: Saved hybrid market_data to /Users/otomi/Desktop/vs code/CFD3_AutoSystem/market_data.csv
+2025-11-02 19:44:33,224 INFO __main__: Using Twelve API key from env/Keychain
+2025-11-02 19:44:33,224 INFO __main__: Processing JP225
+2025-11-02 20:45:42,556 WARNING __main__:   ⚠️ JP225: mismatch 0.998 (>0.05) -> yfinance 1321.T
+2025-11-02 20:45:42,558 INFO __main__: Processing NASDAQ
+2025-11-02 20:46:51,854 WARNING __main__:   ⚠️ NASDAQ: mismatch 0.992 (>0.05) -> yfinance QQQ
+2025-11-02 20:46:51,856 INFO __main__: Processing SP500
+2025-11-02 20:46:54,974 INFO __main__:   yfinance missing -> using twelve (source=FSXR8)
+2025-11-02 20:46:54,979 INFO __main__: Processing DE40
+2025-11-02 20:48:08,188 INFO __main__:   yfinance missing -> using twelve (source=DAX)
+2025-11-02 20:48:08,193 INFO __main__: Processing GOLD
+2025-11-02 20:48:12,011 WARNING __main__:   ⚠️ GOLD: mismatch 0.971 (>0.02) -> yfinance GC=F
+2025-11-02 20:48:12,013 INFO __main__: Processing AAPL
+2025-11-02 20:48:13,280 WARNING __main__:   ⚠️ AAPL: mismatch 0.842 (>0.05) -> yfinance AAPL
+2025-11-02 20:48:13,282 INFO __main__: Processing MSFT
+2025-11-02 20:48:14,677 WARNING __main__:   ⚠️ MSFT: mismatch 0.926 (>0.05) -> yfinance MSFT
+2025-11-02 20:48:14,697 INFO __main__: Saved hybrid market_data to /Users/otomi/Desktop/vs code/CFD3_AutoSystem/market_data.csv
+2025-11-04 07:52:03,482 INFO __main__: Using Twelve API key from env/Keychain
+2025-11-04 07:52:03,482 INFO __main__: Processing JP225
+2025-11-04 08:17:13,533 WARNING __main__:   ⚠️ JP225: mismatch 0.998 (>0.05) -> yfinance 1321.T
+2025-11-04 08:17:13,535 INFO __main__: Processing NASDAQ
+2025-11-04 08:18:29,974 INFO __main__:   yfinance missing -> using twelve (source=QTOP.EUR)
+2025-11-04 08:18:29,977 INFO __main__: Processing SP500
+2025-11-04 08:18:34,718 INFO __main__:   yfinance missing -> using twelve (source=FSXR8)
+2025-11-04 08:18:34,723 INFO __main__: Processing DE40
+2025-11-04 08:19:50,784 INFO __main__:   yfinance missing -> using twelve (source=DAX)
+2025-11-04 08:19:50,790 INFO __main__: Processing GOLD
+2025-11-04 08:19:55,384 WARNING __main__:   ⚠️ GOLD: mismatch 0.971 (>0.02) -> yfinance GC=F
+2025-11-04 08:19:55,386 INFO __main__: Processing AAPL
+2025-11-04 08:19:56,618 WARNING __main__:   ⚠️ AAPL: mismatch 0.844 (>0.05) -> yfinance AAPL
+2025-11-04 08:19:56,620 INFO __main__: Processing MSFT
+2025-11-04 08:19:57,867 WARNING __main__:   ⚠️ MSFT: mismatch 0.925 (>0.05) -> yfinance MSFT
+2025-11-04 08:19:57,880 INFO __main__: Saved hybrid market_data to /Users/otomi/Desktop/vs code/CFD3_AutoSystem/market_data.csv

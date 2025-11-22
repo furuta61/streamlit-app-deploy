@@ -1,0 +1,54 @@
+{
+  "run_id": "2025-11-17-1432",
+  "capital_jpy": 900000,
+  "per_lot_allocation_jpy": 300000,
+  "trade_mode": "DAY4H",
+  "news_lock": false,
+  "orders": [
+    {
+      "instrument": "US30",
+      "direction": "buy",
+      "signal_rating": 6,
+      "decision": "STRONG_GO",
+      "lots": 6,
+      "entry_order": {
+        "type": "market",
+        "price": 47147.0
+      },
+      "order_type": "成行",
+      "ifd_legs": [
+        {
+          "name": "IFD-1",
+          "oco": {
+            "take_profit": {
+              "price": 47167.0
+            },
+            "stop_loss": {
+              "price": 47140.3
+            }
+          }
+        },
+        {
+          "name": "IFD-2",
+          "oco": {
+            "take_profit": {
+              "price": 47177.0
+            },
+            "stop_loss": {
+              "price": 47140.3
+            },
+            "trailing_stop": {
+              "activate_after": 47177.0,
+              "distance": 99.7
+            }
+          }
+        }
+      ],
+      "cut_condition": {
+        "sma": "SMA25<SMA75",
+        "macd": "MACD<Signal"
+      }
+    }
+  ],
+  "valid_until": "2025-11-17T09:32:52.407449Z"
+}

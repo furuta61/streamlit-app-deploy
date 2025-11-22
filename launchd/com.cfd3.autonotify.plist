@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cfd3.autonotify</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/otomi/Desktop/vs code/CFD3_AutoSystem/scripts/run_notify.sh</string>
+  </array>
+
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>8</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/otomi/Library/Logs/CFD3_AutoSystem/notify.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/otomi/Library/Logs/CFD3_AutoSystem/notify_error.log</string>
+
+  <key>RunAtLoad</key>
+  <true/>
+</dict>
+</plist>

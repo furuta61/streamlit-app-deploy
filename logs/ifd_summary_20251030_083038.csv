@@ -1,0 +1,3 @@
+text,date,impact,GOLD,USDJPY,NASDAQ,JP225,combined_score,volatility,sentiment,confidence,reasons,numeric,signal,entry,TP,SL,entry_source,type,lot_size,risk_amount
+Test Buy,2025-10-30 09:10:00,0.7,3958.199951171875,152.69700622558594,,,0.8,,Neutral,0.5,dry-run,0,BUY,3958.2,4858.2,3508.2,GOLD,GO,2.0,89999.99
+Test Sell,2025-10-30 09:11:00,0.7,3958.199951171875,152.69700622558594,,,-0.8,,Neutral,0.5,dry-run,0,SELL,3958.2,3058.2,4408.2,GOLD,GO,2.0,90000.01

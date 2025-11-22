@@ -1,0 +1,38 @@
+{"timestamp": "2025-11-06T06:17:20.691327", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T06:20:55.685900", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T08:12:22.884931", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T11:09:39.314358", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T11:18:19.037633", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T11:37:03.016984", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T11:40:21.320778", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T11:46:13.303096", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T11:54:00.640833", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T11:54:58.879213", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T11:54:58Z"}}
+{"timestamp": "2025-11-06T11:55:55.628848", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T11:55:55Z"}}
+{"timestamp": "2025-11-06T12:03:39.049292", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T12:03:39Z"}}
+{"timestamp": "2025-11-06T12:14:43.409636", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T12:14:41Z"}}
+{"timestamp": "2025-11-06T12:27:05.761349", "data": {"symbol": "JP225", "price": 51200, "signal": "GO", "time": "2025-11-06T12:27:05Z"}}
+{"timestamp": "2025-11-06T12:27:06.374988", "data": {"symbol": "XAUUSD", "price": 2375.5, "signal": "GO", "time": "2025-11-06T12:27:06Z"}}
+{"timestamp": "2025-11-06T12:27:06.986027", "data": {"symbol": "XAGUSD", "price": 28.42, "signal": "GO", "time": "2025-11-06T12:27:06Z"}}
+{"timestamp": "2025-11-06T12:27:07.596489", "data": {"symbol": "NGAS", "price": 3.02, "signal": "GO", "time": "2025-11-06T12:27:07Z"}}
+{"timestamp": "2025-11-06T12:27:08.203546", "data": {"symbol": "GER40", "price": 18450, "signal": "GO", "time": "2025-11-06T12:27:08Z"}}
+{"timestamp": "2025-11-06T12:27:08.814247", "data": {"symbol": "NAS100", "price": 18800, "signal": "GO", "time": "2025-11-06T12:27:08Z"}}
+{"timestamp": "2025-11-06T13:13:31.494366", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:13:31Z"}}
+{"timestamp": "2025-11-06T13:13:32.033528", "data": {"symbol": "NQ100", "price": 17900, "signal": "STRONG_GO", "time": "2025-11-06T13:13:31Z"}}
+{"timestamp": "2025-11-06T13:13:32.557105", "data": {"symbol": "XAUUSD", "price": 2375.5, "signal": "STRONG_GO", "time": "2025-11-06T13:13:31Z"}}
+{"timestamp": "2025-11-06T13:13:33.085068", "data": {"symbol": "XAGUSD", "price": 28.42, "signal": "STRONG_GO", "time": "2025-11-06T13:13:31Z"}}
+{"timestamp": "2025-11-06T13:13:33.611197", "data": {"symbol": "NGAS", "price": 3.02, "signal": "STRONG_GO", "time": "2025-11-06T13:13:31Z"}}
+{"timestamp": "2025-11-06T13:13:34.172215", "data": {"symbol": "GER40", "price": 18450, "signal": "STRONG_GO", "time": "2025-11-06T13:13:31Z"}}
+{"timestamp": "2025-11-06T13:30:12.462805", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T13:30:12Z"}}
+{"timestamp": "2025-11-06T13:30:12.974182", "data": {"symbol": "NQ100", "price": 17900, "signal": "STRONG_GO", "time": "2025-11-06T13:30:12Z"}}
+{"timestamp": "2025-11-06T13:30:13.480506", "data": {"symbol": "XAUUSD", "price": 2375.5, "signal": "STRONG_GO", "time": "2025-11-06T13:30:13Z"}}
+{"timestamp": "2025-11-06T13:30:13.989143", "data": {"symbol": "XAGUSD", "price": 28.42, "signal": "STRONG_GO", "time": "2025-11-06T13:30:13Z"}}
+{"timestamp": "2025-11-06T13:30:14.498954", "data": {"symbol": "NGAS", "price": 3.02, "signal": "STRONG_GO", "time": "2025-11-06T13:30:14Z"}}
+{"timestamp": "2025-11-06T13:30:15.004859", "data": {"symbol": "GER40", "price": 18450, "signal": "STRONG_GO", "time": "2025-11-06T13:30:15Z"}}
+{"timestamp": "2025-11-06T13:47:17.492132", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T14:00:00Z"}}
+{"timestamp": "2025-11-06T13:49:13.419965", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-06T14:05:00Z"}}
+{"timestamp":"2025-11-06T13:15:00Z","data":{"symbol":"XAUUSD","price":2375.50,"signal":"STRONG_GO","time":"2025-11-06T13:15:00Z"}}
+{"timestamp": "2025-11-06T15:58:02.595342", "data": {"symbol": "JP225", "price": 51200, "signal": "STRONG_GO", "time": "2025-11-07T01:00:00Z"}}
+{"timestamp": "2025-11-10T06:23:59.932238", "data": {"symbol": "JP225", "signal": "STRONG_GO", "text": "IFD STRONG_GO test", "timeframe": "60", "data": {"o": 50176.4, "h": 50180.0, "l": 50100.0, "c": 50176.4}}}
+{"timestamp": "2025-11-10T06:36:14.206636", "data": {"symbol": "JP225", "signal": "STRONG_GO", "text": "IFD STRONG_GO test", "timeframe": "60", "data": {"o": 50176.4, "h": 50180.0, "l": 50100.0, "c": 50176.4}}}
+{"timestamp": "2025-11-10T09:10:09.120075", "data": {"symbol": "US30", "price": 47147.0}}

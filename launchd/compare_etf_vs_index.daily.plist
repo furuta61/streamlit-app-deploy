@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.cfd3.compare_etf_vs_index.daily</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-lc</string>
+    <string>cd "${HOME}/Desktop/vs code/CFD3_AutoSystem" && ./.venv/bin/python3 scripts/compare_etf_vs_index.py --etf 1321.T --index ^N225 --days 365</string>
+  </array>
+  <!-- Run once a day at 03:10 local time -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>3</integer>
+    <key>Minute</key>
+    <integer>10</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>${HOME}/Desktop/vs code/CFD3_AutoSystem/logs/compare_etf_vs_index.out</string>
+  <key>StandardErrorPath</key>
+  <string>${HOME}/Desktop/vs code/CFD3_AutoSystem/logs/compare_etf_vs_index.err</string>
+  <key>RunAtLoad</key>
+  <true/>
+</dict>
+</plist>

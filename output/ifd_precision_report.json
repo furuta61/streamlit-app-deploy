@@ -1,0 +1,55 @@
+{
+  "generated_at": "2025-11-11T01:19:50.161363Z",
+  "summary": {
+    "JP225": {
+      "instrument": "JP225",
+      "decision": "GO",
+      "csv_used": "data/JP225_60.csv",
+      "samples": 3,
+      "wins": 1,
+      "losses": 0,
+      "none": 2,
+      "precision": 1.0
+    },
+    "NAS100": {
+      "instrument": "NAS100",
+      "decision": "GO",
+      "csv_used": "data/NAS100_60.csv",
+      "samples": 1,
+      "wins": 0,
+      "losses": 0,
+      "none": 1,
+      "precision": null
+    },
+    "XAUUSD": {
+      "instrument": "XAUUSD",
+      "decision": "STRONG_GO",
+      "csv_used": "data/XAUUSD_60.csv",
+      "samples": 0,
+      "wins": 0,
+      "losses": 0,
+      "none": 0,
+      "precision": null
+    },
+    "US30": {
+      "instrument": "US30",
+      "decision": "GO",
+      "csv_used": "data/US30_240.csv",
+      "samples": 0,
+      "wins": 0,
+      "losses": 0,
+      "none": 0,
+      "precision": null
+    },
+    "COPPER": {
+      "instrument": "COPPER",
+      "decision": "STRONG_GO",
+      "csv_used": "data/COPPER_60.csv",
+      "samples": 0,
+      "wins": 0,
+      "losses": 0,
+      "none": 0,
+      "precision": null
+    }
+  }
+}
