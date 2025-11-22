@@ -11,7 +11,7 @@ except ModuleNotFoundError:
     current_dir = os.path.dirname(__file__)
     parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
     sys.path.append(parent_dir)
-    import webhook_mail.main as main
+    import main  # webhook_mail.main ではなく main.py を直接読む
     analyze_image_with_ai = main.analyze_image_with_ai
 
 """
