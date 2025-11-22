@@ -1,18 +1,30 @@
 import os
+import sys
+from pathlib import Path
 import streamlit as st
 import requests
 
-# ================== API接続先自動判定 ==================
-# PUBLIC_BASE_URL が環境変数に設定されている場合はそのホストを利用。
-# 未設定の場合はローカルFastAPIを前提にしたフォールバック。
-PUBLIC_BASE_URL = (os.getenv("PUBLIC_BASE_URL", "").strip().rstrip("/"))
-if PUBLIC_BASE_URL:
-    API_URL = f"{PUBLIC_BASE_URL}/analyze/image"
+"""
+API接続先の決定ルール:
+- PUBLIC_BASE_URL が環境変数(Secrets)にあればそれを使用
+- なければローカル FastAPI (http://localhost:8080) にフォールバック
+"""
+PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "").strip().rstrip("/")
+USE_API = bool(PUBLIC_BASE_URL)
+if USE_API:
+    BASE = PUBLIC_BASE_URL
+    API_URL = f"{BASE}/analyze/image"
+    st.caption(f"Mode: API / API URL: {API_URL}")
 else:
-    # 一時的に Cloudflare URL を直接指定（Secrets 未設定時の緊急対応）
-    API_URL = "https://elizabeth-chips-strength-rooms.trycloudflare.com/analyze/image"
+    st.caption("Mode: Direct (Streamlitが直接AI解析とIFD生成)")
 
-st.caption(f"API_URL = {API_URL}")
+    # 直呼び出し用のインポート準備（repo ルートをパスに追加）
+    repo_root = Path(__file__).resolve().parents[1]
+    if str(repo_root) not in sys.path:
+        sys.path.insert(0, str(repo_root))
+    # Vision解析とIFD生成を内部利用
+    from webhook_mail.main import analyze_image_with_ai  # type: ignore
+    import manual30_ifd  # type: ignore
 
 st.set_page_config(page_title="CFD3_AutoSystem IFD 自動生成（テスト版）")
 
@@ -27,31 +39,77 @@ if uploaded is not None:
         # 画像をバイトに変換
         img_bytes = uploaded.getvalue()
 
-        # FastAPI へ送信する multipart/form-data
-        files = {
-            "file": (
-                uploaded.name,
-                img_bytes,
-                uploaded.type
-            )
-        }
+        if USE_API:
+            # FastAPI へ送信する multipart/form-data
+            files = {
+                "file": (
+                    uploaded.name,
+                    img_bytes,
+                    uploaded.type
+                )
+            }
 
-        with st.spinner("FastAPI へ送信 → Vision解析中..."):
-            # POST送信
-            res = requests.post(API_URL, files=files)
+            with st.spinner("FastAPI へ送信 → Vision解析中..."):
+                res = requests.post(API_URL, files=files)
 
-        st.write("---")
-        st.subheader("🧠 生レスポンス")
-        st.code(res.text)
+            st.write("---")
+            st.subheader("🧠 生レスポンス")
+            st.code(res.text)
 
-        if res.status_code == 200:
-            data = res.json()
+            if res.status_code == 200:
+                data = res.json()
+            else:
+                st.error(f"FastAPI 側エラー: {res.status_code}")
+                data = None
+        else:
+            with st.spinner("Streamlit 直実行: Vision解析中..."):
+                analysis = analyze_image_with_ai(img_bytes)
 
+            st.write("---")
             st.subheader("🔍 画像AI解析結果")
-            st.json(data.get("analysis"))
+            st.json(analysis)
 
-            st.subheader("📦 IFD 自動生成結果")
-            st.json(data.get("ifd"))
+            # IFD 生成
+            symbol = (analysis.get("symbol") or "JP225").upper()
+            direction = (analysis.get("direction") or "buy").lower()
+            entry = analysis.get("entry")
+            signal = (analysis.get("signal") or ("STRONG_GO" if int(analysis.get("confidence") or 0) >= 80 else "GO")).upper()
+
+            if not entry:
+                st.error("エントリー価格が取得できませんでした（Vision + OCR両方失敗）")
+                data = None
+            else:
+                ifd = manual30_ifd.generate_ifd(symbol=symbol, direction=direction, entry=float(entry), signal=signal)
+
+                # Markdownテーブル（webhook_mail.main と同一様式）
+                order = ifd.get("orders", [{}])[0]
+                trade_mode = ifd.get("trade_mode", "MANUAL_30M")
+                lots = order.get("lots", 1)
+                entry_price = order.get("entry_order", {}).get("price", entry)
+                oco = order.get("ifd_legs", [{}])[0].get("oco", {})
+                tp_price = oco.get("take_profit", {}).get("price", 0)
+                sl_price = oco.get("stop_loss", {}).get("price", 0)
+                direction_jp = "買い" if direction == "buy" else "売り"
+                ifd_markdown = f"""
+| trade_mode | 銘柄 | 方向 | entry_price | SL | TP1 | TP2 | order_type | 判定 | ニュースロック | 推奨度 | ロット | CUT条件 |
+|-------------|------|------|--------------|------|------|------|-------------|--------|----------------|----------|--------|-----------|
+| {trade_mode} | {symbol} | {direction_jp} | {entry_price:.1f} | {sl_price:.1f} | {tp_price:.1f} | - | 指値 | {signal} | false | ★★★★★ | {lots} | SMA25＜SMA75 または MACD＜Signal |
+"""
+
+                data = {
+                    "status": "success",
+                    "symbol": symbol,
+                    "analysis": analysis,
+                    "ifd": ifd,
+                    "ifd_markdown": ifd_markdown,
+                }
+
+        if data:
+            if USE_API:
+                st.subheader("🔍 画像AI解析結果")
+                st.json(data.get("analysis"))
+                st.subheader("📦 IFD 自動生成結果")
+                st.json(data.get("ifd"))
 
             # --- 日本語IFDテーブルをレスポンシブ表示 ---
             if "ifd_markdown" in data:
@@ -106,5 +164,3 @@ if uploaded is not None:
                     unsafe_allow_html=True
                 )
                 st.markdown(data["ifd_markdown"], unsafe_allow_html=True)
-        else:
-            st.error(f"FastAPI 側エラー: {res.status_code}")
