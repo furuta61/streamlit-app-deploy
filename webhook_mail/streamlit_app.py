@@ -1,13 +1,22 @@
+import streamlit as st
 import os
 import sys
-from pathlib import Path
-import streamlit as st
 import requests
+
+# --- Cloud / Local 両対応インポート ---
+# ローカル実行時: webhook_mail.main がパスに含まれる
+# Cloud実行時: Main file path 起点のため親ディレクトリからインポート
+try:
+    from webhook_mail.main import analyze_image_with_ai
+except ModuleNotFoundError:
+    # Streamlit Cloud 環境では webhook_mail/ が認識されないためパスを補正
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+    from main import analyze_image_with_ai
 
 """
 API接続先の決定ルール:
 - PUBLIC_BASE_URL が環境変数(Secrets)にあればそれを使用
-- なければローカル FastAPI (http://localhost:8080) にフォールバック
+- なければ Direct モード（Streamlit内で直接AI解析とIFD生成）
 """
 PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "").strip().rstrip("/")
 USE_API = bool(PUBLIC_BASE_URL)
@@ -17,20 +26,12 @@ if USE_API:
     st.caption(f"Mode: API / API URL: {API_URL}")
 else:
     st.caption("Mode: Direct (Streamlitが直接AI解析とIFD生成)")
-
-    # 直呼び出し用のインポート準備
-    # Streamlit Cloud は Main file path (webhook_mail/streamlit_app.py) を起点とするため
-    # 同階層の main.py を直接インポート
+    # manual30_ifd も同様にインポート
     try:
-        from main import analyze_image_with_ai  # type: ignore
-        import manual30_ifd  # type: ignore
-    except ImportError:
-        # ローカル実行時は親ディレクトリからインポート
-        repo_root = Path(__file__).resolve().parents[1]
-        if str(repo_root) not in sys.path:
-            sys.path.insert(0, str(repo_root))
-        from webhook_mail.main import analyze_image_with_ai  # type: ignore
-        import manual30_ifd  # type: ignore
+        import manual30_ifd
+    except ModuleNotFoundError:
+        sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+        import manual30_ifd
 
 st.set_page_config(page_title="CFD3_AutoSystem IFD 自動生成（テスト版）")
 
