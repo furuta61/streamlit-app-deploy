@@ -1,17 +1,14 @@
 import streamlit as st
-import os
-import sys
+import os, sys
 import requests
 
 # --- Cloud / Local 両対応インポート ---
-# ローカル実行時: webhook_mail.main がパスに含まれる
-# Cloud実行時: Main file path 起点のため親ディレクトリからインポート
 try:
-    from webhook_mail.main import analyze_image_with_ai
+    from webhook_mail.main import analyze_image_with_ai  # ローカル環境用
 except ModuleNotFoundError:
-    # Streamlit Cloud 環境では webhook_mail/ が認識されないためパスを補正
+    # Streamlit Cloud 環境では webhook_mail がモジュールとして認識されないため補正
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-    from main import analyze_image_with_ai
+    from main import analyze_image_with_ai  # Cloud用
 
 """
 API接続先の決定ルール:
