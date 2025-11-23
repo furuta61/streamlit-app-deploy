@@ -21,7 +21,6 @@ import pandas as pd
 from typing import Optional
 import base64
 import re
-import pytesseract
 from PIL import Image, ImageEnhance, ImageFilter
 from openai import OpenAI
 try:
@@ -102,6 +101,13 @@ logger.info("notify_on=%s", NOTIFY_ON)
 # Includes common English tokens and likely Japanese tokens like '交差'.
 TEXT_KEYWORDS = [k.lower() for k in os.getenv("NOTIFY_TEXT_KEYWORDS", "STRONG_GO,GO,cross,交差,IFD").split(",") if k.strip()]
 logger.info("notify_text_keywords=%s", TEXT_KEYWORDS)
+
+# --- Optional OCR (pytesseract) import for Streamlit Cloud compatibility ---
+try:
+    import pytesseract  # type: ignore
+except ModuleNotFoundError:
+    pytesseract = None  # type: ignore
+    print("⚠️ pytesseract が見つかりません (Streamlit Cloud 環境)。Vision OCR のみを使用します。")
 
 
 # --- Google Sheets 連携（オプション） ---
@@ -1080,6 +1086,8 @@ def fallback_ocr_entry(img_bytes: bytes) -> float | None:
     """
     Tesseract OCRで価格を抽出（Vision失敗時のバックアップ）
     """
+    if pytesseract is None:
+        return None
     try:
         img = Image.open(io.BytesIO(img_bytes))
         text = pytesseract.image_to_string(img, lang="eng+jpn")
@@ -1097,6 +1105,8 @@ def fallback_ocr_symbol(img_bytes: bytes) -> str | None:
     スマホスクショなどでVisionが銘柄名を検出できなかった場合に、
     画面上部の文字列から銘柄名をOCRで推定する。
     """
+    if pytesseract is None:
+        return None
     try:
         img = Image.open(io.BytesIO(img_bytes))
         w, h = img.size
