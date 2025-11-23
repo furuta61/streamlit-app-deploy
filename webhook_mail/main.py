@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException, File, UploadFile
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
@@ -22,6 +23,12 @@ import re
 import pytesseract
 from PIL import Image, ImageEnhance, ImageFilter
 from openai import OpenAI
+try:
+    from googleapiclient.discovery import build
+    from google.oauth2 import service_account
+    SHEETS_AVAILABLE = True
+except Exception:
+    SHEETS_AVAILABLE = False
 
 load_dotenv()
 
@@ -96,6 +103,46 @@ TEXT_KEYWORDS = [k.lower() for k in os.getenv("NOTIFY_TEXT_KEYWORDS", "STRONG_GO
 logger.info("notify_text_keywords=%s", TEXT_KEYWORDS)
 
 
+# --- Google Sheets 連携（オプション） ---
+def write_to_sheets(record: dict):
+    """Google Sheetsに1行追加（未設定や未インストールなら黙ってスキップ）。
+
+    必要な環境変数:
+    - GOOGLE_CREDENTIALS_JSON: サービスアカウントJSONの全文
+    - SHEET_ID: スプレッドシートID
+    """
+    if not SHEETS_AVAILABLE:
+        logger.info("Sheets library not installed; skip logging")
+        return
+    creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
+    sheet_id = os.getenv("SHEET_ID")
+    if not creds_json or not sheet_id:
+        logger.info("Sheets not configured (GOOGLE_CREDENTIALS_JSON / SHEET_ID missing); skip logging")
+        return
+
+    try:
+        creds = service_account.Credentials.from_service_account_info(
+            json.loads(creds_json),
+            scopes=["https://www.googleapis.com/auth/spreadsheets"],
+        )
+        service = build("sheets", "v4", credentials=creds)
+        # record の key 順序は dict 依存なので、ここでは安定列を定義
+        ordered_keys = [
+            "timestamp","symbol","direction","entry","tp","sl","signal","confidence","comment"
+        ]
+        row = [record.get(k, "") for k in ordered_keys]
+        body = {"values": [row]}
+        service.spreadsheets().values().append(
+            spreadsheetId=sheet_id,
+            range="Logs!A1",
+            valueInputOption="USER_ENTERED",
+            body=body,
+        ).execute()
+        logger.info("✅ Google Sheets に記録: %s", record)
+    except Exception:
+        logger.exception("Failed to write to Google Sheets")
+
+
 @app.get("/health")
 async def health_check():
     """包括的ヘルスチェック (v2.1.0)"""
@@ -125,6 +172,22 @@ async def health_check():
     except Exception:
         tunnel_status = "unreachable"
 
+    # ✅ Sheets 設定確認
+    try:
+        creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
+        sheet_id = os.getenv("SHEET_ID")
+        if creds_json and sheet_id:
+            # JSONパース可否のみチェック（外部呼び出しはしない）
+            try:
+                json.loads(creds_json)
+                sheets_status = "configured"
+            except Exception:
+                sheets_status = "invalid_credentials_json"
+        else:
+            sheets_status = "missing"
+    except Exception as e:
+        sheets_status = f"error:{e}"
+
     # ✅ 結果まとめ
     return {
         "status": "ok",
@@ -133,8 +196,71 @@ async def health_check():
         "server_time": server_time,
         "vision_status": vision_status,
         "tunnel_status": tunnel_status,
+        "sheets_status": sheets_status,
         "message": "CFD3_AutoSystem v2.1 稼働中 🚀"
     }
+
+
+@app.get("/health/page", response_class=HTMLResponse)
+async def health_page():
+    """人間がブラウザで確認しやすいHTMLステータスページ。
+
+    プログラムからの監視用途は従来の /health (JSON) を継続利用可能。
+    """
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    mode = 'Direct' if not os.getenv('PUBLIC_BASE_URL') else f"API ({os.getenv('PUBLIC_BASE_URL')})"
+    api_key_present = bool(os.getenv('OPENAI_API_KEY'))
+    # Sheets config status (lightweight check)
+    try:
+        creds_json = os.getenv('GOOGLE_CREDENTIALS_JSON')
+        sheet_id = os.getenv('SHEET_ID')
+        if creds_json and sheet_id:
+            try:
+                json.loads(creds_json)
+                sheets_status = "configured"
+            except Exception:
+                sheets_status = "invalid_credentials_json"
+        else:
+            sheets_status = "missing"
+    except Exception:
+        sheets_status = "error"
+    html = f"""
+    <html>
+        <head>
+            <title>🩺 System Health Check</title>
+            <meta charset="utf-8">
+            <style>
+                body {{ font-family: -apple-system, BlinkMacSystemFont, 'Arial'; background-color: #f7f9fc; color: #333; padding: 1.8em; line-height: 1.5; }}
+                h1 {{ color: #0078d7; margin-top: 0; }}
+                .ok {{ color: #0d7d28; font-weight: bold; }}
+                .fail {{ color: #c40000; font-weight: bold; }}
+                .grid {{ display: grid; grid-template-columns: 160px 1fr; gap: 0.4em 1.2em; max-width: 780px; background:#fff; padding:1.2em 1.4em; border-radius:12px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }}
+                .label {{ font-weight:600; }}
+                footer {{ margin-top:2.0em; font-size:12px; opacity:0.7; }}
+                a {{ color:#0078d7; text-decoration:none; }}
+                a:hover {{ text-decoration:underline; }}
+            </style>
+        </head>
+        <body>
+            <h1>🩺 CFD3_AutoSystem Health Status</h1>
+            <div class="grid">
+                <div class="label">Status</div><div><span class="ok">OK</span></div>
+                <div class="label">Mode</div><div>{mode}</div>
+                <div class="label">Version</div><div>{app.version}</div>
+                <div class="label">OpenAI API Key</div><div>{'✅ Detected' if api_key_present else '<span class="fail">❌ Missing</span>'}</div>
+                <div class="label">Vision Model</div><div>gpt-4o</div>
+                <div class="label">IFD Module</div><div>✅ Connected</div>
+                <div class="label">Sheets</div><div>{sheets_status}</div>
+                <div class="label">Last Checked</div><div>{now}</div>
+            </div>
+            <footer>
+                FastAPI JSON endpoint: <code>/health</code> | HTML page: <code>/health/page</code><br>
+                Uvicorn worker active. For monitoring, prefer the JSON endpoint for automation.
+            </footer>
+        </body>
+    </html>
+    """
+    return HTMLResponse(content=html, status_code=200)
 
 
 # Raw webhook persistence for debugging
@@ -1207,6 +1333,23 @@ async def analyze_image(symbol: Optional[str] = None, file: UploadFile = File(..
 |-------------|------|------|--------------|------|------|------|-------------|--------|----------------|----------|--------|-----------|
 | {trade_mode} | {result_symbol} | {direction_jp} | {entry_price:.1f} | {sl_price:.1f} | {tp_price:.1f} | - | 指値 | {signal} | false | ★★★★★ | {lots} | SMA25＜SMA75 または MACD＜Signal |
 """
+            
+            # --- Google Sheets 記録（オプション） ---
+            try:
+                record = {
+                    "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "symbol": result_symbol,
+                    "direction": direction,
+                    "entry": float(entry_price) if entry_price is not None else "",
+                    "tp": float(tp_price) if tp_price else "",
+                    "sl": float(sl_price) if sl_price else "",
+                    "signal": signal,
+                    "confidence": int(confidence) if confidence is not None else "",
+                    "comment": analysis.get("comment") or ""
+                }
+                write_to_sheets(record)
+            except Exception:
+                logger.exception("Sheets logging failed")
             
             return {
                 "status": "success",

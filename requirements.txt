@@ -21,3 +21,7 @@ pandas>=2.2.0
 requests>=2.31.0
 python-dotenv>=1.0.0
 pydantic>=2.0.0
+
+# Google Sheets 連携（オプション）
+google-api-python-client>=2.131.0
+google-auth>=2.25.2

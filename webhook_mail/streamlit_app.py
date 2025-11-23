@@ -1,6 +1,16 @@
 import streamlit as st
 import os, sys
 import requests
+import json
+import pandas as pd
+
+# Optional Sheets imports
+try:
+    from googleapiclient.discovery import build
+    from google.oauth2 import service_account
+    SHEETS_AVAILABLE = True
+except Exception:
+    SHEETS_AVAILABLE = False
 
 # --- Cloud / Local 両対応インポート ---
 try:
@@ -172,3 +182,36 @@ if uploaded is not None:
                     unsafe_allow_html=True
                 )
                 st.markdown(data["ifd_markdown"], unsafe_allow_html=True)
+
+# --- Google Sheets 履歴ビュー ---
+st.markdown("---")
+st.subheader("📜 Google Sheets 履歴（自動ログ）")
+
+if st.button("最新ログを取得"):
+    creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
+    sheet_id = os.getenv("SHEET_ID")
+    if not SHEETS_AVAILABLE:
+        st.warning("⚠️ google-api-python-client / google-auth が未インストールです。requirements.txt を確認してください。")
+    elif not creds_json or not sheet_id:
+        st.warning("⚠️ Google Sheets の設定がありません。SHEET_ID / GOOGLE_CREDENTIALS_JSON を設定してください。")
+    else:
+        try:
+            creds = service_account.Credentials.from_service_account_info(
+                json.loads(creds_json),
+                scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"],
+            )
+            service = build("sheets", "v4", credentials=creds)
+            result = service.spreadsheets().values().get(
+                spreadsheetId=sheet_id,
+                range="Logs!A1:I200"
+            ).execute()
+            rows = result.get("values", [])
+            if not rows or len(rows) < 2:
+                st.info("まだログデータがありません。")
+            else:
+                # 1行目ヘッダーと仮定
+                df = pd.DataFrame(rows[1:], columns=rows[0])
+                st.dataframe(df, use_container_width=True)
+                st.success(f"✅ {len(df)} 行のログを取得しました。")
+        except Exception as e:
+            st.error(f"Sheets読込エラー: {e}")
