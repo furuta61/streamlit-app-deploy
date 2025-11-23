@@ -183,6 +183,26 @@ if uploaded is not None:
                 )
                 st.markdown(data["ifd_markdown"], unsafe_allow_html=True)
 
+# --- システムヘルスチェック ---
+st.markdown("---")
+st.subheader("🩺 システム ヘルスチェック")
+
+API_URL = os.getenv("PUBLIC_BASE_URL") or "http://localhost:8080"
+
+if st.button("✅ 接続状態を確認する"):
+    health_url = f"{API_URL}/health"
+    try:
+        res = requests.get(health_url, timeout=10)
+        if res.status_code == 200:
+            data_health = res.json()
+            st.success("✅ 接続成功！ FastAPI 稼働中")
+            st.json(data_health)
+        else:
+            st.error(f"⚠️ FastAPI が応答しましたが異常コード: {res.status_code}")
+    except Exception as e:
+        st.error(f"❌ 接続エラー: {e}")
+        st.info(f"確認URL: {health_url}")
+
 # --- Google Sheets 履歴ビュー ---
 st.markdown("---")
 st.subheader("📜 Google Sheets 履歴（自動ログ）")
