@@ -98,13 +98,13 @@ if uploaded_file:
                 st.error(f"❌ Direct解析エラー: {e}")
                 st.caption("main.py 内の analyze_image_with_ai / manual30_ifd.generate_ifd を呼び出しています。")
 
-# ---- ヘルスチェック ----
-st.header("🩺 システム ヘルスチェック")
-if st.button("✅ 接続状態を確認する"):
-    target = api_url or "http://localhost:8080"
-    try:
-        res = requests.get(f"{target}/health", timeout=10)
-        st.json(res.json())
-    except Exception as e:
-        st.error(f"❌ 接続エラー: {e}")
-        st.caption(f"確認URL: {target}/health")
+# ---- ヘルスチェック（無効化）----
+# st.header("🩺 システム ヘルスチェック")
+# if st.button("✅ 接続状態を確認する"):
+#     target = api_url or "http://localhost:8080"
+#     try:
+#         res = requests.get(f"{target}/health", timeout=10)
+#         st.json(res.json())
+#     except Exception as e:
+#         # ヘルスチェックは無効化
+#         pass

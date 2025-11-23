@@ -22,16 +22,9 @@ from typing import Optional
 import base64
 import re
 from PIL import Image, ImageEnhance, ImageFilter
-# --- 安全な OpenAI クライアント読込 (Streamlit Cloud fallback) ---
-try:
-    from openai import OpenAI
-except ImportError:
-    import openai
-    class OpenAI:  # fallback wrapper for legacy environments
-        def __init__(self, api_key=None):
-            openai.api_key = api_key
-        def chat(self, *args, **kwargs):
-            return openai.ChatCompletion.create(*args, **kwargs)
+# --- OpenAI クライアント（最新仕様） ---
+from openai import OpenAI
+client = OpenAI()
 try:
     from googleapiclient.discovery import build
     from google.oauth2 import service_account
@@ -1168,9 +1161,7 @@ def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None) ->
     - Visionで解析
     - 失敗時はOCRバックアップ
     """
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     processed_bytes = preprocess_image_for_vision(image_bytes)
-    b64 = base64.b64encode(processed_bytes).decode("utf-8")
 
     base_prompt = f"""
 あなたはCFDトレードに詳しいアナリストです。
@@ -1190,22 +1181,19 @@ def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None) ->
 
     def call_vision(prompt: str) -> dict:
         res = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": prompt},
-                        {
-                            "type": "image_url",
-                            "image_url": {"url": f"data:image/png;base64,{b64}"},
-                        },
+                        {"type": "input_text", "text": prompt},
+                        {"type": "input_image", "image": processed_bytes},
                     ],
                 }
             ],
-            max_tokens=800,
         )
-        content = res.choices[0].message.content or ""
+        msg = res.choices[0].message
+        content = getattr(msg, "content", "") or ""
         return _safe_parse_json_from_text(content)
 
     data = call_vision(base_prompt)
@@ -1227,27 +1215,21 @@ def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None) ->
             buf = io.BytesIO()
             img.save(buf, format="PNG")
             gray_bytes = buf.getvalue()
-            b64_gray = base64.b64encode(gray_bytes).decode("utf-8")
-
             retry_prompt = base_prompt + "\n\nもう一度、画面中央の価格に注目して正確な現在値（エントリー）を1つだけ抽出してください。"
             res_retry = client.chat.completions.create(
-                model="gpt-4o",
+                model="gpt-4o-mini",
                 messages=[
                     {
                         "role": "user",
                         "content": [
-                            {"type": "text", "text": retry_prompt},
-                            {
-                                "type": "image_url",
-                                "image_url": {"url": f"data:image/png;base64,{b64_gray}"},
-                            },
+                            {"type": "input_text", "text": retry_prompt},
+                            {"type": "input_image", "image": gray_bytes},
                         ],
                     }
                 ],
-                max_tokens=800,
             )
-
-            content_retry = res_retry.choices[0].message.content or ""
+            msg_retry = res_retry.choices[0].message
+            content_retry = getattr(msg_retry, "content", "") or ""
             data_retry = _safe_parse_json_from_text(content_retry)
 
             if data_retry.get("entry") and 100 < float(data_retry["entry"]) < 100000:
