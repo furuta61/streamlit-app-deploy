@@ -22,7 +22,16 @@ from typing import Optional
 import base64
 import re
 from PIL import Image, ImageEnhance, ImageFilter
-from openai import OpenAI
+# --- 安全な OpenAI クライアント読込 (Streamlit Cloud fallback) ---
+try:
+    from openai import OpenAI
+except ImportError:
+    import openai
+    class OpenAI:  # fallback wrapper for legacy environments
+        def __init__(self, api_key=None):
+            openai.api_key = api_key
+        def chat(self, *args, **kwargs):
+            return openai.ChatCompletion.create(*args, **kwargs)
 try:
     from googleapiclient.discovery import build
     from google.oauth2 import service_account
