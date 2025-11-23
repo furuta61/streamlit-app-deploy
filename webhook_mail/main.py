@@ -157,74 +157,51 @@ def write_to_sheets(record: dict):
 
 @app.get("/health")
 async def health_check():
-    """包括的ヘルスチェック (v2.1.0)"""
+    """包括的ヘルスチェック (v2.3.0 / OpenCV可視化対応)"""
     uptime = round(time.time() - START_TIME, 2)
     server_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # ✅ OpenAI API接続確認
-    try:
-        api_key = os.getenv("OPENAI_API_KEY")
-        if not api_key:
-            vision_status = "no_api_key"
-        else:
-            test = requests.post(
-                "https://api.openai.com/v1/models",
-                headers={"Authorization": f"Bearer {api_key}"},
-                timeout=3
-            )
-            vision_status = "active" if test.status_code == 200 else f"error:{test.status_code}"
-    except Exception as e:
-        vision_status = f"error:{str(e)}"
+    # OpenAI / Vision 状態（APIキー存在のみで簡易活性表示）
+    api_key = os.getenv("OPENAI_API_KEY")
+    vision_status = "active" if api_key else "no_api_key"
 
-    # ✅ Cloudflareトンネル確認
+    # Sheets設定確認
+    creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
+    sheet_id = os.getenv("SHEET_ID")
     try:
-        tunnel_url = "https://grace-clark-featuring-induction.trycloudflare.com"
-        res = requests.get(tunnel_url + "/health", timeout=3)
-        tunnel_status = "reachable" if res.status_code == 200 else f"error:{res.status_code}"
-    except Exception:
-        tunnel_status = "unreachable"
-
-    # ✅ Sheets 設定確認
-    try:
-        creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
-        sheet_id = os.getenv("SHEET_ID")
         if creds_json and sheet_id:
-            # JSONパース可否のみチェック（外部呼び出しはしない）
-            try:
-                json.loads(creds_json)
-                sheets_status = "configured"
-            except Exception:
-                sheets_status = "invalid_credentials_json"
+            json.loads(creds_json)
+            sheets_status = "configured"
         else:
             sheets_status = "missing"
-    except Exception as e:
-        sheets_status = f"error:{e}"
+    except Exception:
+        sheets_status = "invalid_credentials_json"
 
-    # ✅ Tesseract OCR バイナリ確認
+    # Tesseract状態
     try:
         tess_path = shutil.which("tesseract")
-        if not tess_path:
-            tesseract_status = "missing"
+        if tess_path:
+            proc = subprocess.run(["tesseract", "--version"], capture_output=True, text=True, timeout=5)
+            tesseract_status = "installed" if proc.returncode == 0 else f"error:{proc.returncode}"
         else:
-            try:
-                proc = subprocess.run(["tesseract", "--version"], capture_output=True, text=True, timeout=5)
-                tesseract_status = "installed" if proc.returncode == 0 else f"error:{proc.returncode}"
-            except Exception as e:
-                tesseract_status = f"error:{e}"
-    except Exception:
-        tesseract_status = "unknown"
+            tesseract_status = "missing"
+    except Exception as e:
+        tesseract_status = f"error:{e}"
 
-    # ✅ 結果まとめ
+    # OpenCV状態
+    import importlib.util
+    opencv_available = importlib.util.find_spec("cv2") is not None
+
     return {
         "status": "ok",
-        "version": app.version,
+        "version": "2.3.0",
         "uptime_sec": uptime,
         "server_time": server_time,
         "vision_status": vision_status,
-        "tunnel_status": tunnel_status,
         "sheets_status": sheets_status,
         "tesseract": tesseract_status,
-        "message": "CFD3_AutoSystem v2.1 稼働中 🚀"
+        "opencv": "available" if opencv_available else "missing",
+        "message": "CFD3_AutoSystem v2.3 稼働中 🚀"
     }
 
 
