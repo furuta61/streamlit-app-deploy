@@ -16,6 +16,7 @@ import logging
 import subprocess
 import sys
 from pathlib import Path
+import shutil
 import pandas as pd
 from typing import Optional
 import base64
@@ -188,6 +189,20 @@ async def health_check():
     except Exception as e:
         sheets_status = f"error:{e}"
 
+    # ✅ Tesseract OCR バイナリ確認
+    try:
+        tess_path = shutil.which("tesseract")
+        if not tess_path:
+            tesseract_status = "missing"
+        else:
+            try:
+                proc = subprocess.run(["tesseract", "--version"], capture_output=True, text=True, timeout=5)
+                tesseract_status = "installed" if proc.returncode == 0 else f"error:{proc.returncode}"
+            except Exception as e:
+                tesseract_status = f"error:{e}"
+    except Exception:
+        tesseract_status = "unknown"
+
     # ✅ 結果まとめ
     return {
         "status": "ok",
@@ -197,6 +212,7 @@ async def health_check():
         "vision_status": vision_status,
         "tunnel_status": tunnel_status,
         "sheets_status": sheets_status,
+        "tesseract": tesseract_status,
         "message": "CFD3_AutoSystem v2.1 稼働中 🚀"
     }
 
@@ -224,6 +240,12 @@ async def health_page():
             sheets_status = "missing"
     except Exception:
         sheets_status = "error"
+    # Detect Tesseract status quickly for page display
+    try:
+        tesseract_status = "installed" if shutil.which("tesseract") else "missing"
+    except Exception:
+        tesseract_status = "unknown"
+
     html = f"""
     <html>
         <head>
@@ -251,6 +273,7 @@ async def health_page():
                 <div class="label">Vision Model</div><div>gpt-4o</div>
                 <div class="label">IFD Module</div><div>✅ Connected</div>
                 <div class="label">Sheets</div><div>{sheets_status}</div>
+                <div class="label">Tesseract</div><div>{tesseract_status}</div>
                 <div class="label">Last Checked</div><div>{now}</div>
             </div>
             <footer>
