@@ -1,5 +1,5 @@
 # Web フレームワーク
-fastapi>=0.104.0
+fastapi>=0.111.0
 uvicorn==0.30.1
 python-multipart>=0.0.6
 
@@ -7,7 +7,7 @@ python-multipart>=0.0.6
 streamlit>=1.28.0
 
 # AI/ML
-openai>=1.0.0
+openai>=1.2.0
 
 # 画像処理
 pillow>=10.0.0

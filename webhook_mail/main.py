@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import os
@@ -22,7 +23,11 @@ from typing import Optional
 import base64
 import re
 from PIL import Image, ImageEnhance, ImageFilter
-from openai import OpenAI
+try:
+    from openai import OpenAI
+except ImportError:
+    import openai
+    OpenAI = openai.OpenAI
 try:
     from googleapiclient.discovery import build
     from google.oauth2 import service_account
@@ -82,7 +87,13 @@ def _parse_schedule_windows(s: str) -> list[tuple[int, int]]:
 
 SCHEDULE_WINDOWS = _parse_schedule_windows(IFD_SCHEDULE_WINDOWS)
 
-app = FastAPI(title="CFD3_AutoSystem", version="2.1.0")
+app = FastAPI(title="CFD3_AutoSystem", version="2.2.0")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 START_TIME = time.time()
 
 logger = logging.getLogger("webhook_mail")
