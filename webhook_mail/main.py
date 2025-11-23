@@ -82,7 +82,7 @@ def _parse_schedule_windows(s: str) -> list[tuple[int, int]]:
 
 SCHEDULE_WINDOWS = _parse_schedule_windows(IFD_SCHEDULE_WINDOWS)
 
-app = FastAPI(title="CFD3_AutoSystem", version="2.1.0")
+app = FastAPI(title="CFD3_AutoSystem", version="2.3.0")
 START_TIME = time.time()
 
 logger = logging.getLogger("webhook_mail")
@@ -108,6 +108,11 @@ try:
 except ModuleNotFoundError:
     pytesseract = None  # type: ignore
     print("⚠️ pytesseract が見つかりません (Streamlit Cloud 環境)。Vision OCR のみを使用します。")
+try:
+    from webhook_mail.opencv_preprocess import preprocess_image as opencv_preprocess_image  # type: ignore
+    OPENCV_AVAILABLE = True
+except Exception:
+    OPENCV_AVAILABLE = False
 
 
 # --- Google Sheets 連携（オプション） ---
@@ -1057,6 +1062,12 @@ def preprocess_image_for_vision(img_bytes: bytes) -> bytes:
     - 中央部分トリミング
     """
     try:
+        # OpenCV高度前処理（失敗時は元バイト列）
+        try:
+            from webhook_mail.opencv_preprocess import preprocess_image as cv_pre
+            img_bytes = cv_pre(img_bytes)
+        except Exception:
+            pass
         img = Image.open(io.BytesIO(img_bytes)).convert("RGB")
 
         # 明るさアップ
