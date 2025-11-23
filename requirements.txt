@@ -11,7 +11,7 @@ openai>=1.0.0
 
 # 画像処理
 pillow>=10.0.0
-pytesseract>=0.3.10
+pytesseract==0.3.10
 
 # データ処理
 numpy>=1.24.0
