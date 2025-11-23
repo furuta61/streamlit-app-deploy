@@ -1,7 +1,0 @@
-fastapi>=0.95.0
-uvicorn[standard]>=0.22.0
-python-dotenv>=1.0.0
-
-# Note: the main code uses only stdlib smtplib for sending mail, so yagmail is not required.
-
-pandas>=2.0
