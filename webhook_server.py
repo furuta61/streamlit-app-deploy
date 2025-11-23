@@ -46,6 +46,19 @@ from utils_ifd import print_ifd_table, format_ifd_table_text
 from openai import OpenAI
 openai_client = OpenAI()
 
+# ====== 状態管理 ======
+from collections import deque
+import time
+
+# 直近のTVアラート時刻(timestamp)
+tv_alerts = deque(maxlen=10)
+
+# 直近のスクショ解析時刻
+image_requests = deque(maxlen=10)
+
+# ハイボラフラグ
+high_volatility = False
+
 # ====== CSV からテクニカル指標を読むヘルパー（GER40 4H 用） ======
 
 # TradingViewシンボル → CSVファイル名 の対応
@@ -125,6 +138,16 @@ def load_latest_tech(symbol: str) -> Optional[Dict[str, float]]:
     bb_upper = m + 2 * std
     bb_lower = m - 2 * std
 
+    # ATR(5) - Average True Range for volatility detection
+    high = df["high"]
+    low = df["low"]
+    prev_close = close.shift(1)
+    tr1 = high - low
+    tr2 = (high - prev_close).abs()
+    tr3 = (low - prev_close).abs()
+    true_range = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
+    atr5 = true_range.rolling(5).mean()
+
     last = df.index[-1]
 
     info = {
@@ -137,6 +160,7 @@ def load_latest_tech(symbol: str) -> Optional[Dict[str, float]]:
         "rsi14": float(rsi.iloc[-1]),
         "bb_upper": float(bb_upper.iloc[-1]) if not pd.isna(bb_upper.iloc[-1]) else None,
         "bb_lower": float(bb_lower.iloc[-1]) if not pd.isna(bb_lower.iloc[-1]) else None,
+        "atr5": float(atr5.iloc[-1]) if not pd.isna(atr5.iloc[-1]) else None,
     }
 
     # 直近クローズを少しだけ（プロンプト用）
@@ -144,6 +168,67 @@ def load_latest_tech(symbol: str) -> Optional[Dict[str, float]]:
     info["recent_closes"] = recent_closes
 
     return info
+
+
+def is_high_vol_from_atr(symbol: str) -> bool:
+    """
+    ATR5 の閾値でハイボラ判定。
+    GER40: ATR5 > 20
+    NAS100: ATR5 > 30
+    XAUUSD: ATR5 > 0.7
+    """
+    info = load_latest_tech(symbol)
+    if not info or info.get("atr5") is None:
+        return False
+
+    atr = info["atr5"]
+    sym = symbol.upper().strip()
+
+    if sym == "GER40" and atr > 20:
+        return True
+    if sym == "NAS100" and atr > 30:
+        return True
+    if sym == "XAUUSD" and atr > 0.7:
+        return True
+
+    return False
+
+
+def evaluate_high_volatility(symbol: str) -> bool:
+    """
+    総合ハイボラ判定:
+    ① ATR判定
+    ② TVアラート 15分以内に3回
+    ③ スクショ 10分以内に2回
+    いずれか該当すれば high_volatility = True
+    """
+    global high_volatility
+
+    now = time.time()
+
+    # ① ATR判定
+    if is_high_vol_from_atr(symbol):
+        high_volatility = True
+        logger.info(f"🔥 High volatility detected via ATR for {symbol}")
+        return True
+
+    # ② TVアラート 15分以内に3回
+    recent_tv = [t for t in tv_alerts if now - t < 900]
+    if len(recent_tv) >= 3:
+        high_volatility = True
+        logger.info(f"🔥 High volatility detected: {len(recent_tv)} TV alerts in 15min")
+        return True
+
+    # ③ スクショ 10分以内に2回
+    recent_img = [t for t in image_requests if now - t < 600]
+    if len(recent_img) >= 2:
+        high_volatility = True
+        logger.info(f"🔥 High volatility detected: {len(recent_img)} image requests in 10min")
+        return True
+
+    # どれも該当しない
+    high_volatility = False
+    return False
 
 
 # .env 読み込み（インストールされていなければ無視）
@@ -818,6 +903,10 @@ async def analyze_image(symbol: Optional[str] = None, file: UploadFile = File(..
     GMO 等のスクショ画像を受け取り、AIで方向・価格帯を解析し、
     ついでに 30分手動IFD形式のJSONも生成して返すエンドポイント。
     """
+    # スクショ解析リクエストを記録
+    image_requests.append(time.time())
+    logger.info(f"📸 Image analysis request recorded (recent count: {len(image_requests)})")
+
     try:
         img_bytes = await file.read()
         if not img_bytes:
@@ -878,6 +967,14 @@ async def webhook_handler(request: Request):
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"missing or invalid fields: {e}")
 
+        # TVアラート記録
+        tv_alerts.append(time.time())
+        logger.info(f"📡 TV alert recorded for {symbol} (recent count: {len(tv_alerts)})")
+
+        # ハイボラ判定を実行
+        is_high_vol = evaluate_high_volatility(symbol)
+        logger.info(f"📊 High volatility status: {is_high_vol}")
+
         # ★ AIフィルター判定 ★
         logger.info(f"AI filter check: {symbol} {direction} @ {price}")
         filter_result = ai_filter_signal(symbol, "4H", direction, price, signal)
@@ -923,6 +1020,8 @@ async def webhook_handler(request: Request):
             "status": "4H IFD generated",
             "ifd": ifd_json,
             "saved": saved,
+            "high_volatility": high_volatility,
+            "filter_result": filter_result,
         }
 
     return {"status": "ignored"}
@@ -988,6 +1087,24 @@ async def ifd_run(req: IfdRunRequest):
 @app.post("/ifd/manual30")
 async def ifd_manual30(req: Manual30Request):
     """30分 手動IFDをAPI経由で生成。JSON保存と簡易サマリ追記も行う。"""
+    # ハイボラ判定
+    is_high_vol = evaluate_high_volatility(req.symbol)
+    
+    # 低ボラ時は1回制限(簡易実装: 直近10分のスクショ回数でチェック)
+    if not is_high_vol:
+        now = time.time()
+        recent_30m_count = len([t for t in image_requests if now - t < 600])
+        if recent_30m_count > 1:
+            logger.warning(f"⚠️ Low volatility: blocking 30m IFD (recent requests: {recent_30m_count})")
+            return {
+                "status": "blocked",
+                "reason": "Low volatility detected. 30m manual IFD limited to 1 per session.",
+                "high_volatility": False,
+                "recent_requests": recent_30m_count,
+            }
+    
+    logger.info(f"✅ 30m IFD allowed (high_vol={is_high_vol})")
+    
     try:
         from manual30_ifd import generate_ifd as generate_manual30_ifd
     except Exception as e:
@@ -1050,6 +1167,7 @@ async def ifd_manual30(req: Manual30Request):
         "status": "ok",
         "saved": saved_path,
         "ifd_json": obj,
+        "high_volatility": high_volatility,
     }
 
 
