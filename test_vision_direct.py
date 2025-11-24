@@ -5,10 +5,19 @@ FastAPI /analyze/image エンドポイントへの直接テスト送信
 import requests
 import sys
 from io import BytesIO
-from PIL import Image, ImageDraw, ImageFont
+
+try:
+    from PIL import Image, ImageDraw, ImageFont
+except ImportError:
+    Image = None
+    ImageDraw = None
+    ImageFont = None
 
 def create_test_image():
     """テスト用の簡単な画像を生成（チャート風）"""
+    if Image is None:
+        print("Pillowなし → Renderではローカル画像テストは無効")
+        return None
     img = Image.new('RGB', (800, 600), color='white')
     draw = ImageDraw.Draw(img)
     

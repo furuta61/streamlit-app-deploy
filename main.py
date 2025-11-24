@@ -21,7 +21,14 @@ import pandas as pd
 from typing import Optional
 import base64
 import re
-from PIL import Image, ImageEnhance, ImageFilter
+
+try:
+    from PIL import Image, ImageEnhance, ImageFilter
+except ImportError:
+    Image = None
+    ImageEnhance = None
+    ImageFilter = None
+
 # --- OpenAI クライアント（最新仕様） ---
 from openai import OpenAI
 client = OpenAI()
@@ -1040,6 +1047,9 @@ def preprocess_image_for_vision(img_bytes: bytes) -> bytes:
     - シャープ化
     - 中央部分トリミング
     """
+    if Image is None:
+        # Render環境：Pillow無効 → 前処理スキップ
+        return img_bytes
     try:
         # OpenCV高度前処理（失敗時は元バイト列）
         try:
@@ -1076,7 +1086,7 @@ def fallback_ocr_entry(img_bytes: bytes) -> float | None:
     """
     Tesseract OCRで価格を抽出（Vision失敗時のバックアップ）
     """
-    if pytesseract is None:
+    if pytesseract is None or Image is None:
         return None
     try:
         img = Image.open(io.BytesIO(img_bytes))
@@ -1095,7 +1105,7 @@ def fallback_ocr_symbol(img_bytes: bytes) -> str | None:
     スマホスクショなどでVisionが銘柄名を検出できなかった場合に、
     画面上部の文字列から銘柄名をOCRで推定する。
     """
-    if pytesseract is None:
+    if pytesseract is None or Image is None:
         return None
     try:
         img = Image.open(io.BytesIO(img_bytes))
@@ -1215,30 +1225,33 @@ def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None) ->
             logger.warning("⚠️ entry 値 %.1f が異常 → Vision再試行（グレースケール再処理）", float(data.get("entry", 0)))
 
             # グレースケール再処理でコントラスト強化
-            img = Image.open(io.BytesIO(image_bytes)).convert("L")
-            buf = io.BytesIO()
-            img.save(buf, format="PNG")
-            gray_bytes = buf.getvalue()
-            retry_prompt = base_prompt + "\n\nもう一度、画面中央の価格に注目して正確な現在値（エントリー）を1つだけ抽出してください。"
-            # gray_bytes も data URL に変換して送信
-            b64g = base64.b64encode(gray_bytes).decode("utf-8")
-            gray_url = f"data:image/png;base64,{b64g}"
-            res_retry = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": retry_prompt},
-                            {"type": "image_url", "image_url": {"url": gray_url}},
-                        ],
-                    }
-                ],
-                temperature=0.0,
-            )
-            msg_retry = res_retry.choices[0].message
-            content_retry = getattr(msg_retry, "content", "") or ""
-            data_retry = _safe_parse_json_from_text(content_retry)
+            if Image is None:
+                logger.info("Pillowなし → グレースケール再処理スキップ")
+            else:
+                img = Image.open(io.BytesIO(image_bytes)).convert("L")
+                buf = io.BytesIO()
+                img.save(buf, format="PNG")
+                gray_bytes = buf.getvalue()
+                retry_prompt = base_prompt + "\n\nもう一度、画面中央の価格に注目して正確な現在値（エントリー）を1つだけ抽出してください。"
+                # gray_bytes も data URL に変換して送信
+                b64g = base64.b64encode(gray_bytes).decode("utf-8")
+                gray_url = f"data:image/png;base64,{b64g}"
+                res_retry = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": retry_prompt},
+                                {"type": "image_url", "image_url": {"url": gray_url}},
+                            ],
+                        }
+                    ],
+                    temperature=0.0,
+                )
+                msg_retry = res_retry.choices[0].message
+                content_retry = getattr(msg_retry, "content", "") or ""
+                data_retry = _safe_parse_json_from_text(content_retry)
 
             if data_retry.get("entry") and 100 < float(data_retry["entry"]) < 100000:
                 logger.info("🔁 Vision再試行成功 → entry %.2f に修正", float(data_retry["entry"]))
