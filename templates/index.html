@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>📸 GMO スクショ IFD自動生成</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 24px;
+    }
+    .btn {
+      padding: 8px 20px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      font-size: 0.95rem;
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .loading {
+      display: none;
+      margin-top: 20px;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border: 3px solid #ddd;
+      border-top-color: #007bff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    #result {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+      font-size: 0.9rem;
+    }
+    .result-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    .error {
+      color: #b00020;
+      margin-top: 10px;
+    }
+
+    /* 方向の巨大表示 */
+    .direction-badge {
+      font-size: 1.8rem;
+      font-weight: bold;
+      padding: 8px 16px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    .direction-buy {
+      background-color: #e6f4ea;
+      color: #137333;
+    }
+    .direction-sell {
+      background-color: #fce8e6;
+      color: #c5221f;
+    }
+
+    /* 判定ラベル */
+    .decision-label {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+    .decision-go {
+      background-color: #e3f2fd;
+      color: #1565c0;
+    }
+    .decision-strong {
+      background-color: #fff3e0;
+      color: #ef6c00;
+    }
+
+    /* テーブル表示 */
+    .ifd-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .ifd-table th,
+    .ifd-table td {
+      border: 1px solid #ddd;
+      padding: 6px 8px;
+      font-size: 0.9rem;
+    }
+    .ifd-table th {
+      background-color: #f5f5f5;
+      width: 120px;
+      text-align: left;
+    }
+
+    /* 異常警告 */
+    .warning-list {
+      margin-top: 10px;
+      padding-left: 18px;
+      color: #b00020;
+    }
+    .warning-title {
+      font-weight: bold;
+      color: #b00020;
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+
+    /* 履歴 */
+    .history-section {
+      margin-top: 24px;
+      border-top: 1px solid #eee;
+      padding-top: 12px;
+      font-size: 0.85rem;
+    }
+    .history-item {
+      margin-bottom: 4px;
+      font-family: Menlo, Monaco, "SF Mono", monospace;
+    }
+    .history-label {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    /* JSON表示 */
+    .json-block {
+      margin-top: 16px;
+      font-family: Menlo, Monaco, "SF Mono", monospace;
+      font-size: 0.8rem;
+      white-space: pre-wrap;
+    }
+
+    /* AI分析結果 */
+    .ai-analysis {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 8px;
+      border: 2px solid #ddd;
+    }
+    .ai-analysis.safe {
+      background-color: #e6f4ea;
+      border-color: #137333;
+    }
+    .ai-analysis.caution {
+      background-color: #fff3e0;
+      border-color: #ef6c00;
+    }
+    .ai-analysis.danger {
+      background-color: #fce8e6;
+      border-color: #c5221f;
+    }
+    .ai-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+    .ai-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .ai-metric {
+      padding: 8px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 4px;
+    }
+    .ai-metric-label {
+      font-size: 0.75rem;
+      color: #666;
+      margin-bottom: 2px;
+    }
+    .ai-metric-value {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-store" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="color-scheme" content="light only" />
+</head>
+<body>
+  <h1>📸 GMO スクショ IFD自動生成（ローカルUI）</h1>
+
+  <div class="card">
+    <form id="upload-form" method="post" action="http://127.0.0.1:8080/analyze/image" enctype="multipart/form-data">
+      <p>GMOクリック証券CFDのスクリーンショット画像を選択してください。</p>
+      <input type="file" name="file" accept="image/png,image/jpeg" required />
+      <br /><br />
+      <button id="submit-btn" class="btn" type="submit">解析する</button>
+      
+      <!-- 追加：統合AI解析ボタン -->
+      <br /><br />
+      <button id="combined-btn" class="btn" type="button" style="background:#28a745;">
+        統合AI（ニュース＋画像＋TV）解析
+      </button>
+    </form>
+
+    <!-- 処理中スピナー -->
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <div>
+        AIがスクショを解析中です…<br />
+        数秒〜十数秒ほどお待ちください。
+      </div>
+    </div>
+
+    <div id="error" class="error"></div>
+
+    <!-- 解析結果表示エリア -->
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("upload-form");
+    const loading = document.getElementById("loading");
+    const result = document.getElementById("result");
+    const errorBox = document.getElementById("error");
+    const submitBtn = document.getElementById("submit-btn");
+
+    // 直近5件の履歴をメモリ上で保持
+    const history = [];
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      errorBox.textContent = "";
+      result.innerHTML = "";
+      const formData = new FormData(form);
+
+      loading.style.display = "flex";
+      submitBtn.disabled = true;
+
+      try {
+        const resp = await fetch("http://127.0.0.1:8080/analyze/image", { method: "POST", body: formData });
+        if (!resp.ok) throw new Error("サーバーからエラー応答が返されました");
+
+        const data = await resp.json();
+
+        // ---- 方向（日本語） ----
+        let directionRaw = "";
+        let directionJP = "";
+        try {
+          directionRaw =
+            (data?.analysis?.direction ||
+              data?.ifd?.orders?.[0]?.direction ||
+              "") + "";
+          const dir = directionRaw.toLowerCase();
+          if (dir === "buy") directionJP = "買い";
+          else if (dir === "sell") directionJP = "売り";
+        } catch (_) {}
+
+        // ---- IFD主要情報抽出 ----
+        let symbol = "不明";
+        let entry = null;
+        let tp = null;
+        let sl = null;
+        let lots = null;
+        let decision = "";
+        let comment = data?.analysis?.comment || "";
+
+        if (data.ifd && data.ifd.orders && data.ifd.orders.length > 0) {
+          const order = data.ifd.orders[0];
+          symbol = order.instrument || data.analysis?.symbol || "不明";
+          entry = order.entry_order?.price ?? data.analysis?.entry ?? null;
+          tp = order.ifd_legs?.[0]?.oco?.take_profit?.price ?? null;
+          sl = order.ifd_legs?.[0]?.oco?.stop_loss?.price ?? null;
+          lots = order.lots ?? null;
+          decision = order.decision || "";
+        }
+
+        // ---- 異常検出 ----
+        const warnings = [];
+
+        const isNumber = (v) => typeof v === "number" && !Number.isNaN(v);
+
+        if (!isNumber(entry) || !isNumber(tp) || !isNumber(sl)) {
+          warnings.push("エントリー／利確／損切りのいずれかが数値として認識できません。");
+        } else {
+          // 方向別のTP/SL位置チェック
+          if (directionJP === "買い") {
+            if (tp <= entry) warnings.push("買いポジションなのに、利確がエントリー以下です。設定を確認してください。");
+            if (sl >= entry) warnings.push("買いポジションなのに、損切りがエントリー以上です。設定を確認してください。");
+          } else if (directionJP === "売り") {
+            if (tp >= entry) warnings.push("売りポジションなのに、利確がエントリー以上です。設定を確認してください。");
+            if (sl <= entry) warnings.push("売りポジションなのに、損切りがエントリー以下です。設定を確認してください。");
+          }
+
+          // GO/STRONG_GO と LOT数の簡易チェック（あなたのルールに基づく）
+          if (decision === "GO" && isNumber(lots) && lots > 3) {
+            warnings.push("GO モードでのロット数が 3口を超えています。ルールに合っているか確認してください。");
+          }
+          if (decision === "STRONG_GO" && isNumber(lots) && lots > 5) {
+            warnings.push("STRONG_GO モードでのロット数が 5口を超えています。ルールに合っているか確認してください。");
+          }
+        }
+
+        // ---- 履歴に保存（最大5件） ----
+        const historyItem = {
+          symbol,
+          directionJP,
+          entry,
+          tp,
+          sl,
+          lots,
+          decision,
+          run_id: data?.ifd?.run_id || "",
+        };
+        history.unshift(historyItem);
+        if (history.length > 5) history.pop();
+
+        // ---- 画面描画 ----
+        result.innerHTML = "";
+
+        // 方向の巨大バッジ
+        if (directionJP) {
+          const dirDiv = document.createElement("div");
+          dirDiv.className = "direction-badge " +
+            (directionJP === "買い" ? "direction-buy" : "direction-sell");
+          dirDiv.textContent = `【${directionJP}】`;
+          result.appendChild(dirDiv);
+        }
+
+        // 判定ラベル
+        if (decision) {
+          const decSpan = document.createElement("span");
+          decSpan.className =
+            "decision-label " +
+            (decision === "STRONG_GO" ? "decision-strong" : "decision-go");
+          decSpan.textContent = decision;
+          result.appendChild(decSpan);
+        }
+
+        // 表形式テーブル
+        const tableTitle = document.createElement("div");
+        tableTitle.className = "result-title";
+        tableTitle.textContent = "▶ IFD解析結果（テーブル表示）";
+        result.appendChild(tableTitle);
+
+        const table = document.createElement("table");
+        table.className = "ifd-table";
+        table.innerHTML = `
+          <tr><th>銘柄</th><td>${symbol}</td></tr>
+          <tr><th>方向</th><td>${directionJP || "不明"}</td></tr>
+          <tr><th>エントリー価格</th><td>${entry ?? "不明"}</td></tr>
+          <tr><th>利確</th><td>${tp ?? "不明"}</td></tr>
+          <tr><th>損切り</th><td>${sl ?? "不明"}</td></tr>
+          <tr><th>LOT</th><td>${lots ?? "不明"}</td></tr>
+          <tr><th>判定</th><td>${decision || "不明"}</td></tr>
+        `;
+        result.appendChild(table);
+
+        // コメント
+        if (comment) {
+          const cTitle = document.createElement("div");
+          cTitle.className = "result-title";
+          cTitle.textContent = "▶ コメント";
+          const cBody = document.createElement("div");
+          cBody.textContent = comment;
+          result.appendChild(cTitle);
+          result.appendChild(cBody);
+        }
+
+        // 異常警告
+        if (warnings.length > 0) {
+          const wTitle = document.createElement("div");
+          wTitle.className = "warning-title";
+          wTitle.textContent = "⚠ 入力内容に注意が必要です";
+          result.appendChild(wTitle);
+
+          const ul = document.createElement("ul");
+          ul.className = "warning-list";
+          for (const w of warnings) {
+            const li = document.createElement("li");
+            li.textContent = w;
+            ul.appendChild(li);
+          }
+          result.appendChild(ul);
+        }
+
+        // 履歴表示
+        if (history.length > 0) {
+          const hDiv = document.createElement("div");
+          hDiv.className = "history-section";
+
+          const hLabel = document.createElement("div");
+          hLabel.className = "history-label";
+          hLabel.textContent = "▶ 直近IFD解析履歴（最大5件）";
+          hDiv.appendChild(hLabel);
+
+          history.forEach((h, idx) => {
+            const item = document.createElement("div");
+            item.className = "history-item";
+            item.textContent =
+              `[${idx + 1}] ${h.symbol} / ${h.directionJP || "不明"} / ${h.decision || "?"} / ` +
+              `Entry: ${h.entry ?? "?"} / TP: ${h.tp ?? "?"} / SL: ${h.sl ?? "?"} / LOT: ${h.lots ?? "?"}`;
+            hDiv.appendChild(item);
+          });
+
+          result.appendChild(hDiv);
+        }
+
+        // AI分析結果表示
+        if (data.ai_analysis && !data.ai_analysis.error) {
+          const aiDiv = document.createElement("div");
+          const judgement = (data.ai_analysis.final_judgement || "").toLowerCase();
+          let aiClass = "ai-analysis";
+          if (judgement.includes("安全")) aiClass += " safe";
+          else if (judgement.includes("注意")) aiClass += " caution";
+          else if (judgement.includes("危険")) aiClass += " danger";
+          
+          aiDiv.className = aiClass;
+          
+          const aiTitle = document.createElement("div");
+          aiTitle.className = "ai-title";
+          aiTitle.textContent = "🤖 AI総合分析";
+          aiDiv.appendChild(aiTitle);
+          
+          // 判定結果
+          const judgementDiv = document.createElement("div");
+          judgementDiv.innerHTML = `<strong>最終判定:</strong> ${data.ai_analysis.final_judgement || "不明"}`;
+          aiDiv.appendChild(judgementDiv);
+          
+          // 理由
+          if (data.ai_analysis.reason) {
+            const reasonDiv = document.createElement("div");
+            reasonDiv.style.marginTop = "8px";
+            reasonDiv.innerHTML = `<strong>理由:</strong> ${data.ai_analysis.reason}`;
+            aiDiv.appendChild(reasonDiv);
+          }
+          
+          // メトリクス
+          const metricsDiv = document.createElement("div");
+          metricsDiv.className = "ai-metrics";
+          
+          if (typeof data.ai_analysis.news_risk === "number") {
+            const newsRisk = document.createElement("div");
+            newsRisk.className = "ai-metric";
+            newsRisk.innerHTML = `
+              <div class="ai-metric-label">ニュースリスク</div>
+              <div class="ai-metric-value">${data.ai_analysis.news_risk}/100</div>
+            `;
+            metricsDiv.appendChild(newsRisk);
+          }
+          
+          if (typeof data.ai_analysis.trade_risk === "number") {
+            const tradeRisk = document.createElement("div");
+            tradeRisk.className = "ai-metric";
+            tradeRisk.innerHTML = `
+              <div class="ai-metric-label">トレードリスク</div>
+              <div class="ai-metric-value">${data.ai_analysis.trade_risk}/100</div>
+            `;
+            metricsDiv.appendChild(tradeRisk);
+          }
+          
+          if (data.ai_analysis.classification) {
+            const classif = document.createElement("div");
+            classif.className = "ai-metric";
+            classif.innerHTML = `
+              <div class="ai-metric-label">AI分類</div>
+              <div class="ai-metric-value">${data.ai_analysis.classification}</div>
+            `;
+            metricsDiv.appendChild(classif);
+          }
+          
+          if (typeof data.ai_analysis.ok === "boolean") {
+            const okStatus = document.createElement("div");
+            okStatus.className = "ai-metric";
+            okStatus.innerHTML = `
+              <div class="ai-metric-label">実行可否</div>
+              <div class="ai-metric-value">${data.ai_analysis.ok ? "✅ OK" : "❌ NG"}</div>
+            `;
+            metricsDiv.appendChild(okStatus);
+          }
+          
+          aiDiv.appendChild(metricsDiv);
+          result.appendChild(aiDiv);
+        }
+
+        // 生JSON
+        const rawTitle = document.createElement("div");
+        rawTitle.className = "result-title";
+        rawTitle.textContent = "▶ 生のJSONレスポンス";
+        const rawPre = document.createElement("pre");
+        rawPre.className = "json-block";
+        rawPre.textContent = JSON.stringify(data, null, 2);
+        result.appendChild(rawTitle);
+        result.appendChild(rawPre);
+
+      } catch (err) {
+        console.error(err);
+        errorBox.textContent = "解析中にエラーが発生しました: " + err.message;
+      } finally {
+        loading.style.display = "none";
+        submitBtn.disabled = false;
+      }
+    });
+
+    // ===== 統合AI解析 =====
+    document.getElementById("combined-btn").addEventListener("click", async () => {
+      const formData = new FormData(form);
+
+      errorBox.textContent = "";
+      result.innerHTML = "";
+
+      loading.style.display = "flex";
+      submitBtn.disabled = true;
+
+      try {
+        const resp = await fetch("http://127.0.0.1:8080/analyze/combined", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!resp.ok) throw new Error("統合AIサーバーがエラーを返しました");
+
+        const data = await resp.json();
+
+        // --- 統合AI結果を要約 ---
+        let s = "";
+        s += "【統合AI結果】\n";
+        s += `銘柄: ${data.symbol}\n`;
+        s += `最終判定: ${data.final_judgement}\n`;
+        s += `統合スコア: ${data.final_score}\n`;
+        s += `ニュースリスク: ${data.news_risk}\n`;
+        s += `方向: ${data.vision.direction}\n`;
+        s += `エントリー: ${data.vision.entry}\n`;
+        s += `信頼度: ${data.vision.confidence}%\n`;
+
+        // ニュース翻訳表示
+        if (data.news && data.news.translated && data.news.translated.length > 0) {
+          s += `\n関連ニュース (${data.news.translated.length}件):\n`;
+          data.news.translated.slice(0, 5).forEach((news, idx) => {
+            s += `${idx + 1}. ${news}\n`;
+          });
+        }
+
+        result.innerHTML = `
+          <div class="result-title">▶ 統合AI要約</div>
+          <pre>${s}</pre>
+          <div class="result-title">▶ 生のJSONレスポンス</div>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+
+      } catch (e) {
+        errorBox.textContent = "統合AI解析中にエラー: " + e.message;
+      } finally {
+        loading.style.display = "none";
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

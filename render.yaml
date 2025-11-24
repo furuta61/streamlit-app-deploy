@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: cfd3-fastapi
+    env: python
+    branch: main
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn webhook_server:app --host 0.0.0.0 --port 10000"
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: WEBHOOK_TOKEN
+        sync: false
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false
+      - key: GMAIL_TO
+        sync: false

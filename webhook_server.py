@@ -1,1225 +1,865 @@
 # -*- coding: utf-8 -*-
 """
-CFD3 FastAaPI Webhook Server
-
-目的:
-- TradingView の Webhook を受信
-- RAW JSON をログに保存
-- barstate=closed のときだけ CSV へ追記 (DATA_DIR/WEBHOOK_{symbol}_{frame}.csv)
-- 条件を満たす場合に IFD ジェネレーター (cfd3_portfolio_update_v2.py) を起動
-- Gmail で通知メールを送信
-- IFD の JSON を output/ に保存し、簡易サマリを logs/ に追記
-
-必要なライブラリ:
-- fastapi, uvicorn, pandas
-- smtplib, email
-- subprocess, pathlib
+あなた専用：CFD3 FastAPI ローカル運用版（2025/02 完成版）
+- TradingView 方向アラート
+- GMOスクショ → Vision価格補正
+- 30m IFD & 4H IFD 自動生成
+- 大量参戦モード（High Volatility Mode）
+- ハイボラ判定（ATR / TV連発 / スクショ連打）
+- 時間参戦（09:15 / 13:15 / 17:15 / 22:30）
 
 実行例 (ローカル):
     uvicorn webhook_server:app --reload --port 8080
-
 """
 from __future__ import annotations
 
-from fastapi import FastAPI, Request, HTTPException, UploadFile, File
-from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-import os
-import json
-import base64
+from fastapi import FastAPI, Request, HTTPException, UploadFile, File, Query
+import time
+from collections import deque
 from datetime import datetime
-import smtplib
-from email.message import EmailMessage
-from email.utils import make_msgid
-import io
-import contextlib
-import logging
+from pathlib import Path
+import json
+import pandas as pd
+from typing import Optional, Dict, Any
+import base64
 import subprocess
 import sys
-from pathlib import Path
-import pandas as pd
-from typing import Optional, Dict, Any, Tuple
-from typing import List
-from utils_ifd import print_ifd_table, format_ifd_table_text
-
-# OpenAI for AI filter
+import logging
 from openai import OpenAI
-openai_client = OpenAI()
+import io
+import os
 
-# ====== 状態管理 ======
-from collections import deque
-import time
+# ====== OpenAI ======
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# 直近のTVアラート時刻(timestamp)
-tv_alerts = deque(maxlen=10)
+# ====== ディレクトリ設定 ======
+REPO = Path(__file__).resolve().parent
+DATA_DIR = REPO / "data"
+OUTPUT_DIR = REPO / "output"
+LOGS_DIR = REPO / "logs"
+DATA_DIR.mkdir(exist_ok=True)
+OUTPUT_DIR.mkdir(exist_ok=True)
+LOGS_DIR.mkdir(exist_ok=True)
 
-# 直近のスクショ解析時刻
-image_requests = deque(maxlen=10)
+# ====== ロガー ======
+logger = logging.getLogger("cfd3")
+logging.basicConfig(level=logging.INFO)
 
-# ハイボラフラグ
-high_volatility = False
+# =====================================================================
+# ニュース RSS 取得（Reuters / Bloomberg / CNBC / MarketWatch / ZeroHedge / FinancialJuice）
+# =====================================================================
+import feedparser
+import requests
+from bs4 import BeautifulSoup
 
-# ====== CSV からテクニカル指標を読むヘルパー（GER40 4H 用） ======
+RSS_SOURCES = [
+    # 高信頼メディア
+    ("Reuters Top News", "https://feeds.reuters.com/reuters/topNews"),
+    ("Reuters World News", "https://feeds.reuters.com/Reuters/worldNews"),
+    ("Bloomberg Markets", "https://www.bloomberg.com/feeds/podcast/etf-report.xml"),
+    ("CNBC Top News", "https://www.cnbc.com/id/100727362/device/rss/rss.html"),
 
-# TradingViewシンボル → CSVファイル名 の対応
-CSV_FILE_MAP: Dict[str, str] = {
-    "GER40": "FOREXCOM_GER40, 240.csv",
-    # JP225 / NAS100 / XAUUSD 用はあとで追加できます
-    # "JP225": "FOREXCOM_JP225, 240.csv",
-    # "NAS100": "FOREXCOM_NAS100, 240.csv",
-    # "XAUUSD": "FOREXCOM_XAUUSD, 240.csv",
+    # マーケット系
+    ("MarketWatch", "https://feeds2.feedburner.com/marketwatch/topstories"),
+    ("FinancialJuice", "https://financialjuice.com/home/rss"),
+
+    # クラッシュ系
+    ("ZeroHedge", "https://zerohedge.com/fullrss"),
+]
+
+
+def fetch_rss_news(max_items: int = 40):
+    """
+    RSSニュースを最大40件まとめて取得する
+    """
+    all_news = []
+
+    for source_name, url in RSS_SOURCES:
+        try:
+            feed = feedparser.parse(url)
+
+            for entry in feed.entries[:10]:
+                all_news.append({
+                    "source": source_name,
+                    "title": entry.get("title", "").strip(),
+                    "summary": entry.get("summary", "").strip(),
+                    "published": entry.get("published", ""),
+                    "link": entry.get("link", "")
+                })
+
+        except Exception as e:
+            logger.warning(f"RSS取得失敗: {source_name} - {e}")
+
+    # 最新ニュース順にソート
+    def sort_key(x):
+        return x.get("published", "")
+
+    all_news = sorted(all_news, key=sort_key, reverse=True)
+
+    # 最大 max_items 件に制限
+    return all_news[:max_items]
+
+# =====================================================================
+# ニュース スクレイピング（FinancialJuice / FXStreet / Investing / MarketWatch）
+# =====================================================================
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
 }
 
-
-def load_latest_tech(symbol: str) -> Optional[Dict[str, float]]:
+def scrape_financialjuice():
     """
-    data/FOREXCOM_GER40, 240.csv などから最新バーとテクニカル指標を計算して返す。
-    CSVが無い・壊れている場合は None を返す。
+    FinancialJuice 速報ニュースをスクレイピング
     """
-    sym = symbol.upper().strip()
-    fname = CSV_FILE_MAP.get(sym)
-    if not fname:
-        logger.warning(f"[tech] CSV_FILE_MAP に {sym} が定義されていません")
-        return None
+    url = "https://www.financialjuice.com/home"
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
 
-    csv_path = DATA_DIR / fname
-    if not csv_path.exists():
-        logger.warning(f"[tech] CSV ファイルが見つかりません: {csv_path}")
-        return None
+        items = []
+        for div in soup.select(".latest-news-item")[:10]:
+            title = div.get_text(strip=True)
+            items.append({
+                "source": "FinancialJuice",
+                "title": title,
+                "summary": "",
+                "link": url,
+                "published": ""
+            })
+        return items
+    except Exception as e:
+        logger.warning(f"FinancialJuice scrape error: {e}")
+        return []
+
+
+def scrape_fxstreet():
+    url = "https://www.fxstreet.com/news"
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        items = []
+        for div in soup.select(".fxs_headline_tiny")[:10]:
+            title = div.get_text(strip=True)
+            items.append({
+                "source": "FXStreet",
+                "title": title,
+                "summary": "",
+                "link": url,
+                "published": ""
+            })
+        return items
+    except Exception as e:
+        logger.warning(f"FXStreet scrape error: {e}")
+        return []
+
+
+def scrape_investing():
+    url = "https://www.investing.com/news/"
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        items = []
+        for div in soup.select("article")[:10]:
+            title = div.get_text(strip=True)
+            items.append({
+                "source": "Investing.com",
+                "title": title,
+                "summary": "",
+                "link": url,
+                "published": ""
+            })
+        return items
+    except Exception as e:
+        logger.warning(f"Investing scrape error: {e}")
+        return []
+
+
+def scrape_marketwatch():
+    url = "https://www.marketwatch.com/latest-news"
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        items = []
+        for div in soup.select("h3.article__headline")[:10]:
+            title = div.get_text(strip=True)
+            items.append({
+                "source": "MarketWatch",
+                "title": title,
+                "summary": "",
+                "link": url,
+                "published": ""
+            })
+        return items
+    except Exception as e:
+        logger.warning(f"MarketWatch scrape error: {e}")
+        return []
+
+# =====================================================================
+# ニュース翻訳（英語 → 日本語：自然な日本語スタイル）
+# =====================================================================
+
+def translate_to_japanese(text: str) -> str:
+    """
+    AIを使って自然な日本語へ翻訳する（Aスタイル：読みやすく自然）
+    """
+    if not text or text.strip() == "":
+        return ""
+
+    prompt = f"""
+以下の英文を「自然で読みやすい日本語」に翻訳してください。
+専門用語は優しく補足し、文章は読みやすく整えてください。
+
+--- 英文 ---
+{text}
+"""
 
     try:
-        df = pd.read_csv(csv_path)
+        res = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0
+        )
+        return res.choices[0].message.content.strip()
     except Exception as e:
-        logger.warning(f"[tech] CSV 読み込みエラー: {csv_path} / {e}")
-        return None
+        logger.warning(f"Translation error: {e}")
+        return text  # 翻訳失敗時は元のテキストを返す
 
-    # time列があればソート
-    if "time" in df.columns:
-        try:
-            df["time"] = pd.to_datetime(df["time"], errors="coerce")
-            df = df.dropna(subset=["time"]).sort_values("time")
-        except Exception:
-            pass
+# =====================================================================
+# 統合AI：ニュース危険度スコアリング
+# =====================================================================
 
-    # 最低限 OHLC が必要
-    for col in ["open", "high", "low", "close"]:
-        if col not in df.columns:
-            logger.warning(f"[tech] CSVに {col} 列がありません: {csv_path}")
-            return None
+def score_news_risk(news_items: list[str]) -> dict:
+    """
+    ニュースをスコア化（0〜100）
+    - 危険ワード：-30〜-50
+    - 重要経済指標：-20
+    - FRB/金利：-10〜-30
+    - 地政学：-20
+    """
+    risk = 0
+    summary = []
 
-    # 最近 200 本だけ使う（重くなりすぎないように）
-    df = df.tail(200).copy()
-
-    close = df["close"]
-
-    # SMA
-    df["sma20"] = close.rolling(20).mean()
-    df["sma50"] = close.rolling(50).mean()
-    df["sma100"] = close.rolling(100).mean()
-
-    # MACD (12,26,9)
-    ema12 = close.ewm(span=12, adjust=False).mean()
-    ema26 = close.ewm(span=26, adjust=False).mean()
-    macd = ema12 - ema26
-    macd_signal = macd.ewm(span=9, adjust=False).mean()
-
-    # RSI(14)
-    delta = close.diff()
-    gain = delta.clip(lower=0)
-    loss = -delta.clip(upper=0)
-    avg_gain = gain.rolling(14).mean()
-    avg_loss = loss.rolling(14).mean()
-    rs = avg_gain / avg_loss
-    rsi = 100 - (100 / (1 + rs))
-
-    # ボリンジャーバンド(20, 2σ)
-    m = close.rolling(20).mean()
-    std = close.rolling(20).std()
-    bb_upper = m + 2 * std
-    bb_lower = m - 2 * std
-
-    # ATR(5) - Average True Range for volatility detection
-    high = df["high"]
-    low = df["low"]
-    prev_close = close.shift(1)
-    tr1 = high - low
-    tr2 = (high - prev_close).abs()
-    tr3 = (low - prev_close).abs()
-    true_range = pd.concat([tr1, tr2, tr3], axis=1).max(axis=1)
-    atr5 = true_range.rolling(5).mean()
-
-    last = df.index[-1]
-
-    info = {
-        "close": float(close.iloc[-1]),
-        "sma20": float(df.loc[last, "sma20"]) if not pd.isna(df.loc[last, "sma20"]) else None,
-        "sma50": float(df.loc[last, "sma50"]) if not pd.isna(df.loc[last, "sma50"]) else None,
-        "sma100": float(df.loc[last, "sma100"]) if not pd.isna(df.loc[last, "sma100"]) else None,
-        "macd": float(macd.iloc[-1]),
-        "macd_signal": float(macd_signal.iloc[-1]),
-        "rsi14": float(rsi.iloc[-1]),
-        "bb_upper": float(bb_upper.iloc[-1]) if not pd.isna(bb_upper.iloc[-1]) else None,
-        "bb_lower": float(bb_lower.iloc[-1]) if not pd.isna(bb_lower.iloc[-1]) else None,
-        "atr5": float(atr5.iloc[-1]) if not pd.isna(atr5.iloc[-1]) else None,
+    NEGATIVE_KEYWORDS = {
+        "geopolitical": -30,
+        "conflict": -40,
+        "attack": -50,
+        "inflation": -15,
+        "rate hike": -20,
+        "hike": -20,
+        "yields surge": -20,
+        "crash": -40,
+        "recession": -35,
+        "default": -25,
+        "bank failure": -60
     }
 
-    # 直近クローズを少しだけ（プロンプト用）
-    recent_closes = list(map(float, close.tail(30).tolist()))
-    info["recent_closes"] = recent_closes
+    for text in news_items:
+        t = text.lower()
+        for k, v in NEGATIVE_KEYWORDS.items():
+            if k in t:
+                risk += v
+                summary.append(f"- {k}: {v}")
 
-    return info
+    # ニュースの危険スコアは -100〜+20 に収める
+    risk = max(-100, min(20, risk))
+
+    return {"risk": risk, "details": summary}
 
 
-def is_high_vol_from_atr(symbol: str) -> bool:
+def collect_latest_news_for_symbol(symbol: str) -> dict:
     """
-    ATR5 の閾値でハイボラ判定。
-    GER40: ATR5 > 20
-    NAS100: ATR5 > 30
-    XAUUSD: ATR5 > 0.7
+    symbolに関連するニュースを収集・翻訳して返す
     """
-    info = load_latest_tech(symbol)
-    if not info or info.get("atr5") is None:
-        return False
+    # --- RSSから取得 ---
+    rss_items = fetch_rss_news()
 
-    atr = info["atr5"]
-    sym = symbol.upper().strip()
+    # --- スクレイピングから取得 ---
+    scrapes = []
+    scrapes += scrape_financialjuice()
+    scrapes += scrape_investing()
+    scrapes += scrape_fxstreet()
 
-    if sym == "GER40" and atr > 20:
-        return True
-    if sym == "NAS100" and atr > 30:
-        return True
-    if sym == "XAUUSD" and atr > 0.7:
-        return True
+    all_news = rss_items + scrapes
 
-    return False
+    # 銘柄に関係しやすい単語でフィルタ
+    KEY_MAP = {
+        "GER40": ["germany", "europe", "dax", "eurozone", "bundesbank"],
+        "JP225": ["japan", "nikkei", "boj", "tokyo"],
+        "NAS100": ["nasdaq", "us", "tech", "federal reserve"],
+        "XAUUSD": ["gold", "precious metal", "xau"]
+    }
 
+    keywords = KEY_MAP.get(symbol.upper(), [])
+    related = []
 
+    for item in all_news:
+        # ニュースitemは辞書形式なので、titleとsummaryを結合して検索
+        txt = ""
+        if isinstance(item, dict):
+            txt = f"{item.get('title', '')} {item.get('summary', '')}".lower()
+        else:
+            txt = str(item).lower()
+        
+        if any(k in txt for k in keywords):
+            related.append(item)
+
+    # 限定して最大10件
+    related = related[:10]
+
+    # 翻訳（タイトルのみ）
+    translated = []
+    for item in related:
+        try:
+            if isinstance(item, dict):
+                title = item.get("title", "")
+                jp = translate_to_japanese(title)
+            else:
+                jp = translate_to_japanese(str(item))
+        except Exception:
+            jp = str(item)
+        translated.append(jp)
+
+    # リスク評価（テキスト抽出）
+    text_for_risk = []
+    for item in related:
+        if isinstance(item, dict):
+            text_for_risk.append(f"{item.get('title', '')} {item.get('summary', '')}")
+        else:
+            text_for_risk.append(str(item))
+
+    news_eval = score_news_risk(text_for_risk)
+
+    return {
+        "raw_news": related,
+        "translated": translated,
+        "risk": news_eval["risk"],
+        "risk_details": news_eval["details"]
+    }
+
+# ====== ニュース取得 & AI分析 ======
+try:
+    from news_fetcher import fetch_latest_rss, fetch_x_market_news
+    from ifd_analyzer import ai_ifd_analysis
+    NEWS_ANALYSIS_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"⚠️ news_fetcher or ifd_analyzer not available: {e}")
+    NEWS_ANALYSIS_AVAILABLE = False
+    def fetch_latest_rss(limit=5): return []
+    def fetch_x_market_news(limit=5): return []
+    def ai_ifd_analysis(ifd_data, rss_news, x_news): return {"error": "not_available"}
+
+# ====== High Volatility Mode（大量参戦） ======
+tv_alerts = deque(maxlen=20)        # TVアラート時刻
+image_requests = deque(maxlen=20)   # スクショ解析時刻
+recent_30m_trades = deque(maxlen=20)
+high_volatility = False
+
+# ====== TV の最新方向保存 ======
+tv_last_direction = {}   # symbol → buy/sell
+tv_last_signal = {}      # symbol → GO/STRONG_GO
+
+# ====== TradingView CSV マップ ======
+CSV_FILE_MAP = {
+    "GER40": "FOREXCOM_GER40, 240.csv",
+    "NAS100": "FOREXCOM_NAS100, 240.csv",
+    "JP225": "FOREXCOM_JP225, 240.csv",
+    "XAUUSD": "FOREXCOM_XAUUSD, 240.csv",
+}
+
+# =====================================================================
+# テクニカル読込（ATR含む）
+# =====================================================================
+def load_latest_tech(symbol: str) -> Optional[Dict[str, float]]:
+    sym = symbol.upper()
+    fname = CSV_FILE_MAP.get(sym)
+    if not fname:
+        return None
+
+    fp = DATA_DIR / fname
+    if not fp.exists():
+        return None
+
+    df = pd.read_csv(fp)
+
+    if "time" in df.columns:
+        df["time"] = pd.to_datetime(df["time"], errors="coerce")
+        df = df.dropna(subset=["time"]).sort_values("time")
+
+    df = df.tail(200).copy()
+    close = df["close"]
+
+    # ATR5 簡易計算
+    atrs = [abs(close.iloc[i] - close.iloc[i - 1]) for i in range(-1, -6, -1)]
+    atr5 = sum(atrs) / 5
+
+    return {
+        "close": float(close.iloc[-1]),
+        "atr5": float(atr5),
+        "recent_closes": [float(x) for x in close.tail(30)],
+    }
+
+# =====================================================================
+# ハイボラ判定（ATR / TV連打 / スクショ連打）
+# =====================================================================
 def evaluate_high_volatility(symbol: str) -> bool:
-    """
-    総合ハイボラ判定:
-    ① ATR判定
-    ② TVアラート 15分以内に3回
-    ③ スクショ 10分以内に2回
-    いずれか該当すれば high_volatility = True
-    """
     global high_volatility
 
     now = time.time()
+    info = load_latest_tech(symbol)
 
     # ① ATR判定
-    if is_high_vol_from_atr(symbol):
-        high_volatility = True
-        logger.info(f"🔥 High volatility detected via ATR for {symbol}")
-        return True
+    if info:
+        atr = info["atr5"]
+        sym = symbol.upper()
+        if (sym == "GER40" and atr > 20) or \
+           (sym == "NAS100" and atr > 30) or \
+           (sym == "XAUUSD" and atr > 0.7):
+            high_volatility = True
+            logger.info(f"🔥 High volatility via ATR: {symbol} ATR5={atr}")
+            return True
 
-    # ② TVアラート 15分以内に3回
+    # ② TVアラート 15分で3回以上
     recent_tv = [t for t in tv_alerts if now - t < 900]
     if len(recent_tv) >= 3:
         high_volatility = True
-        logger.info(f"🔥 High volatility detected: {len(recent_tv)} TV alerts in 15min")
+        logger.info(f"🔥 High volatility: {len(recent_tv)} TV alerts in 15min")
         return True
 
-    # ③ スクショ 10分以内に2回
-    recent_img = [t for t in image_requests if now - t < 600]
-    if len(recent_img) >= 2:
+    # ③ スクショ 10分で2回以上
+    recent_imgs = [t for t in image_requests if now - t < 600]
+    if len(recent_imgs) >= 2:
         high_volatility = True
-        logger.info(f"🔥 High volatility detected: {len(recent_img)} image requests in 10min")
+        logger.info(f"🔥 High volatility: {len(recent_imgs)} image requests in 10min")
         return True
 
-    # どれも該当しない
     high_volatility = False
     return False
 
-
-# .env 読み込み（インストールされていなければ無視）
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except Exception:
-    pass
-
-# ====== 環境変数・定数 ======
-GMAIL_USER = os.getenv("GMAIL_USER")
-GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
-GMAIL_TO = os.getenv("GMAIL_TO", "")
-
-# CSV/ログ/出力ディレクトリ
-REPO_ROOT = Path(__file__).resolve().parent
-DATA_DIR = Path(os.getenv("DATA_DIR", str(REPO_ROOT / "data")))
-LOGS_DIR = REPO_ROOT / "logs"
-OUTPUT_DIR = REPO_ROOT / "output"
-
-# ログファイル
-RAW_LOG = LOGS_DIR / "tradingview_raw.log"
-SMTP_LOG = LOGS_DIR / "notify_smtp.log"
-
-# IFD スクリプト (既存)
-IFD_SCRIPT = REPO_ROOT / "cfd3_portfolio_update_v2.py"
-
-# ロガー
-logger = logging.getLogger("webhook_server")
-logging.basicConfig(level=logging.INFO)
-
-app = FastAPI(title="CFD3 Webhook Server")
-
-
-# ====== AI チャートフィルター（CSV + テクニカル指標付き） ======
-def ai_filter_signal(symbol: str, timeframe: str, direction: str, price: float, signal: str) -> Dict[str, Any]:
-    """
-    CSVからテクニカル指標を読み込み、GPT-4o-miniでシグナルの妥当性を判定。
-    
-    Returns:
-        {
-            "ok": bool,    # True=取引OK, False=取引NG
-            "score": int,  # 0-100の確率
-            "reason": str  # 理由
-        }
-    """
-    sym = symbol.upper().strip()
-    tf = timeframe.upper().strip()
-    dir_l = direction.lower().strip()
-    sig = signal.upper().strip()
-
-    tech = load_latest_tech(sym)
-
-    # テクニカル情報をテキスト化
-    if tech:
-        tech_text = f"""
-[テクニカル情報 (最新バー)]
-- close: {tech.get('close')}
-- SMA20: {tech.get('sma20')}
-- SMA50: {tech.get('sma50')}
-- SMA100: {tech.get('sma100')}
-- MACD: {tech.get('macd')}
-- MACDシグナル: {tech.get('macd_signal')}
-- RSI14: {tech.get('rsi14')}
-- BB上限: {tech.get('bb_upper')}
-- BB下限: {tech.get('bb_lower')}
-- 直近クローズ(約30本): {tech.get('recent_closes')}
-"""
-    else:
-        tech_text = "\n[テクニカル情報] CSV読み込みに失敗したため、数値はなしで評価してください。"
-
-    prompt = f"""
-あなたはプロの裁量トレーダー兼システムトレーダーです。
-以下のCFDシグナルの妥当性を、チャートの方向性ベースで「適度に厳しめ」に評価してください。
-
-■ 銘柄: {sym}
-■ 時間足: {tf}
-■ 方向: {dir_l}
-■ シグナル: {sig}
-■ 現在価格: {price}
-
-{tech_text}
-
-=== 評価方針 ===
-- トレンド方向: SMA20 / SMA50 / SMA100 の並びと、価格がどの位置にあるかを最重要視。
-- MACD: ゼロラインとの位置、シグナルとの位置関係、勢いを確認。
-- RSI14: 30〜70 を基準に、トレンド方向と逆行していないか確認。
-- ボリンジャーバンド: バンドの上限/下限での逆張りは慎重に。
-- 直近クローズの形（トレンド or レンジ）も参考にし、ノイズだけのシグナルは避ける。
-
-=== 判定ルール ===
-- 「トレンド方向に素直に乗っているシグナル」のみ高評価。
-- 強い逆張り・レンジのど真ん中・指標がバラバラな場合はスコアを下げる。
-- score は 0〜100 の整数。
-    - score < 35 → ok = false（エントリーすべきでない）
-    - score ≥ 35 → ok = true（エントリー許可）
-
-=== 出力形式（JSONのみ, 余計なテキスト禁止） ===
-{{
-  "ok": true or false,
-  "score": 数値,
-  "reason": "日本語で、簡潔に理由を1〜2行で説明"
-}}
-"""
-
-    try:
-        res = openai_client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}]
-        )
-        content = res.choices[0].message.content.strip()
-
-        # ```json ... ``` で返ってきた場合のガード
-        if content.startswith("```"):
-            lines = content.split("\n")
-            content = "\n".join(lines[1:-1]).strip()
-
-        data = json.loads(content)
-
-        # 最低限のキーが無ければフォールバック
-        if not isinstance(data, dict) or "ok" not in data or "score" not in data:
-            raise ValueError("unexpected AI filter response")
-
-        return data
-
-    except Exception as e:
-        logger.error(f"AI filter error: {e}")
-        # エラー時は安全のため「やや厳しめOK」にする
-        return {"ok": True, "score": 50, "reason": f"AI判定エラーのためデフォルト許可: {e}"}
-
-
-# ====== スクショ画像AI解析 ======
-def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None) -> Dict[str, Any]:
-    """
-    GMOのスクショ画像から、AIに以下を推定させる:
-      - symbol        : 銘柄名（推定できなければ symbol_hint を使う）
-      - direction     : buy / sell
-      - entry         : 推奨エントリー価格
-      - tp1, tp2, sl  : 目安レベル
-      - confidence    : 0-100 の自信度
-      - comment       : 日本語コメント
-    """
-    b64 = base64.b64encode(image_bytes).decode("utf-8")
-
-    prompt = f"""
-あなたはプロのCFDトレーダー兼テクニカルアナリストです。
-添付のトレード画面（GMO CFD 等）のスクリーンショットを見て、
-エントリーとIFD候補を提案してください。
-
-要件:
-
-1. できる範囲で銘柄(symbol)を推定してください。
-   - 画像から明確に分からない場合は、symbol は "UNKNOWN" としてください。
-   - 引数のヒント symbol_hint が渡されていた場合は、それを優先して使っても構いません。
-
-2. 次の項目を決めてください:
-   - direction : "buy" か "sell"
-   - entry     : 現在レート付近の、妥当なエントリー価格
-   - tp1       : 利確1の目安
-   - tp2       : 利確2の目安（中〜長め）
-   - sl        : 損切りの目安
-   - confidence: 0〜100 の整数で、自分の提案の自信度
-   - comment   : なぜその方向と水準にしたか、日本語で1〜3行
-
-3. 注意点:
-   - スキャルではなく、数十分〜数時間を想定したデイトレ〜短期スイングレベルのIFDを提案してください。
-   - 明らかに方向感がないレンジの場合は、自信度を下げて構いません。
-
-出力は必ず次のJSON「だけ」を返してください。前後に説明文は書かないでください:
-
-{{
-  "symbol": "<銘柄 or UNKNOWN>",
-  "direction": "buy or sell",
-  "entry": 価格の数値,
-  "tp1": 価格の数値,
-  "tp2": 価格の数値,
-  "sl": 価格の数値,
-  "confidence": 0〜100 の整数,
-  "comment": "日本語コメント"
-}}
-"""
-
-    try:
-        res = openai_client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": prompt},
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/jpeg;base64,{b64}"
-                            },
-                        },
-                    ],
-                }
-            ],
-        )
-        content = res.choices[0].message.content.strip()
-
-        # ```json ... ``` で返ってきた場合に備えて除去
-        if content.startswith("```"):
-            lines = content.split("\n")
-            content = "\n".join(lines[1:-1]).strip()
-
-        data = json.loads(content)
-
-        # symbol_hint があれば補完
-        if symbol_hint and (not data.get("symbol") or data.get("symbol") == "UNKNOWN"):
-            data["symbol"] = symbol_hint
-
-        return data
-    except Exception as e:
-        logger.exception(f"analyze_image_with_ai error: {e}")
-        # 失敗時は最低限のダミーを返す
-        return {
-            "symbol": symbol_hint or "UNKNOWN",
-            "direction": "buy",
-            "entry": 0,
-            "tp1": 0,
-            "tp2": 0,
-            "sl": 0,
-            "confidence": 0,
-            "comment": f"AI解析に失敗しました: {e}",
-        }
-
-
-# ====== Pydantic Models ======
-class WebhookPayload(BaseModel):
-    symbol: Optional[str] = None
-    timeframe: Optional[str] = None
-    barstate: Optional[str] = None
-    text: Optional[str] = None
-    data: Optional[Dict[str, Any]] = None
-    time: Optional[str] = None
-    is_realtime: Optional[bool] = None
-    # OHLC (平文または data 内にも入ることあり)
-    open: Optional[float] = None
-    high: Optional[float] = None
-    low: Optional[float] = None
-    close: Optional[float] = None
-
-
-class IfdRunRequest(BaseModel):
-    tf: Optional[str] = "4h"
-    symbols: Optional[str] = None  # カンマ区切り
-    single: Optional[bool] = True
-    expiry_hours: Optional[int] = 0
-    trade_mode: Optional[str] = None
-
-
-class Manual30Request(BaseModel):
-    symbol: str
-    direction: str  # buy/sell
-    entry: float
-    signal: str  # GO / STRONG_GO
-    save: Optional[bool] = True
-
-
-# ====== ユーティリティ ======
-
-def timeframe_to_frame(tf: str | None) -> str:
-    """TradingView 由来の timeframe を '30'|'60'|'240' のいずれかに正規化。"""
-    t = (tf or "").lower()
-    if t in ("30", "30m"):  # 30分
-        return "30"
-    if t in ("60", "60m", "1h", "1hour", "1-hour"):  # 1時間
-        return "60"
-    if t in ("240", "4h", "4hour", "4-hour"):  # 4時間
-        return "240"
-    # 既定: 60
-    return "60"
-
-
-def parse_time_to_utc(tval: Any) -> pd.Timestamp:
-    """ISO/epoch(ms|s) を UTC Timestamp に変換。異常時は now(UTC)。"""
-    if tval is None:
-        return pd.Timestamp.utcnow().tz_localize("UTC")
-    # 数値っぽい場合は epoch を推定
-    try:
-        if isinstance(tval, (int, float)) or (isinstance(tval, str) and tval.strip().isdigit()):
-            v = float(tval)
-            # 大きさで秒/ミリ秒を判定
-            if v > 1e12:  # ms
-                return pd.to_datetime(v, unit="ms", utc=True)
-            if v > 1e9:  # s
-                return pd.to_datetime(v, unit="s", utc=True)
-    except Exception:
-        pass
-    # 文字列のときは pandas に任せる
-    try:
-        ts = pd.to_datetime(tval, utc=True)
-        if ts.tzinfo is None:
-            ts = ts.tz_localize("UTC")
-        return ts
-    except Exception:
-        return pd.Timestamp.utcnow().tz_localize("UTC")
-
-
-def is_bar_closed(payload: WebhookPayload) -> bool:
-    # 明示 barstate
-    try:
-        if (payload.barstate or "").lower() in ("closed", "bar_closed", "bar_close", "close"):
-            return True
-    except Exception:
-        pass
-    # data 内
-    try:
-        d = payload.data or {}
-        bs = str(d.get("barstate") or d.get("bar_state") or "").lower()
-        if bs in ("closed", "bar_closed", "bar_close", "close"):
-            return True
-    except Exception:
-        pass
-    # テキストヒューリスティック
-    try:
-        txt = (payload.text or "").lower()
-        if any(k in txt for k in ["bar close", "bar_closed", "closed bar", "closed"]):
-            return True
-    except Exception:
-        pass
-    return False
-
-
-def send_email(subject: str, body: str, to_addrs: str):
-    """Gmail SMTP(SSL:465) でプレーンテキスト送信。"""
-    smtp_user = GMAIL_USER
-    smtp_pass = GMAIL_APP_PASSWORD
-    recipients = to_addrs or GMAIL_TO
-
-    if not smtp_user or not smtp_pass or not recipients:
-        raise RuntimeError("メール設定が不完全です (.env の GMAIL_* を確認)。")
-
-    rcpts = [r.strip() for r in recipients.split(",") if r.strip()]
-
-    msg = EmailMessage()
-    msg["From"] = f"CFD3 Alerts <{smtp_user}>"
-    msg["To"] = ", ".join(rcpts)
-    msg["Subject"] = subject
-    msg["Reply-To"] = smtp_user
-    try:
-        msg["Message-ID"] = make_msgid()
-    except Exception:
-        pass
-    msg.set_content(body)
-
-    smtp_host = "smtp.gmail.com"
-    smtp_port = 465
-
-    LOGS_DIR.mkdir(parents=True, exist_ok=True)
-    debug_out = ""
-    with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=20) as smtp:
-        smtp.set_debuglevel(1)
-        buf = io.StringIO()
-        with contextlib.redirect_stdout(buf):
-            smtp.login(smtp_user, smtp_pass)
-            smtp.send_message(msg, from_addr=smtp_user, to_addrs=rcpts)
-        debug_out = buf.getvalue()
-
-    # SMTP デバッグをファイルにも残す
-    try:
-        with open(SMTP_LOG, "a", encoding="utf-8") as f:
-            f.write(json.dumps({
-                "ts": datetime.utcnow().isoformat(),
-                "to": rcpts,
-                "subject": subject,
-                "status": "sent",
-            }, ensure_ascii=False) + "\n")
-            if debug_out:
-                tail = debug_out.splitlines()[-20:]
-                f.write("\n".join(tail) + "\n\n")
-    except Exception:
-        pass
-
-
-def append_csv(symbol: str, frame: str, payload: WebhookPayload) -> Path:
-    """DATA_DIR/WEBHOOK_{symbol}_{frame}.csv に 1 レコード追記（重複は time で排除）。"""
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    fn = DATA_DIR / f"WEBHOOK_{symbol}_{frame}.csv"
-
-    # OHLC の抽出（payload 平文優先→data 辞書）
-    ohlc = {}
-    if payload.open is not None:
-        ohlc = {
-            "open": payload.open,
-            "high": payload.high,
-            "low": payload.low,
-            "close": payload.close,
-        }
-    elif payload.data:
-        d = payload.data
-        def pick(dd: Dict[str, Any], keys):
-            for k in keys:
-                if k in dd:
-                    return dd.get(k)
-            return None
-        ohlc = {
-            "open": pick(d, ("o", "open")),
-            "high": pick(d, ("h", "high")),
-            "low": pick(d, ("l", "low")),
-            "close": pick(d, ("c", "close")),
-        }
-
-    # time の決定
-    tval = payload.time or ((payload.data or {}).get("time"))
-    ts = parse_time_to_utc(tval)
-
-    row = pd.DataFrame([{
-        "time": ts,
-        "open": float(ohlc.get("open", ohlc.get("close", 0.0)) or 0.0),
-        "high": float(ohlc.get("high", ohlc.get("close", 0.0)) or 0.0),
-        "low": float(ohlc.get("low", ohlc.get("close", 0.0)) or 0.0),
-        "close": float(ohlc.get("close", 0.0) or 0.0),
-    }])
-
-    if fn.exists():
-        try:
-            old = pd.read_csv(fn, parse_dates=[0])
-            if old.columns[0].lower() != "time":
-                old.columns = ["time"] + list(old.columns[1:])
-            df = pd.concat([old, row], ignore_index=True)
-        except Exception:
-            df = row
-    else:
-        df = row
-
-    df["time"] = pd.to_datetime(df["time"], utc=True, errors="coerce")
-    df = df.dropna(subset=["time"]).drop_duplicates(subset=["time"], keep="last").sort_values("time").reset_index(drop=True)
-    df.to_csv(fn, index=False)
-    logger.info("wrote csv: %s (rows=%d)", str(fn), len(df))
-    return fn
-
-
-def run_ifd(symbol: str, tf: str = "4h") -> Tuple[int, str, str, Optional[dict]]:
-    """IFD ジェネレーターを実行して (returncode, stdout, stderr, parsed_json) を返す。"""
-    if not IFD_SCRIPT.exists():
-        return (127, "", f"not found: {IFD_SCRIPT}", None)
-
-    args = [
-        sys.executable,
-        str(IFD_SCRIPT),
-        "--data", str(DATA_DIR),
-        "--tf", str(tf),
-        "--single",
-        "--only", symbol,
-    ]
-    logger.info("running IFD: %s", " ".join(args))
-    proc = subprocess.run(args, cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=180)
-
-    out, err = proc.stdout or "", proc.stderr or ""
-    logger.info("IFD stdout (head): %s", out[:1200])
-    logger.info("IFD stderr (head): %s", err[:1200])
-
-    parsed = None
-    s = out.strip()
-    if s:
-        try:
-            parsed = json.loads(s)
-        except Exception:
-            first = s.find("{")
-            last = s.rfind("}")
-            if first != -1 and last != -1 and last > first:
-                try:
-                    parsed = json.loads(s[first:last+1])
-                except Exception:
-                    parsed = None
-
-    # JSON を保存 + サマリ追記
-    if parsed:
-        try:
-            OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-            run_id = parsed.get("run_id") or datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-            out_fp = OUTPUT_DIR / f"ifd_{run_id}.json"
-            with open(out_fp, "w", encoding="utf-8") as f:
-                json.dump(parsed, f, ensure_ascii=False, indent=2)
-            logger.info("Saved IFD JSON to %s", str(out_fp))
-
-            LOGS_DIR.mkdir(parents=True, exist_ok=True)
-            summary_fp = LOGS_DIR / f"ifd_summary_{datetime.utcnow().strftime('%Y%m%d')}.csv"
-            rows = []
-            for order in parsed.get("orders", []):
-                inst = order.get("instrument", "")
-                decision = order.get("decision", "")
-                lots = order.get("lots", "")
-                entry = ""
-                try:
-                    entry = str(order.get("entry_order", {}).get("price", ""))
-                except Exception:
-                    pass
-                tp1 = tp2 = sl = ""
-                legs = order.get("ifd_legs") or []
-                if legs and isinstance(legs, list):
-                    try:
-                        oco = legs[0].get("oco", {})
-                        tp = oco.get("take_profit") or {}
-                        slv = oco.get("stop_loss") or {}
-                        tp1 = str(tp.get("price", "")) if isinstance(tp, dict) else ""
-                        sl = str(slv.get("price", "")) if isinstance(slv, dict) else ""
-                    except Exception:
-                        pass
-                rows.append((run_id, datetime.utcnow().isoformat(), inst, decision, entry, sl, tp1, tp2, lots))
-
-            import csv
-            write_header = not summary_fp.exists()
-            with open(summary_fp, "a", newline="", encoding="utf-8") as cf:
-                writer = csv.writer(cf)
-                if write_header:
-                    writer.writerow(["run_id","ts","instrument","decision","entry","SL","TP1","TP2","lots"])
-                for r in rows:
-                    writer.writerow(r)
-            logger.info("Appended IFD summary to %s", str(summary_fp))
-        except Exception:
-            logger.exception("Failed to persist IFD artifacts")
-
-    return (proc.returncode, out, err, parsed)
-
-
-# ====== 4H 手動IFDユーティリティ ======
-# 既存 cfd3_portfolio_update_v2.py の距離設計に準拠（TPは per_lot_jpy / point_value、TP2 は 1.5倍、SL は TP距離の1/3）
-DECIMALS_MAP: Dict[str, int] = {
-    "JP225": 0,
-    "NAS100": 1,
-    "GER40": 0,
-    "XAUUSD": 2,
+# =====================================================================
+# GMOスクショ → Vision 解析
+# =====================================================================
+def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None):
+    b64 = base64.b64encode(image_bytes).decode()
+    prompt = """
+あなたはプロのトレーダーです。
+画像から現在価格と方向、そしてエントリーを推定し、JSONのみ返してください。
+{
+ "symbol": "GER40",
+ "direction": "buy",
+ "entry": 23751.2,
+ "confidence": 80,
+ "comment": "..."
 }
+"""
 
-POINT_VALUE_MAP: Dict[str, float] = {
-    "JP225": 100.0,
-    "NAS100": 20.0,
-    "GER40": 80.0,
-    "XAUUSD": 150.0,
-}
-
-
-def _round_price(symbol: str, price: float) -> float:
-    d = DECIMALS_MAP.get(symbol.upper(), 1)
-    return round(float(price), d)
-
-
-def generate_4h_ifd(symbol: str, direction: str, entry_price: float, signal: str) -> dict:
-    sym = symbol.upper().strip()
-    side = direction.lower().strip()
-    sig = signal.upper().strip()
-
-    if sig not in ("GO", "STRONG_GO"):
-        raise ValueError("signal は GO または STRONG_GO のみ")
-    if side not in ("buy", "sell"):
-        raise ValueError("direction は buy / sell のみ")
-
-    # 4H 既定: STRONG_GO=2000円/口, GO=800円/口、ロット 6 / 4
-    per_lot = 2000.0 if sig == "STRONG_GO" else 800.0
-    lots = 6 if sig == "STRONG_GO" else 4
-
-    pv = float(POINT_VALUE_MAP.get(sym, 1.0))
-    try:
-        tp_distance = float(per_lot) / pv
-    except Exception:
-        tp_distance = float(per_lot)
-    tp2_distance = tp_distance * 1.5
-    sl_distance = tp_distance / 3.0
-
-    e = float(entry_price)
-    if side == "buy":
-        tp1 = e + tp_distance
-        tp2 = e + tp2_distance
-        sl = e - sl_distance
-    else:
-        tp1 = e - tp_distance
-        tp2 = e - tp2_distance
-        sl = e + sl_distance
-
-    # 丸め
-    entry_r = _round_price(sym, e)
-    tp1_r = _round_price(sym, tp1)
-    tp2_r = _round_price(sym, tp2)
-    sl_r = _round_price(sym, sl)
-
-    run_id = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-    ifd = {
-        "run_id": run_id,
-        "trade_mode": "SYSTEM_4H",
-        "orders": [
+    res = openai_client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
             {
-                "instrument": sym,
-                "direction": side,
-                "decision": sig,
-                "lots": lots,
-                "entry_order": {"type": "limit", "price": entry_r},
-                "ifd_legs": [
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
                     {
-                        "name": "IFD-1",
-                        "oco": {
-                            "take_profit": {"price": tp1_r},
-                            "stop_loss": {"price": sl_r},
-                        },
-                    },
-                    {
-                        "name": "IFD-2",
-                        "oco": {
-                            "take_profit": {"price": tp2_r},
-                            "stop_loss": {"price": sl_r},
-                        },
-                    },
-                ],
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/png;base64,{b64}"}
+                    }
+                ]
             }
         ],
-        # ★ 4HのTP2をトップレベルにも明示
-        "tp2_price": tp2_r,
+        temperature=0.0
+    )
+
+    content = res.choices[0].message.content
+    if content.startswith("```"):
+        lines = content.split("\n")
+        content = "\n".join(lines[1:-1]).strip()
+
+    data = json.loads(content)
+    if symbol_hint and (not data.get("symbol") or data.get("symbol") == "UNKNOWN"):
+        data["symbol"] = symbol_hint
+
+    return data
+
+# =====================================================================
+# Markdown フォーマット関数
+# =====================================================================
+def format_markdown_ifd(ifd_json):
+    """
+    IFD JSONをMarkdownテーブルに変換。
+    """
+    order = ifd_json["orders"][0]
+
+    trade_mode = ifd_json.get("trade_mode", "-")
+    symbol = order["instrument"]
+
+    # direction を日本語化
+    direction_jp = "買い" if order["direction"] == "buy" else "売り"
+
+    entry = order["entry_order"]["price"]
+    tp = order["ifd_legs"][0]["oco"]["take_profit"]["price"]
+    sl = order["ifd_legs"][0]["oco"]["stop_loss"]["price"]
+
+    # TP2（4H用）
+    tp2 = "-"
+    legs = order.get("ifd_legs", [])
+    if len(legs) > 1:
+        tp2 = legs[1]["oco"]["take_profit"]["price"]
+    else:
+        tp2 = ifd_json.get("tp2_price", "-")
+
+    decision = order.get("decision", "-")
+    lots = order.get("lots", 1)
+
+    markdown = f"""
+| trade_mode | 銘柄 | 方向 | entry_price | SL | TP1 | TP2 | order_type | 判定 | ニュースロック | 推奨度 | ロット | CUT条件 |
+|------------|------|------|-------------|------|------|------|------------|--------|----------------|----------|--------|-----------|
+| {trade_mode} | {symbol} | {direction_jp} | {entry} | {sl} | {tp} | {tp2} | 指値 | {decision} | false | ★★★★★ | {lots} | SMA25 < SMA75 または MACD < Signal |
+"""
+    return markdown
+
+# =====================================================================
+# IFD生成（30m：manual30_ifd を使用）
+# =====================================================================
+try:
+    from manual30_ifd import generate_ifd as generate_manual30
+    MANUAL30_AVAILABLE = True
+except ImportError:
+    logger.warning("⚠️ manual30_ifd not found, using fallback")
+    MANUAL30_AVAILABLE = False
+    
+    def generate_manual30(symbol, direction, entry, signal):
+        """Fallback IFD generator"""
+        return {
+            "run_id": datetime.now().strftime("%Y%m%d_%H%M%S"),
+            "symbol": symbol,
+            "direction": direction,
+            "entry": entry,
+            "signal": signal,
+            "orders": [],
+            "error": "manual30_ifd module not available"
+        }
+
+# =====================================================================
+# FastAPI 本体
+# =====================================================================
+app = FastAPI(title="CFD3 Local Trade System")
+
+# CORSミドルウェア追加（UI 8081 からのクロスオリジン許可）
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# =====================================================================
+# ルート
+# =====================================================================
+@app.get("/")
+def root():
+    """ウェルカムメッセージとエンドポイント一覧"""
+    return {
+        "service": "CFD3 Local Trade System",
+        "version": "2025.02",
+        "status": "running",
+        "endpoints": {
+            "POST /analyze/image": "GMOスクショ解析 + 30m IFD生成 + AI分析",
+            "POST /webhook": "TradingView 方向アラート受信",
+            "GET /health": "システム状態確認",
+            "POST /debug/reset": "状態リセット（テスト用）"
+        },
+        "high_volatility": high_volatility,
+        "manual30_available": MANUAL30_AVAILABLE,
+        "news_analysis_available": NEWS_ANALYSIS_AVAILABLE
     }
-    return ifd
 
-
-def save_ifd_json(obj: dict, prefix: str = "ifd_4h_") -> str:
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    run_id = obj.get("run_id") or datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-    out_fp = OUTPUT_DIR / f"{prefix}{run_id}.json"
-    with open(out_fp, "w", encoding="utf-8") as f:
-        json.dump(obj, f, ensure_ascii=False, indent=2)
-
-    # 簡易サマリ
-    try:
-        LOGS_DIR.mkdir(parents=True, exist_ok=True)
-        summary_fp = LOGS_DIR / f"ifd_summary_{datetime.utcnow().strftime('%Y%m%d')}.csv"
-        import csv
-        write_header = not summary_fp.exists()
-        rows: List[List[str]] = []
-        for order in obj.get("orders", []):
-            inst = order.get("instrument", "")
-            decision = order.get("decision", "")
-            lots = order.get("lots", "")
-            entry = str(order.get("entry_order", {}).get("price", ""))
-            tp1 = tp2 = sl = ""
-            legs = order.get("ifd_legs") or []
-            if legs:
-                oco0 = legs[0].get("oco", {})
-                tp1 = str((oco0.get("take_profit") or {}).get("price", ""))
-                sl = str((oco0.get("stop_loss") or {}).get("price", ""))
-                if len(legs) > 1:
-                    oco1 = legs[1].get("oco", {})
-                    tp2 = str((oco1.get("take_profit") or {}).get("price", ""))
-            rows.append([obj.get("run_id"), datetime.utcnow().isoformat(), inst, decision, entry, sl, tp1, tp2, str(lots)])
-
-        with open(summary_fp, "a", newline="", encoding="utf-8") as cf:
-            writer = csv.writer(cf)
-            if write_header:
-                writer.writerow(["run_id","ts","instrument","decision","entry","SL","TP1","TP2","lots"])
-            for r in rows:
-                writer.writerow(r)
-    except Exception:
-        logger.exception("failed to append 4H ifd summary")
-
-    return str(out_fp)
-
-
-def send_ifd_email(ifd_json: dict):
-    """4H IFD 生成通知メール（表形式付き）。"""
-    try:
-        body = "4時間IFDが生成されました。\n\n"
-        body += format_ifd_table_text(ifd_json)
-        body += "\n(JSONデータは添付またはログを参照)\n"
-        send_email(subject="【4H IFD】注文生成", body=body, to_addrs=GMAIL_TO)
-    except Exception:
-        logger.exception("email send failed (4H ifd)")
-
-
-# ====== Endpoints ======
+# =====================================================================
+# スクショ解析（エントリー作成）
+# =====================================================================
 @app.post("/analyze/image")
 async def analyze_image(symbol: Optional[str] = None, file: UploadFile = File(...)):
     """
-    GMO 等のスクショ画像を受け取り、AIで方向・価格帯を解析し、
-    ついでに 30分手動IFD形式のJSONも生成して返すエンドポイント。
+    GMOスクショから価格を読み取り、TV方向と組み合わせて30m IFD生成。
+    ハイボラ判定により参戦制限を適用。
     """
-    # スクショ解析リクエストを記録
+    img = await file.read()
+    if not img:
+        raise HTTPException(status_code=400, detail="no image")
+
+    # 記録（ハイボラ判定の材料）
     image_requests.append(time.time())
-    logger.info(f"📸 Image analysis request recorded (recent count: {len(image_requests)})")
+    logger.info(f"📸 Image request recorded (recent: {len(image_requests)})")
 
+    # Vision解析
+    analysis = analyze_image_with_ai(img, symbol_hint=symbol)
+
+    sym = analysis["symbol"].upper()
+    entry = float(analysis["entry"])
+    direction = analysis["direction"]
+
+    # 方向は最新TV方向を優先
+    if sym in tv_last_direction:
+        direction = tv_last_direction[sym]
+        logger.info(f"🎯 Using TV direction for {sym}: {direction}")
+
+    # High Vol 判定
+    is_hv = evaluate_high_volatility(sym)
+
+    # 低ボラ → 10分で1回制限
+    if not is_hv:
+        now = time.time()
+        recent = [t for t in recent_30m_trades if now - t < 600]
+        if len(recent) >= 1:
+            logger.warning(f"⚠️ Low volatility: blocking {sym} (recent trades: {len(recent)})")
+            return {
+                "status": "blocked_low_vol",
+                "message": "Low Volatility のため参戦制限（10分で1回まで）",
+                "analysis": analysis,
+                "high_volatility": False,
+                "recent_trades": len(recent)
+            }
+
+    # トレード登録
+    recent_30m_trades.append(time.time())
+
+    # 自信度で signal切替
+    conf = int(analysis.get("confidence") or 0)
+    signal = "STRONG_GO" if conf >= 70 else "GO"
+
+    # IFD生成
+    ifd = generate_manual30(sym, direction, entry, signal)
+
+    # JSON保存
     try:
-        img_bytes = await file.read()
-        if not img_bytes:
-            raise HTTPException(status_code=400, detail="画像データが空です")
+        run_id = ifd.get("run_id") or datetime.now().strftime("%Y%m%d_%H%M%S")
+        out_fp = OUTPUT_DIR / f"ifd_30m_{run_id}.json"
+        with open(out_fp, "w", encoding="utf-8") as f:
+            json.dump(ifd, f, ensure_ascii=False, indent=2)
+        logger.info(f"💾 IFD saved: {out_fp}")
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"画像の読み込みに失敗しました: {e}")
+        logger.exception(f"Failed to save IFD: {e}")
 
-    # 画像からAIで解析
-    analysis = analyze_image_with_ai(img_bytes, symbol_hint=symbol)
-
-    # manual30_ifd を使って IFD JSON を組み立てる（confidence で GO / STRONG_GO を分ける）
-    ifd_json = None
-    error_msg = None
-    try:
-        from manual30_ifd import generate_ifd as generate_manual30_ifd
-
-        sym = (analysis.get("symbol") or symbol or "UNKNOWN").upper()
-        direction = str(analysis.get("direction") or "buy").lower()
-        entry = float(analysis.get("entry") or 0)
-
-        # 自信度で GO / STRONG_GO を切り替え（70以上なら STRONG_GO）
-        conf = int(analysis.get("confidence") or 0)
-        signal = "STRONG_GO" if conf >= 70 else "GO"
-
-        ifd_json = generate_manual30_ifd(sym, direction, entry, signal)
-    except Exception as e:
-        logger.exception("failed to generate manual30 IFD from image analysis")
-        error_msg = f"IFD生成に失敗しました: {e}"
+    # ====== ニュース取得 & AI分析 ======
+    ai_result = None
+    if NEWS_ANALYSIS_AVAILABLE:
+        try:
+            logger.info("📰 Fetching news...")
+            rss_news = fetch_latest_rss(limit=3)
+            x_news = fetch_x_market_news(limit=3)
+            
+            logger.info(f"🤖 Running AI analysis... (RSS: {len(rss_news)}, X: {len(x_news)})")
+            ai_analysis = ai_ifd_analysis(
+                ifd_data=json.dumps(ifd, ensure_ascii=False),
+                rss_news=json.dumps(rss_news, ensure_ascii=False),
+                x_news=json.dumps(x_news, ensure_ascii=False)
+            )
+            
+            # JSON形式のレスポンスをパース
+            if ai_analysis.startswith("```"):
+                lines = ai_analysis.split("\n")
+                ai_analysis = "\n".join(lines[1:-1]).strip()
+            
+            try:
+                ai_result = json.loads(ai_analysis)
+                logger.info(f"✅ AI analysis complete: {ai_result.get('final_judgement', 'N/A')}")
+            except json.JSONDecodeError:
+                ai_result = {"raw_response": ai_analysis}
+                logger.warning("⚠️ AI response not valid JSON, storing as raw")
+        except Exception as e:
+            logger.exception(f"AI analysis failed: {e}")
+            ai_result = {"error": str(e)}
 
     return {
         "status": "ok",
+        "high_volatility": is_hv,
         "analysis": analysis,
-        "ifd": ifd_json,
-        "ifd_error": error_msg,
+        "ifd": ifd,
+        "recent_trades": len(recent_30m_trades),
+        "ai_analysis": ai_result
     }
 
-
+# =====================================================================
+# TV Webhook（方向とsignalを更新）
+# =====================================================================
 @app.post("/webhook")
-async def webhook_handler(request: Request):
-    """4H アラート → 自動IFD生成ハンドラ（AIフィルター付き）。
-    TradingView 側から以下のJSONが送られる想定:
-      {
-        "timeframe":"4H", "symbol":"GER40", "direction":"sell",
-        "price":23762, "signal":"STRONG_GO"
-      }
+async def webhook(request: Request):
     """
-    try:
-        data = await request.json()
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"invalid json: {e}")
+    TradingView アラートから方向とシグナルを受信・保存。
+    
+    期待するJSON:
+    {
+      "symbol": "GER40",
+      "direction": "buy",
+      "signal": "STRONG_GO",
+      "timeframe": "4H"  (optional)
+    }
+    """
+    data = await request.json()
 
-    if str(data.get("timeframe", "")).upper() == "4H":
-        try:
-            symbol = str(data["symbol"]).upper()
-            direction = str(data["direction"]).lower()
-            price = float(data["price"])
-            signal = str(data["signal"]).upper()
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"missing or invalid fields: {e}")
+    symbol = data.get("symbol")
+    direction = data.get("direction")
+    signal = data.get("signal")
+
+    if symbol and direction:
+        symbol_upper = symbol.upper()
+        tv_last_direction[symbol_upper] = direction.lower()
+        tv_last_signal[symbol_upper] = (signal or "GO").upper()
 
         # TVアラート記録
         tv_alerts.append(time.time())
-        logger.info(f"📡 TV alert recorded for {symbol} (recent count: {len(tv_alerts)})")
+        logger.info(f"📡 TV alert: {symbol_upper} → {direction} / {signal or 'GO'} (recent: {len(tv_alerts)})")
 
-        # ハイボラ判定を実行
-        is_high_vol = evaluate_high_volatility(symbol)
-        logger.info(f"📊 High volatility status: {is_high_vol}")
-
-        # ★ AIフィルター判定 ★
-        logger.info(f"AI filter check: {symbol} {direction} @ {price}")
-        filter_result = ai_filter_signal(symbol, "4H", direction, price, signal)
-        
-        if not filter_result["ok"]:
-            logger.warning("=== AI フィルターで拒否されました ===")
-            logger.warning(f"Score: {filter_result['score']}")
-            logger.warning(f"Reason: {filter_result['reason']}")
-            return {
-                "status": "filtered",
-                "detail": filter_result,
-                "message": "AIフィルターによりエントリーが拒否されました"
-            }
-        
-        logger.info(f"AI filter passed: Score={filter_result['score']}, Reason={filter_result['reason']}")
-
-        # IFD生成（このモジュール内の generate_4h_ifd を利用）
-        try:
-            ifd_json = generate_4h_ifd(symbol, direction, price, signal)
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"generate_4h_ifd failed: {e}")
-
-        # ▼ 表形式でターミナル表示
-        try:
-            print_ifd_table(ifd_json)
-        except Exception:
-            logger.exception("failed to print table for 4H IFD")
-
-        # 保存
-        saved = None
-        try:
-            saved = save_ifd_json(ifd_json, symbol)
-        except Exception:
-            logger.exception("failed to save 4H IFD json")
-
-        # メール
-        try:
-            send_ifd_email(ifd_json)
-        except Exception:
-            logger.exception("failed to send 4H IFD email")
+        # ハイボラ判定実行
+        is_hv = evaluate_high_volatility(symbol_upper)
+        logger.info(f"📊 High volatility status: {is_hv}")
 
         return {
-            "status": "4H IFD generated",
-            "ifd": ifd_json,
-            "saved": saved,
-            "high_volatility": high_volatility,
-            "filter_result": filter_result,
+            "status": "tv_updated",
+            "symbol": symbol_upper,
+            "direction": direction,
+            "signal": signal or "GO",
+            "high_volatility": is_hv,
+            "recent_alerts": len(tv_alerts)
         }
 
-    return {"status": "ignored"}
+    return {"status": "ignored", "message": "Missing symbol or direction"}
 
-
-@app.post("/webhook/test")
-async def webhook_test(payload: WebhookPayload):
-    return {"received": payload.dict(), "data_dir": str(DATA_DIR)}
-
-
-@app.post("/ifd/run")
-async def ifd_run(req: IfdRunRequest):
-    if not IFD_SCRIPT.exists():
-        raise HTTPException(status_code=404, detail=f"IFD script not found: {IFD_SCRIPT}")
-
-    args = [
-        sys.executable, str(IFD_SCRIPT),
-        "--data", str(DATA_DIR),
-    ]
-    if req.tf:
-        args += ["--tf", str(req.tf)]
-    if req.single:
-        args.append("--single")
-    if req.expiry_hours is not None and int(req.expiry_hours) > 0:
-        args += ["--expiry-hours", str(int(req.expiry_hours))]
-    if req.trade_mode:
-        args += ["--trade-mode", str(req.trade_mode)]
-    if req.symbols:
-        args += ["--only", str(req.symbols)]
-
-    try:
-        proc = subprocess.run(args, cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=180)
-    except subprocess.TimeoutExpired:
-        raise HTTPException(status_code=504, detail="IFD run timed out")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"IFD run failed: {e}")
-
-    out = proc.stdout or ""
-    s = out.strip()
-    parsed = None
-    if s:
-        try:
-            parsed = json.loads(s)
-        except Exception:
-            first = s.find("{")
-            last = s.rfind("}")
-            if first != -1 and last != -1 and last > first:
-                try:
-                    parsed = json.loads(s[first:last+1])
-                except Exception:
-                    parsed = None
-
-    return {
-        "args": args,
-        "returncode": proc.returncode,
-        "stdout": out[:4000],
-        "stderr": (proc.stderr or '')[:4000],
-        "parsed": bool(parsed is not None),
-        "ifd_json": parsed,
-    }
-
-
-@app.post("/ifd/manual30")
-async def ifd_manual30(req: Manual30Request):
-    """30分 手動IFDをAPI経由で生成。JSON保存と簡易サマリ追記も行う。"""
-    # ハイボラ判定
-    is_high_vol = evaluate_high_volatility(req.symbol)
-    
-    # 低ボラ時は1回制限(簡易実装: 直近10分のスクショ回数でチェック)
-    if not is_high_vol:
-        now = time.time()
-        recent_30m_count = len([t for t in image_requests if now - t < 600])
-        if recent_30m_count > 1:
-            logger.warning(f"⚠️ Low volatility: blocking 30m IFD (recent requests: {recent_30m_count})")
-            return {
-                "status": "blocked",
-                "reason": "Low volatility detected. 30m manual IFD limited to 1 per session.",
-                "high_volatility": False,
-                "recent_requests": recent_30m_count,
-            }
-    
-    logger.info(f"✅ 30m IFD allowed (high_vol={is_high_vol})")
-    
-    try:
-        from manual30_ifd import generate_ifd as generate_manual30_ifd
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"manual30_ifd import failed: {e}")
-
-    try:
-        obj = generate_manual30_ifd(req.symbol, req.direction, float(req.entry), req.signal)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"generate_ifd error: {e}")
-
-    saved_path = None
-    try:
-        if req.save:
-            OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-            run_id = obj.get("run_id") or datetime.utcnow().strftime("%Y%m%d_%H%M%S")
-            out_fp = OUTPUT_DIR / f"ifd_manual30_{run_id}.json"
-            with open(out_fp, "w", encoding="utf-8") as f:
-                json.dump(obj, f, ensure_ascii=False, indent=2)
-            saved_path = str(out_fp)
-
-            # 簡易サマリ (1本目のみ)
-            try:
-                LOGS_DIR.mkdir(parents=True, exist_ok=True)
-                summary_fp = LOGS_DIR / f"ifd_summary_{datetime.utcnow().strftime('%Y%m%d')}.csv"
-                import csv
-                write_header = not summary_fp.exists()
-                rows: List[List[str]] = []
-                for order in obj.get("orders", []):
-                    inst = order.get("instrument", "")
-                    decision = order.get("decision", "")
-                    lots = order.get("lots", "")
-                    entry = ""
-                    try:
-                        entry = str(order.get("entry_order", {}).get("price", ""))
-                    except Exception:
-                        pass
-                    tp = sl = ""
-                    try:
-                        legs = order.get("ifd_legs") or []
-                        if legs:
-                            oco = legs[0].get("oco", {})
-                            tp = str((oco.get("take_profit") or {}).get("price", ""))
-                            sl = str((oco.get("stop_loss") or {}).get("price", ""))
-                    except Exception:
-                        pass
-                    rows.append([obj.get("run_id"), datetime.utcnow().isoformat(), inst, decision, entry, sl, tp, "", str(lots)])
-
-                with open(summary_fp, "a", newline="", encoding="utf-8") as cf:
-                    writer = csv.writer(cf)
-                    if write_header:
-                        writer.writerow(["run_id","ts","instrument","decision","entry","SL","TP1","TP2","lots"])
-                    for r in rows:
-                        writer.writerow(r)
-            except Exception:
-                logger.exception("failed to append manual30 summary")
-    except Exception:
-        logger.exception("manual30 ifd persistence failed")
-
-    return {
-        "status": "ok",
-        "saved": saved_path,
-        "ifd_json": obj,
-        "high_volatility": high_volatility,
-    }
-
-
-@app.post("/webhook/v2")
-async def webhook_handler(request: Request):
-    """シンプルな 4H Webhook ハンドラ。
-    期待するJSON例:
-      {
-        "timeframe": "4H",
-        "symbol": "GER40",
-        "direction": "sell",
-        "price": 23762,
-        "signal": "STRONG_GO"
-      }
+# =====================================================================
+# ニュースエンドポイント
+# =====================================================================
+@app.get("/news/rss")
+async def news_rss():
     """
-    try:
-        data = await request.json()
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"invalid json: {e}")
+    RSSニュース（英語40件）を返す
+    """
+    items = fetch_rss_news()
+    return {
+        "count": len(items),
+        "news": items,
+    }
 
-    tfv = str(data.get("timeframe", "")).upper()
-    if tfv == "4H":
-        try:
-            symbol = str(data["symbol"]).upper()
-            direction = str(data["direction"]).lower()
-            price = float(data["price"])
-            signal = str(data["signal"]).upper()
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"missing or invalid fields: {e}")
+@app.get("/news/scrape")
+async def news_scrape():
+    """
+    スクレイピング速報ニュースを返す
+    """
+    result = []
+    result.extend(scrape_financialjuice())
+    result.extend(scrape_fxstreet())
+    result.extend(scrape_investing())
+    result.extend(scrape_marketwatch())
 
-        # 4H IFD生成
-        try:
-            ifd_json = generate_4h_ifd(symbol, direction, price, signal)
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"generate_4h_ifd failed: {e}")
+    return {
+        "count": len(result),
+        "news": result[:40]
+    }
 
-        # 保存
-        try:
-            saved = save_ifd_json(ifd_json, prefix="ifd_4h_")
-        except Exception:
-            logger.exception("failed to save 4H IFD json")
-            saved = None
+@app.get("/news/translate")
+def api_translate_news(
+    text: str = Query(..., description="英語のニュース本文または見出し")
+):
+    """
+    ニュース文章(英文)を自然な日本語へ翻訳して返すAPI。
+    """
+    if not text:
+        return {"error": "text is empty"}
 
-        # メール送信
-        try:
-            send_ifd_email(ifd_json)
-        except Exception:
-            logger.exception("failed to send 4H IFD email")
+    translated = translate_to_japanese(text)
+    return {
+        "original": text,
+        "translated": translated
+    }
 
-        return {"status": "4H IFD generated", "ifd": ifd_json, "saved": saved}
+# =====================================================================
+# 統合AI：画像 + ニュース + TV の総合判定
+# =====================================================================
 
-    return {"status": "ignored"}
+@app.post("/analyze/combined")
+async def analyze_combined(file: UploadFile = File(...)):
+    """
+    Vision画像 + ニュースAI + TV方向 を統合した最終判定（B：バランス仕様）
+    """
+    img_bytes = await file.read()
+
+    # Vision解析
+    vision = analyze_image_with_ai(img_bytes)
+    symbol = vision["symbol"]
+    direction = vision["direction"]
+    entry = float(vision["entry"])
+
+    # TV方向の反映
+    if symbol in tv_last_direction:
+        direction = tv_last_direction[symbol]
+
+    # ニュース取得
+    news = collect_latest_news_for_symbol(symbol)
+    news_risk = news["risk"]
+
+    # 統合スコア（B：バランス）
+    base_score = 50
+    score = base_score + vision["confidence"] * 0.5 + news_risk * 0.2
+
+    # 最終判定
+    if score < 30:
+        final = "STOP"
+    elif score < 60:
+        final = "GO"
+    else:
+        final = "STRONG_GO"
+
+    # IFD生成
+    if final != "STOP":
+        ifd = generate_manual30(symbol, direction, entry, final)
+    else:
+        ifd = {"status": "blocked", "reason": "STOP (news risk high)"}
+
+    return {
+        "symbol": symbol,
+        "vision": vision,
+        "news": news,
+        "news_risk": news_risk,
+        "final_score": score,
+        "final_judgement": final,
+        "ifd": ifd
+    }
+
+# =====================================================================
+# ヘルスチェック
+# =====================================================================
+@app.get("/health")
+def health():
+    """システム状態を返す"""
+    return {
+        "status": "running",
+        "high_volatility": high_volatility,
+        "tv_last_direction": tv_last_direction,
+        "tv_last_signal": tv_last_signal,
+        "recent_30m_trades": len(recent_30m_trades),
+        "recent_tv_alerts": len(tv_alerts),
+        "recent_image_requests": len(image_requests),
+        "manual30_available": MANUAL30_AVAILABLE,
+        "news_analysis_available": NEWS_ANALYSIS_AVAILABLE,
+    }
+
+# =====================================================================
+# デバッグ：状態リセット
+# =====================================================================
+@app.post("/debug/reset")
+def debug_reset():
+    """テスト用：全状態をリセット"""
+    global high_volatility
+    tv_alerts.clear()
+    image_requests.clear()
+    recent_30m_trades.clear()
+    tv_last_direction.clear()
+    tv_last_signal.clear()
+    high_volatility = False
+    
+    return {"status": "reset", "message": "All state cleared"}
 
 
 # ====== 起動メモ ======
