@@ -30,7 +30,7 @@ import io
 import os
 
 # ====== OpenAI ======
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
 # ====== ディレクトリ設定 ======
 REPO = Path(__file__).resolve().parent
@@ -217,7 +217,7 @@ def translate_to_japanese(text: str) -> str:
 """
 
     try:
-        res = openai_client.chat.completions.create(
+        res = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0
@@ -455,7 +455,7 @@ def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None):
 }
 """
 
-    res = openai_client.chat.completions.create(
+    res = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
             {
