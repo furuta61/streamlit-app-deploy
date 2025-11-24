@@ -1,5 +1,5 @@
 #!/bin/sh
-'''exec' "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/bin/python" "$0" "$@"
+'''exec' "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/bin/python3.11" "$0" "$@"
 ' '''
 import sys
 from pytesseract.pytesseract import main

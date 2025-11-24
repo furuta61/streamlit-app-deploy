@@ -1180,17 +1180,21 @@ def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None) ->
 """
 
     def call_vision(prompt: str) -> dict:
+        # Chat Completions API は image_url 形式を期待するため data URL に変換
+        b64 = base64.b64encode(processed_bytes).decode("utf-8")
+        data_url = f"data:image/png;base64,{b64}"
         res = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {
                     "role": "user",
                     "content": [
-                        {"type": "input_text", "text": prompt},
-                        {"type": "input_image", "image": processed_bytes},
+                        {"type": "text", "text": prompt},
+                        {"type": "image_url", "image_url": {"url": data_url}},
                     ],
                 }
             ],
+            temperature=0.0,
         )
         msg = res.choices[0].message
         content = getattr(msg, "content", "") or ""
@@ -1216,17 +1220,21 @@ def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None) ->
             img.save(buf, format="PNG")
             gray_bytes = buf.getvalue()
             retry_prompt = base_prompt + "\n\nもう一度、画面中央の価格に注目して正確な現在値（エントリー）を1つだけ抽出してください。"
+            # gray_bytes も data URL に変換して送信
+            b64g = base64.b64encode(gray_bytes).decode("utf-8")
+            gray_url = f"data:image/png;base64,{b64g}"
             res_retry = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
                     {
                         "role": "user",
                         "content": [
-                            {"type": "input_text", "text": retry_prompt},
-                            {"type": "input_image", "image": gray_bytes},
+                            {"type": "text", "text": retry_prompt},
+                            {"type": "image_url", "image_url": {"url": gray_url}},
                         ],
                     }
                 ],
+                temperature=0.0,
             )
             msg_retry = res_retry.choices[0].message
             content_retry = getattr(msg_retry, "content", "") or ""

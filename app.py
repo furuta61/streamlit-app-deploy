@@ -5,12 +5,12 @@ import os
 from openai import OpenAI
 
 # OpenAI API キーを環境変数またはStreamlit Secretsから取得
-api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
+api_key = os.getenv("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") or st.secrets.get("OPENAI_API_KEY")
 if not api_key:
     st.error("⚠️ OPENAI_API_KEYが設定されていません。Streamlit Cloudの場合はSecretsに設定してください。")
     st.stop()
 
-client = OpenAI(api_key=api_key)
+client = OpenAI(api_key="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")
 
 # ======== API 状態チェック ==========
 def check_openai_status() -> str:
