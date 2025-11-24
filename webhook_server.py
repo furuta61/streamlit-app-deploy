@@ -30,7 +30,7 @@ import io
 import os
 
 # ====== OpenAI ======
-client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+client = OpenAI()
 
 # ====== ディレクトリ設定 ======
 REPO = Path(__file__).resolve().parent
