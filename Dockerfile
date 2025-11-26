@@ -1,25 +1,25 @@
-# === ベースイメージ ===
+# ---- Base ----
 FROM python:3.11-slim
 
-# === システム依存パッケージ ===
+# ---- System Dependencies ----
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     tesseract-ocr-jpn \
     libgl1 \
     libglib2.0-0 \
-    && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/*
 
-# === 作業ディレクトリ ===
+# ---- Working Directory ----
 WORKDIR /app
 
-# === 依存関係をインストール ===
+# ---- Copy Files ----
 COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
-
-# === ソースコードをコピー ===
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 COPY . .
 
-# === PORT環境変数を使用 ===
+# ---- Expose Port ----
 ENV PORT=8080
-CMD ["bash", "-c", "cd server && uvicorn webhook_server:app --host 0.0.0.0 --port ${PORT}"]
+EXPOSE 8080
+
+# ---- Run App ----
+CMD ["sh", "-c", "cd server && uvicorn webhook_server:app --host 0.0.0.0 --port ${PORT}"]
