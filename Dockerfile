@@ -23,9 +23,5 @@ COPY . .
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8080
 
-# ヘルスチェック
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8080/health || exit 1
-
 # FastAPI起動
-CMD ["uvicorn", "webhook_mail.main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["sh", "-c", "cd server && uvicorn webhook_server:app --host 0.0.0.0 --port ${PORT:-8080}"]

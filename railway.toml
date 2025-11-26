@@ -1,5 +1,5 @@
 [build]
-builder = "Nixpacks"
+builder = "Dockerfile"
 
-[env]
-PYTHON_VERSION = "3.11"
+[deploy]
+startCommand = "cd server && uvicorn webhook_server:app --host 0.0.0.0 --port $PORT"
