@@ -2,10 +2,7 @@ fastapi
 python-multipart
 uvicorn[standard]
 openai==1.12.0
-# openai 1.12.0 が期待している古い httpx を固定しないと、
-# 「Client.__init__() got an unexpected keyword argument 'proxies'」エラーが出る
 httpx==0.27.2
-pyngrok
 
 python-dotenv
 requests
