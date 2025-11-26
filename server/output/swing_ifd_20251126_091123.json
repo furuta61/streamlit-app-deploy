@@ -1,0 +1,42 @@
+[
+  {
+    "symbol": "JP225",
+    "direction": "buy",
+    "entry": 32000,
+    "take_profit": 32800,
+    "stop_loss": 31600,
+    "confidence": 85,
+    "comment": "シグナル強度がGOであり、ニュースリスクスコアが0であるため、JP225の買いポジションを推奨します。現在の市場環境において、主要なリスクヘッドラインが検出されていないため、リスクは低いと判断されます。エントリーポイントは32000とし、テイクプロフィットは32800、ストップロスは31600に設定します。",
+    "markdown": "| 銘柄 | 方向 | Entry | TP | SL | 信頼度 | コメント |\n|------|------|-------|----|----|--------|-----------|\n| JP225 | buy | 32000 | 32800 | 31600 | 85 | シグナル強度がGOであり、ニュースリスクスコアが0であるため、JP225の買いポジションを推奨します。現在の市場環境において、主要なリスクヘッドラインが検出されていないため、リスクは低いと判断されます。エントリーポイントは32000とし、テイクプロフィットは32800、ストップロスは31600に設定します。 |\n"
+  },
+  {
+    "symbol": "NAS100",
+    "direction": "buy",
+    "entry": 15000,
+    "take_profit": 15300,
+    "stop_loss": 14800,
+    "confidence": 85,
+    "comment": "The signal strength is strong (GO) and there are no major risk headlines, indicating a favorable environment for a buy position. The entry point is set at 15000, with a take profit target of 15300, considering potential upward momentum. The stop loss is placed at 14800 to manage downside risk.",
+    "markdown": "| 銘柄 | 方向 | Entry | TP | SL | 信頼度 | コメント |\n|------|------|-------|----|----|--------|-----------|\n| NAS100 | buy | 15000 | 15300 | 14800 | 85 | The signal strength is strong (GO) and there are no major risk headlines, indicating a favorable environment for a buy position. The entry point is set at 15000, with a take profit target of 15300, considering potential upward momentum. The stop loss is placed at 14800 to manage downside risk. |\n"
+  },
+  {
+    "symbol": "GER40",
+    "direction": "buy",
+    "entry": 15500,
+    "take_profit": 15800,
+    "stop_loss": 15300,
+    "confidence": 85,
+    "comment": "The signal strength is strong (GO) with no major news risks, suggesting a favorable environment for a buy position. The entry point is set at 15500, with a take profit at 15800 to capture potential upward movement. A stop loss at 15300 is placed to manage downside risk. Overall, the confidence level is high due to the absence of significant news risks and strong buy signal.",
+    "markdown": "| 銘柄 | 方向 | Entry | TP | SL | 信頼度 | コメント |\n|------|------|-------|----|----|--------|-----------|\n| GER40 | buy | 15500 | 15800 | 15300 | 85 | The signal strength is strong (GO) with no major news risks, suggesting a favorable environment for a buy position. The entry point is set at 15500, with a take profit at 15800 to capture potential upward movement. A stop loss at 15300 is placed to manage downside risk. Overall, the confidence level is high due to the absence of significant news risks and strong buy signal. |\n"
+  },
+  {
+    "symbol": "XAUUSD",
+    "direction": "buy",
+    "entry": 1920.0,
+    "take_profit": 1950.0,
+    "stop_loss": 1900.0,
+    "confidence": 85,
+    "comment": "シグナル強度がGOであり、ニュースリスクスコアが0であるため、リスクの少ない環境での買いエントリーを推奨します。主要なリスクヘッドラインも検出されていないため、現在の市場状況は比較的安定しています。",
+    "markdown": "| 銘柄 | 方向 | Entry | TP | SL | 信頼度 | コメント |\n|------|------|-------|----|----|--------|-----------|\n| XAUUSD | buy | 1920.0 | 1950.0 | 1900.0 | 85 | シグナル強度がGOであり、ニュースリスクスコアが0であるため、リスクの少ない環境での買いエントリーを推奨します。主要なリスクヘッドラインも検出されていないため、現在の市場状況は比較的安定しています。 |\n"
+  }
+]
