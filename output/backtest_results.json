@@ -1,0 +1,5 @@
+[
+  {"symbol": "JP225", "date": "2025-11-26 10:00", "direction": "buy", "entry": 0, "tp": 0, "sl": 0, "result": "win"},
+  {"symbol": "JP225", "date": "2025-11-26 11:00", "direction": "buy", "entry": 0, "tp": 0, "sl": 0, "result": "win"},
+  {"symbol": "JP225", "date": "2025-11-26 12:00", "direction": "sell", "entry": 0, "tp": 0, "sl": 0, "result": "loss"}
+]

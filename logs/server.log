@@ -1,0 +1,163 @@
+INFO:     Will watch for changes in these directories: ['/Users/otomi/Desktop/vs code/CFD3_AutoSystem/server']
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     Started reloader process [1683] using WatchFiles
+INFO:     Started server process [1742]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:50573 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50578 - "GET /ui?id=48e21436-c429-427a-9909-cc6b07b5c0f3&vscodeBrowserReqId=1764157046525 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50587 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50604 - "GET /health HTTP/1.1" 404 Not Found
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:50643 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:50645 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:50643 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:50646 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:50647 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:50648 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50643 - "GET /health HTTP/1.1" 404 Not Found
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:50645 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:50649 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50705 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50750 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50807 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50838 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50881 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50923 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50994 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51039 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51081 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51124 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51162 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51208 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51255 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51257 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51300 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51339 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51369 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51412 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51452 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51487 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51588 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51648 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51737 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51799 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51833 - "GET /ui HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:51855 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51858 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51900 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51939 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52051 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52133 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52203 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52265 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52328 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52364 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52452 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52506 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52548 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52585 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52627 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52672 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52746 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52788 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52823 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52850 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52888 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52933 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53010 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53051 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53103 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53120 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53131 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53175 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53185 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53197 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53229 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53275 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53307 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53325 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53334 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53415 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53428 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53444 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53485 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53519 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53540 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53553 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53569 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53582 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53599 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53630 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53655 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53670 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53683 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53713 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53766 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53781 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53807 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53845 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53894 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53924 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53946 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53963 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53988 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54028 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54093 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54150 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54235 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54292 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54362 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54398 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54435 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54474 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54520 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54580 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54610 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54680 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54738 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54782 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54832 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54890 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54928 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:54972 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55025 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55100 - "GET /health HTTP/1.1" 404 Not Found
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55144 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55151 - "GET /health HTTP/1.1" 404 Not Found
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55150 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55155 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55156 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55164 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55173 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55194 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55241 - "GET /health HTTP/1.1" 404 Not Found

@@ -1,0 +1,39 @@
+INFO:     Will watch for changes in these directories: ['/Users/otomi/Desktop/vs code/CFD3_AutoSystem']
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     Started reloader process [15397] using WatchFiles
+INFO:     Started server process [15400]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:62903 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62921 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62922 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:62921 - "GET /static/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:63054 - "GET /ui HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 1)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_095145.json
+INFO:cfd3:📰 Collecting news for JP225...
+INFO:cfd3:📰 News for JP225: found 8 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     127.0.0.1:63068 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63211 - "GET /ui HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 2)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_132246.json
+INFO:cfd3:📰 Collecting news for JP225...
+INFO:cfd3:📰 News for JP225: found 8 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     127.0.0.1:64845 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51702 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51702 - "GET /static/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:51703 - "GET /static/app.js HTTP/1.1" 304 Not Modified

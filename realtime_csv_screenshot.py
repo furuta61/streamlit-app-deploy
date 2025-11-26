@@ -9,8 +9,14 @@
 import pandas as pd
 from datetime import datetime
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
 import io
+
+try:
+    from PIL import Image, ImageDraw, ImageFont
+except ImportError:
+    Image = None
+    ImageDraw = None
+    ImageFont = None
 
 ROOT = Path(__file__).parent
 

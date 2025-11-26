@@ -1,0 +1,10 @@
+{
+  "JP225": {
+    "direction": "buy",
+    "signal": "STRONG_GO"
+  },
+  "NAS100": {
+    "direction": "sell",
+    "signal": "GO"
+  }
+}

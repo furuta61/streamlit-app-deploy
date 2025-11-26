@@ -1,0 +1,244 @@
+INFO:     Will watch for changes in these directories: ['/Users/otomi/Desktop/vs code/CFD3_AutoSystem']
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     Started reloader process [60800] using WatchFiles
+INFO:     Started server process [60805]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:50736 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50748 - "GET /analyze/swing?symbol=JP225 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50758 - "GET /analyze/swing?symbol=GER40 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50878 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51023 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     125.11.202.148:0 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51178 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51202 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51202 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51202 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51202 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51202 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51202 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51202 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51209 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51209 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51209 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51209 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+INFO:     127.0.0.1:51209 - "POST /analyze/swing HTTP/1.1" 405 Method Not Allowed
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [60805]
+INFO:     Started server process [64741]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64741]
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Started server process [64746]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [64747]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64747]
+INFO:     Started server process [64765]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64765]
+INFO:     Started server process [64814]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64814]
+INFO:     Started server process [64823]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64823]
+INFO:     Started server process [64882]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64882]
+INFO:     Started server process [64937]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64937]
+INFO:     Started server process [65784]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52616 - "GET /health HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [65784]
+INFO:     Started server process [67994]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67994]
+INFO:     Started server process [68001]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:53917 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53945 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53955 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54022 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54022 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54054 - "POST /analyze/image HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [68001]
+INFO:     Started server process [71253]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [71253]
+INFO:     Started server process [71342]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54236 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54385 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54385 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54385 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54385 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54420 - "POST /analyze/image HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [71342]
+INFO:     Started server process [75576]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [75576]
+INFO:     Started server process [75759]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:54702 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54712 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54763 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54763 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54827 - "POST /analyze/multi_image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54975 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54990 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54990 - "GET /static/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:54991 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55030 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55030 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:55045 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55246 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55246 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:55262 - "POST /analyze/multi_image_news HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55365 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55365 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [75759]
+INFO:     Started server process [77402]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [77402]
+INFO:     Started server process [77427]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     34.212.75.30:0 - "POST /webhook HTTP/1.1" 404 Not Found
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [77427]
+INFO:     Started server process [77573]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:55520 - "GET /health HTTP/1.1" 200 OK
+INFO:     52.32.178.7:0 - "POST /webhook HTTP/1.1" 404 Not Found
+INFO:     34.212.75.30:0 - "POST /webhook HTTP/1.1" 404 Not Found
+INFO:     52.32.178.7:0 - "POST /webhook HTTP/1.1" 404 Not Found
+INFO:     52.32.178.7:0 - "POST /webhook HTTP/1.1" 404 Not Found
+INFO:     34.212.75.30:0 - "POST /webhook HTTP/1.1" 404 Not Found
+INFO:     34.212.75.30:0 - "POST /webhook HTTP/1.1" 404 Not Found
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [77573]
+INFO:     Started server process [78801]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [78801]
+INFO:     Started server process [78814]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [78814]
+INFO:     Started server process [78827]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [78827]
+INFO:     Started server process [78845]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [78845]
+INFO:     Started server process [79184]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:57597 - "GET /health HTTP/1.1" 200 OK

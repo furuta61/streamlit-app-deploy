@@ -17,5 +17,4 @@ COPY . .
 ENV PORT=8080
 EXPOSE 8080
 
-WORKDIR /app/server
-CMD ["uvicorn", "webhook_server:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["sh", "-c", "cd server && uvicorn webhook_server:app --host 0.0.0.0 --port ${PORT}"]

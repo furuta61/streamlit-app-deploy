@@ -14,6 +14,8 @@
 from __future__ import annotations
 
 from fastapi import FastAPI, Request, HTTPException, UploadFile, File, Query
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, HTMLResponse
 import time
 from collections import deque
 from datetime import datetime
@@ -269,6 +271,65 @@ def score_news_risk(news_items: list[str]) -> dict:
     return {"risk": risk, "details": summary}
 
 
+def ai_news_risk_analyzer(symbol: str, news_items: list[dict]) -> dict:
+    """
+    AIによるニュース影響度分析（本格版）
+    - 銘柄へ与えるインパクトを判定
+    - 危険度スコア (0〜100)
+    - 重要イベント抽出
+    - STOP 判断
+    """
+    if not news_items:
+        return {
+            "risk_score": 0,
+            "events": [],
+            "summary": "関連ニュースなし",
+            "should_stop": False
+        }
+
+    prompt = f"""
+あなたはプロのマーケットアナリストです。
+以下のニュースが銘柄 {symbol} に与える市場影響を分析し、
+次の形式のJSONだけを返してください：
+
+{{
+ "risk_score": 0〜100（市場が荒れるほど高い）,
+ "events": ["重要イベント1", "重要イベント2"],
+ "summary": "要点を短くまとめた説明",
+ "should_stop": true or false
+}}
+
+ニュース一覧（最新順）:
+{json.dumps(news_items, ensure_ascii=False)}
+"""
+
+    try:
+        res = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0
+        )
+
+        text = res.choices[0].message.content.strip()
+
+        # JSON抽出
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+
+        result = json.loads(text)
+        logger.info(f"🤖 AI news analysis: {symbol} risk={result.get('risk_score', 0)}, stop={result.get('should_stop', False)}")
+        return result
+
+    except Exception as e:
+        logger.warning(f"ai_news_risk_analyzer error: {e}")
+        return {
+            "risk_score": 0,
+            "events": [],
+            "summary": "AI分析失敗",
+            "should_stop": False
+        }
+
+
 def collect_latest_news_for_symbol(symbol: str) -> dict:
     """
     symbolに関連するニュースを収集・翻訳して返す
@@ -286,13 +347,20 @@ def collect_latest_news_for_symbol(symbol: str) -> dict:
 
     # 銘柄に関係しやすい単語でフィルタ
     KEY_MAP = {
-        "GER40": ["germany", "europe", "dax", "eurozone", "bundesbank"],
-        "JP225": ["japan", "nikkei", "boj", "tokyo"],
-        "NAS100": ["nasdaq", "us", "tech", "federal reserve"],
-        "XAUUSD": ["gold", "precious metal", "xau"]
+        "GER40": ["germany", "europe", "dax", "eurozone", "bundesbank", "german"],
+        "JP225": ["japan", "nikkei", "boj", "tokyo", "japanese", "yen"],
+        "NAS100": ["nasdaq", "us", "tech", "federal reserve", "technology", "apple", "microsoft", "nvidia"],
+        "US30": ["dow", "dow jones", "us", "industrial", "federal reserve", "fed"],
+        "XAUUSD": ["gold", "precious metal", "xau", "bullion"],
+        "COPPER": ["copper", "metal", "industrial metal", "commodity"],
+        "XCUUSD": ["copper", "metal", "industrial metal", "commodity"],
+        "EURUSD": ["euro", "dollar", "ecb", "fed", "currency"],
+        "USDJPY": ["dollar", "yen", "fed", "boj", "currency"],
+        "GBPUSD": ["pound", "sterling", "dollar", "boe", "fed", "currency"],
     }
 
-    keywords = KEY_MAP.get(symbol.upper(), [])
+    # デフォルトキーワード（銘柄が見つからない場合は市場全般）
+    keywords = KEY_MAP.get(symbol.upper(), ["market", "economic", "inflation", "rate", "fed", "central bank"])
     related = []
 
     for item in all_news:
@@ -308,6 +376,9 @@ def collect_latest_news_for_symbol(symbol: str) -> dict:
 
     # 限定して最大10件
     related = related[:10]
+    
+    # ログ出力
+    logger.info(f"📰 News for {symbol}: found {len(all_news)} total, {len(related)} related (keywords: {keywords[:3]}...)")
 
     # 翻訳（タイトルのみ）
     translated = []
@@ -331,6 +402,11 @@ def collect_latest_news_for_symbol(symbol: str) -> dict:
             text_for_risk.append(str(item))
 
     news_eval = score_news_risk(text_for_risk)
+
+    # ニュースが見つからない場合のデフォルトメッセージ
+    if len(translated) == 0:
+        translated = [f"{symbol} 関連のニュースが見つかりませんでした（キーワード: {', '.join(keywords[:5])}）"]
+        logger.warning(f"⚠️ No news found for {symbol}")
 
     return {
         "raw_news": related,
@@ -445,13 +521,23 @@ def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None):
     b64 = base64.b64encode(image_bytes).decode()
     prompt = """
 あなたはプロのトレーダーです。
-画像から現在価格と方向、そしてエントリーを推定し、JSONのみ返してください。
+画像から【銘柄名・方向・現在価格】を抽出し、JSONだけを返してください。
+
+銘柄は必ず以下のいずれか：
+- GER40（ドイツDAX）
+- JP225（日経225）
+- XAUUSD（金スポット）
+- NAS100（ナスダックミニ）
+
+画像に映っているロゴ・UI・文字ラベルから最適な銘柄を選び、
+必ずこの形式のJSONのみ返してください：
+
 {
- "symbol": "GER40",
- "direction": "buy",
- "entry": 23751.2,
- "confidence": 80,
- "comment": "..."
+ "symbol": "GER40 / JP225 / XAUUSD / NAS100",
+ "direction": "buy or sell",
+ "entry": 12345.6,
+ "confidence": 0〜100,
+ "comment": "根拠を短く"
 }
 """
 
@@ -486,39 +572,51 @@ def analyze_image_with_ai(image_bytes: bytes, symbol_hint: str | None = None):
 # =====================================================================
 # Markdown フォーマット関数
 # =====================================================================
-def format_markdown_ifd(ifd_json):
+def format_markdown_ifd(ifd_json, news_info=None):
     """
     IFD JSONをMarkdownテーブルに変換。
+    ニュース情報も追記する。
     """
-    order = ifd_json["orders"][0]
+    try:
+        order = ifd_json["orders"][0]
+        trade_mode = ifd_json.get("trade_mode", "DAY6H")
+        symbol = order.get("instrument", "-")
+        direction = order.get("direction", "-")
+        direction_jp = "買い" if direction == "buy" else "売り"
 
-    trade_mode = ifd_json.get("trade_mode", "-")
-    symbol = order["instrument"]
+        entry = order["entry_order"]["price"]
+        tp1 = order["ifd_legs"][0]["oco"]["take_profit"]["price"]
+        sl = order["ifd_legs"][0]["oco"]["stop_loss"]["price"]
 
-    # direction を日本語化
-    direction_jp = "買い" if order["direction"] == "buy" else "売り"
+        # TP2対応
+        tp2 = "-"
+        if len(order.get("ifd_legs", [])) > 1:
+            tp2 = order["ifd_legs"][1]["oco"]["take_profit"]["price"]
+        else:
+            tp2 = ifd_json.get("tp2_price", "-")
 
-    entry = order["entry_order"]["price"]
-    tp = order["ifd_legs"][0]["oco"]["take_profit"]["price"]
-    sl = order["ifd_legs"][0]["oco"]["stop_loss"]["price"]
+        decision = order.get("decision", "STRONG_GO")
+        lots = order.get("lots", 6)
+        cut_cond = "SMA25 < SMA75 or MACD < Signal"
 
-    # TP2（4H用）
-    tp2 = "-"
-    legs = order.get("ifd_legs", [])
-    if len(legs) > 1:
-        tp2 = legs[1]["oco"]["take_profit"]["price"]
-    else:
-        tp2 = ifd_json.get("tp2_price", "-")
-
-    decision = order.get("decision", "-")
-    lots = order.get("lots", 1)
-
-    markdown = f"""
+        # Markdownテーブル本体
+        markdown = f"""\
 | trade_mode | 銘柄 | 方向 | entry_price | SL | TP1 | TP2 | order_type | 判定 | ニュースロック | 推奨度 | ロット | CUT条件 |
-|------------|------|------|-------------|------|------|------|------------|--------|----------------|----------|--------|-----------|
-| {trade_mode} | {symbol} | {direction_jp} | {entry} | {sl} | {tp} | {tp2} | 指値 | {decision} | false | ★★★★★ | {lots} | SMA25 < SMA75 または MACD < Signal |
+|-------------|------|------|--------------|------|------|------|------------|--------|----------------|----------|--------|------------|
+| {trade_mode} | {symbol} | {direction_jp} | {entry} | {sl} | {tp1} | {tp2} | 指値 | {decision} | false | ★★★★★ | {lots} | {cut_cond} |
 """
-    return markdown
+
+        # ニュース情報を追加
+        if news_info:
+            translated = news_info.get("translated", [])
+            risk = news_info.get("risk", 0)
+            markdown += f"\n\n### 📰 ニュース分析\n- 危険スコア: {risk}\n"
+            for line in translated[:5]:
+                markdown += f"- {line}\n"
+
+        return markdown
+    except Exception as e:
+        return f"⚠️ Markdown生成エラー: {e}"
 
 # =====================================================================
 # IFD生成（30m：manual30_ifd を使用）
@@ -555,6 +653,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# 静的ファイル (UI) を /static でマウントし、/ui で index.html を返す
+app.mount("/static", StaticFiles(directory=str(REPO / "ui")), name="static")
+
+@app.get("/ui", response_class=HTMLResponse)
+def serve_ui():
+    index_path = REPO / "ui" / "index.html"
+    if index_path.exists():
+        return index_path.read_text(encoding="utf-8")
+    raise HTTPException(status_code=404, detail="UI not found")
 
 # =====================================================================
 # ルート
@@ -643,7 +751,21 @@ async def analyze_image(symbol: Optional[str] = None, file: UploadFile = File(..
     except Exception as e:
         logger.exception(f"Failed to save IFD: {e}")
 
-    # ====== ニュース取得 & AI分析 ======
+    # ====== ニュース取得 ======
+    logger.info(f"📰 Collecting news for {sym}...")
+    news_info = collect_latest_news_for_symbol(sym)
+
+    # ====== Markdown生成 ======
+    markdown_output = ""
+    if ifd.get("orders"):
+        try:
+            markdown_output = format_markdown_ifd(ifd, news_info)
+            logger.info("✅ Markdown table generated")
+        except Exception as e:
+            logger.warning(f"⚠️ Markdown generation failed: {e}")
+            markdown_output = "⚠️ Markdown生成失敗"
+
+    # ====== AI分析 (オプション) ======
     ai_result = None
     if NEWS_ANALYSIS_AVAILABLE:
         try:
@@ -679,6 +801,8 @@ async def analyze_image(symbol: Optional[str] = None, file: UploadFile = File(..
         "analysis": analysis,
         "ifd": ifd,
         "recent_trades": len(recent_30m_trades),
+        "news_info": news_info,
+        "markdown": markdown_output,
         "ai_analysis": ai_result
     }
 
@@ -817,6 +941,16 @@ async def analyze_combined(file: UploadFile = File(...)):
     else:
         ifd = {"status": "blocked", "reason": "STOP (news risk high)"}
 
+    # ====== Markdown生成 ======
+    markdown_output = ""
+    if ifd.get("orders"):
+        try:
+            markdown_output = format_markdown_ifd(ifd, news)
+            logger.info("✅ Markdown table generated for combined analysis")
+        except Exception as e:
+            logger.warning(f"⚠️ Markdown generation failed: {e}")
+            markdown_output = "⚠️ Markdown生成失敗"
+
     return {
         "symbol": symbol,
         "vision": vision,
@@ -824,7 +958,8 @@ async def analyze_combined(file: UploadFile = File(...)):
         "news_risk": news_risk,
         "final_score": score,
         "final_judgement": final,
-        "ifd": ifd
+        "ifd": ifd,
+        "markdown": markdown_output
     }
 
 # =====================================================================

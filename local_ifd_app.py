@@ -6,7 +6,11 @@ from datetime import datetime
 
 import streamlit as st
 from openai import OpenAI
-from PIL import Image
+
+try:
+    from PIL import Image
+except ImportError:
+    Image = None  # Render環境用：Pillow無効
 
 # ==== OpenAI クライアント ====
 # OPENAI_API_KEY は .env か環境変数に設定しておいてください

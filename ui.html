@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>🧠 CFD3 AI Trade System v107</title>
+  <link rel="stylesheet" href="/static/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>🧠 CFD3 AI Trade System v107</h1>
+
+  <div class="tabs">
+    <button id="tab-manual" class="active">📸 手動IFD（スクショ）</button>
+    <button id="tab-ai">🤖 AIスイングIFD</button>
+  </div>
+
+  <!-- 手動IFD -->
+  <div id="manual-panel" class="panel active">
+    <h2>📸 スクショからAI解析</h2>
+    <form id="imageForm">
+      <input type="file" name="file" accept="image/*" required />
+      <button type="submit">送信してAI解析</button>
+    </form>
+    <pre id="manualResult">ここにAI結果が表示されます...</pre>
+  </div>
+
+  <!-- AIスイングIFD -->
+  <div id="ai-panel" class="panel">
+    <h2>🤖 AIスイング自動解析</h2>
+    <button id="runAI">AIスイング解析を実行</button>
+
+    <div class="charts">
+      <canvas id="sentimentChart"></canvas>
+      <canvas id="confidenceChart"></canvas>
+    </div>
+
+    <pre id="aiResult">解析結果を待機中...</pre>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

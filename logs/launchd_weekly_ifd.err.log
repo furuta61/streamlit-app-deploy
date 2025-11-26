@@ -4,3 +4,5 @@ shell-init: error retrieving current directory: getcwd: cannot access parent dir
 /bin/zsh: can't open input file: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/scripts/run_weekly_ifd.sh
 shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
 /bin/zsh: can't open input file: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/scripts/run_weekly_ifd.sh
+shell-init: error retrieving current directory: getcwd: cannot access parent directories: Operation not permitted
+/bin/zsh: can't open input file: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/scripts/run_weekly_ifd.sh

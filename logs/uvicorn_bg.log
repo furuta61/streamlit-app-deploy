@@ -1,0 +1,485 @@
+INFO:     Will watch for changes in these directories: ['/Users/otomi/Desktop/vs code/CFD3_AutoSystem']
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     Started reloader process [27958] using WatchFiles
+INFO:     Started server process [27961]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52058 - "GET /health HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /health HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /ui HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /static/style.css HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:cfd3:📸 Image request recorded (recent: 1)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_144147.json
+INFO:cfd3:📰 Collecting news for JP225...
+WARNING:cfd3:FXStreet scrape error: HTTPSConnectionPool(host='www.fxstreet.com', port=443): Read timed out. (read timeout=10)
+INFO:cfd3:📰 News for JP225: found 0 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     202.209.91.98:0 - "POST /analyze/image HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27961]
+INFO:     Started server process [29474]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29474]
+INFO:     Started server process [29487]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:52206 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52217 - "GET /ui HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 1)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_144527.json
+INFO:cfd3:📰 Collecting news for JP225...
+WARNING:cfd3:FXStreet scrape error: HTTPSConnectionPool(host='www.fxstreet.com', port=443): Read timed out. (read timeout=10)
+INFO:cfd3:📰 News for JP225: found 0 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     127.0.0.1:52247 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 2)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:🔥 High volatility: 2 image requests in 10min
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_144843.json
+INFO:cfd3:📰 Collecting news for JP225...
+INFO:cfd3:📰 News for JP225: found 8 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     127.0.0.1:52349 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 3)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:🔥 High volatility: 3 image requests in 10min
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_144936.json
+INFO:cfd3:📰 Collecting news for JP225...
+INFO:cfd3:📰 News for JP225: found 8 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     127.0.0.1:52382 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 4)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:🔥 High volatility: 4 image requests in 10min
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_145038.json
+INFO:cfd3:📰 Collecting news for JP225...
+INFO:cfd3:📰 News for JP225: found 8 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     127.0.0.1:52433 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52433 - "GET /ui HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 5)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:🔥 High volatility: 5 image requests in 10min
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_145104.json
+INFO:cfd3:📰 Collecting news for JP225...
+INFO:cfd3:📰 News for JP225: found 8 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     127.0.0.1:52465 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52495 - "GET /ui HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 6)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:🔥 High volatility: 6 image requests in 10min
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_145206.json
+INFO:cfd3:📰 Collecting news for JP225...
+INFO:cfd3:📰 News for JP225: found 8 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     127.0.0.1:52520 - "POST /analyze/image HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29487]
+INFO:     Started server process [36295]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36295]
+INFO:     Started server process [36301]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36301]
+INFO:     Started server process [36302]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36302]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [36317]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36317]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [36324]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36324]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [36335]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36335]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [36340]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:57238 - "GET /health HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36340]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [36956]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36956]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [37619]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:cfd3:🤖 Quick Swing AI: GER40
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+ERROR:ai_swing:❌ SwingAI error
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/server/ai_swing_master.py", line 108, in analyze_swing
+    result = json.loads(text)
+             ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:57573 - "GET /swing?symbol=GER40 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58838 - "GET /static/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58839 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 1)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_172127.json
+INFO:cfd3:📰 Collecting news for JP225...
+INFO:cfd3:📰 News for JP225: found 8 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     127.0.0.1:58855 - "POST /analyze/image HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [37619]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [42077]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42077]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [42121]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:cfd3:🤖 Quick Swing AI: JP225
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+ERROR:ai_swing:❌ SwingAI JSON parse error: Expecting value: line 1 column 1 (char 0)
+Response text: 申し訳ありませんが、私はリアルタイムのデータを取得することができません。そのため、指定された条件に基づいてJP225のスイング方向を判断することはできません。
+INFO:     127.0.0.1:59392 - "GET /swing?symbol=JP225 HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42121]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [43253]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [43253]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [43813]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:cfd3:🤖 Quick Swing AI: GER40
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:ai_swing:✅ Swing AI(GER40) → BUY @ 19500
+INFO:     127.0.0.1:59514 - "GET /swing?symbol=GER40 HTTP/1.1" 200 OK
+INFO:cfd3:🤖 Quick Swing AI: GER40
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:ai_swing:✅ Swing AI(GER40) → BUY @ 19500
+INFO:     127.0.0.1:59538 - "GET /swing?symbol=GER40 HTTP/1.1" 200 OK
+INFO:cfd3:🤖 Quick Swing AI: GER40
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:ai_swing:✅ Swing AI(GER40) → BUY @ 19500
+INFO:     202.209.91.98:0 - "GET /swing?symbol=GER40 HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /ui HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /static/style.css HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /ui HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /static/style.css HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /apple-touch-icon.png HTTP/1.1" 404 Not Found
+INFO:     202.209.91.98:0 - "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 Not Found
+INFO:     202.209.91.98:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     202.209.91.98:0 - "GET /apple-touch-icon-120x120-precomposed.png HTTP/1.1" 404 Not Found
+INFO:     202.209.91.98:0 - "GET /apple-touch-icon-120x120.png HTTP/1.1" 404 Not Found
+INFO:     202.209.91.98:0 - "GET /apple-touch-icon.png HTTP/1.1" 404 Not Found
+INFO:     202.209.91.98:0 - "GET /apple-touch-icon.png HTTP/1.1" 404 Not Found
+INFO:     202.209.91.98:0 - "GET /ui HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /ui HTTP/1.1" 200 OK
+INFO:     202.209.91.98:0 - "GET /ui HTTP/1.1" 200 OK
+INFO:cfd3:📸 Image request recorded (recent: 1)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:cfd3:💾 IFD saved: /Users/otomi/Desktop/vs code/CFD3_AutoSystem/output/ifd_30m_20251125_173757.json
+INFO:cfd3:📰 Collecting news for JP225...
+INFO:cfd3:📰 News for JP225: found 8 total, 0 related (keywords: ['japan', 'nikkei', 'boj']...)
+WARNING:cfd3:⚠️ No news found for JP225
+INFO:cfd3:✅ Markdown table generated
+INFO:cfd3:📰 Fetching news...
+INFO:cfd3:🤖 Running AI analysis... (RSS: 0, X: 0)
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+WARNING:cfd3:⚠️ AI response not valid JSON, storing as raw
+INFO:     202.209.91.98:0 - "POST /analyze/image HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [43813]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [47961]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [47961]
+INFO:cfd3:✅ AI Swing Master loaded
+INFO:     Started server process [47977]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [47977]
+INFO:     Started server process [53838]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:49487 - "GET /health HTTP/1.1" 200 OK
+[SwingAI] ERROR
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/server/ai_swing_master.py", line 92, in analyze_swing
+    res = client.chat.completions.create(
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/openai/_utils/_utils.py", line 275, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/openai/resources/chat/completions.py", line 663, in create
+    return self._post(
+           ^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/openai/_base_client.py", line 1200, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/openai/_base_client.py", line 889, in request
+    return self._request(
+           ^^^^^^^^^^^^^^
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/.venv/lib/python3.11/site-packages/openai/_base_client.py", line 980, in _request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'error': {'message': 'The model `gpt-4.2` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'param': None, 'code': 'model_not_found'}}
+INFO:     127.0.0.1:49495 - "GET /analyze/swing?symbol=JP225 HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [53838]
+INFO:     Started server process [54409]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [54409]
+INFO:     Started server process [54411]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+[SwingAI] ERROR
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/server/ai_swing_master.py", line 103, in analyze_swing
+    data = json.loads(text)
+           ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:49514 - "GET /analyze/swing?symbol=GER40 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49668 - "GET /ui HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49668 - "GET /static/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49669 - "GET /static/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:49686 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49697 - "POST /analyze/image HTTP/1.1" 200 OK
+[SwingAI] ERROR
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/server/ai_swing_master.py", line 103, in analyze_swing
+    data = json.loads(text)
+           ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:49717 - "GET /analyze/swing?symbol=GER40 HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [54411]
+INFO:     Started server process [55828]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [55828]
+INFO:     Started server process [55841]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:49755 - "GET /analyze/swing?symbol=JP225 HTTP/1.1" 200 OK
+[SwingAI] ERROR
+Traceback (most recent call last):
+  File "/Users/otomi/Desktop/vs code/CFD3_AutoSystem/server/ai_swing_master.py", line 108, in analyze_swing
+    data = json.loads(text)
+           ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/decoder.py", line 337, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/json/decoder.py", line 355, in raw_decode
+    raise JSONDecodeError("Expecting value", s, err.value) from None
+json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:49771 - "GET /analyze/swing?symbol=NAS100 HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [55841]
+INFO:     Started server process [56429]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [56429]
+INFO:     Started server process [56431]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [56431]
+INFO:     Started server process [56438]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'server/ai_swing_master.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [56438]
+INFO:     Started server process [56445]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:49838 - "GET /analyze/swing?symbol=GER40 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49840 - "GET /analyze/swing?symbol=JP225 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49842 - "GET /analyze/swing?symbol=NAS100 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49844 - "GET /analyze/swing?symbol=XAUUSD HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50081 - "GET /ui?id=2feb6a97-53d0-4717-878b-6b0de2846a1c&vscodeBrowserReqId=1764077887134 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50081 - "GET /static/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50082 - "GET /static/app.js HTTP/1.1" 200 OK

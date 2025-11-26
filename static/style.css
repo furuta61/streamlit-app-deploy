@@ -1,0 +1,55 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #0f172a;
+  color: #f1f5f9;
+  text-align: center;
+  margin: 40px;
+}
+h1 {
+  color: #38bdf8;
+}
+.tabs {
+  margin-bottom: 20px;
+}
+button {
+  background: #1e293b;
+  color: white;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  padding: 10px 20px;
+  margin: 4px;
+  cursor: pointer;
+}
+button.active {
+  background: #38bdf8;
+  color: #0f172a;
+}
+.panel {
+  display: none;
+}
+.panel.active {
+  display: block;
+}
+pre {
+  text-align: left;
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px auto;
+  width: 90%;
+  max-height: 400px;
+  overflow: auto;
+}
+.charts {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+}
+canvas {
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 10px;
+  width: 400px;
+  height: 250px;
+}

@@ -1,0 +1,29 @@
+{
+  "run_id": "20251124_234141",
+  "trade_mode": "MANUAL_30M",
+  "orders": [
+    {
+      "instrument": "GER40",
+      "direction": "buy",
+      "decision": "STRONG_GO",
+      "lots": 1,
+      "entry_order": {
+        "type": "limit",
+        "price": 23269.0
+      },
+      "ifd_legs": [
+        {
+          "name": "IFD-30M",
+          "oco": {
+            "take_profit": {
+              "price": 23288.0
+            },
+            "stop_loss": {
+              "price": 23250.0
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+body {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+header, footer {
+  text-align: center;
+  padding: 12px;
+  background: #111;
+  border-bottom: 1px solid #333;
+}
+section {
+  background: #1a1a1a;
+  margin: 15px;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #000;
+}
+
+#ai-card {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a2a0a 100%);
+  border: 1px solid #2a4a2a;
+}
+
+h3 {
+  color: #4cc9f0;
+}
+
+/* モード選択（ラジオボタン） */
+.mode-selector {
+  display: flex;
+  gap: 15px;
+  margin: 10px 0;
+}
+.mode-selector label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 8px 12px;
+  background: #222;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.mode-selector label:hover {
+  background: #333;
+}
+.mode-selector input[type="radio"] {
+  accent-color: #4cc9f0;
+}
+.mode-selector span {
+  font-weight: 500;
+  color: #ddd;
+}
+
+#fileInput {
+  width: 100%;
+  margin-top: 10px;
+}
+#sendBtn {
+  width: 100%;
+  background: #4cc9f0;
+  border: none;
+  padding: 10px;
+  color: #000;
+  margin-top: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+#preview img {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+pre {
+  white-space: pre-wrap;
+  background: #111;
+  padding: 10px;
+  border-radius: 8px;
+  color: #ddd;
+  font-size: 14px;
+}
+
+/* Markdown表示スタイル（marked.js対応） */
+.markdown-body {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  color: #ddd;
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.markdown-body th,
+.markdown-body td {
+  border: 1px solid #555;
+  padding: 6px 8px;
+  text-align: center;
+}
+
+.markdown-body th {
+  background: #2a2a2a;
+  font-weight: bold;
+  color: #4cc9f0;
+}
+
+.markdown-body tr:nth-child(even) {
+  background: #222;
+}
+
+.markdown-body h3 {
+  margin-top: 18px;
+  color: #9cf;
+}
