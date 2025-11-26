@@ -161,3 +161,24 @@ INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1
 INFO:     127.0.0.1:55173 - "POST /analyze/image HTTP/1.1" 200 OK
 INFO:     127.0.0.1:55194 - "GET /health HTTP/1.1" 404 Not Found
 INFO:     127.0.0.1:55241 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55321 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55377 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55417 - "GET /health HTTP/1.1" 404 Not Found
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55432 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55435 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55436 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55437 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+[WARN] Vision失敗: Expecting value: line 1 column 1 (char 0)
+INFO:     127.0.0.1:55439 - "POST /analyze/image HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55464 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55516 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55554 - "GET /health HTTP/1.1" 404 Not Found
