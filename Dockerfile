@@ -1,27 +1,23 @@
-# CFD3 AutoSystem Dockerfile
+# === ベースイメージ ===
 FROM python:3.11-slim
 
-# 作業ディレクトリ
-WORKDIR /app
-
-# システムパッケージのインストール
+# === システム依存パッケージ ===
 RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     tesseract-ocr-jpn \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Python依存関係のインストール
+# === 作業ディレクトリ ===
+WORKDIR /app
+
+# === 依存関係をインストール ===
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# アプリケーションコードをコピー
+# === ソースコードをコピー ===
 COPY . .
 
-# 環境変数
-ENV PYTHONUNBUFFERED=1
-ENV PORT=8080
-
-# FastAPI起動
+# === 起動コマンド ===
 CMD ["sh", "-c", "cd server && uvicorn webhook_server:app --host 0.0.0.0 --port ${PORT:-8080}"]
