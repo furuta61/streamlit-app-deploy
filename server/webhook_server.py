@@ -252,42 +252,13 @@ async def analyze_image(file: UploadFile = File(...)):
 @app.post("/analyze/swing_multi")
 def analyze_swing_multi():
     """
-    CSV + ニュース + 相関 から4銘柄のAIスイングIFDを生成
+    CSV + AI + ニュース + 相関 から4銘柄のAIスイングIFDを生成
     """
-    news_items = fetch_rss_news(30)
-    corr = compute_correlation()
-    logger.info(f"相関値: {corr}")
-
-    results = []
-    for sym in SYMBOLS:
-        tech = load_latest_tech(sym)
-        if not tech:
-            continue
-
-        direction = "buy" if sym in ["JP225", "GER40", "XAUUSD"] else "sell"
-        entry = tech["close"]
-        atr = tech["atr5"]
-
-        tp1 = entry + atr * (1.5 if direction == "buy" else -1.5)
-        tp2 = entry + atr * (2.5 if direction == "buy" else -2.5)
-        sl = entry - atr * (1.2 if direction == "buy" else -1.2)
-
-        sample_news = news_items[0]["title"] if news_items else ""
-        sentiment = analyze_sentiment(sample_news)
-        senti_score = sentiment["positive"] - sentiment["negative"]
-
-        markdown = format_markdown_ifd(sym, direction, entry, sl, tp1, tp2, "GO",
-                                       news_score=senti_score, sentiment=sentiment)
-
-        results.append({
-            "symbol": sym,
-            "entry": entry,
-            "atr": atr,
-            "corr": corr,
-            "sentiment": sentiment,
-            "markdown": markdown
-        })
-
+    import sys
+    sys.path.append(str(BASE_DIR.parent))
+    from analyze_swing_multi_core import analyze_swing_multi_core
+    
+    results = analyze_swing_multi_core(["JP225", "NAS100", "GER40", "XAUUSD"])
     return {"status": "ok", "count": len(results), "results": results}
 
 

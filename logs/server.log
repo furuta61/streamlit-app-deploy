@@ -182,3 +182,64 @@ INFO:     127.0.0.1:55439 - "POST /analyze/image HTTP/1.1" 200 OK
 INFO:     127.0.0.1:55464 - "GET /health HTTP/1.1" 404 Not Found
 INFO:     127.0.0.1:55516 - "GET /health HTTP/1.1" 404 Not Found
 INFO:     127.0.0.1:55554 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55602 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55618 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55662 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55711 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55772 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55813 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55860 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55893 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56018 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56099 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56143 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56180 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56211 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56273 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56331 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56363 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56404 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56421 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56476 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56579 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56639 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56730 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56778 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56805 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56849 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56898 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56934 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56957 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56991 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57019 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57093 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57159 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57274 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57362 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57517 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57661 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57779 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57858 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57916 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58011 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58109 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58191 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58303 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58344 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58409 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58483 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58525 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58576 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58663 - "GET /health HTTP/1.1" 404 Not Found
+INFO:watchfiles.main:1 change detected
+WARNING:  WatchFiles detected changes in 'webhook_server.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1742]
+INFO:watchfiles.main:1 change detected
+INFO:     Started server process [17345]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:watchfiles.main:3 changes detected
+INFO:watchfiles.main:1 change detected
