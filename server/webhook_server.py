@@ -458,6 +458,33 @@ def test_endpoint():
         "timestamp": datetime.now().isoformat()
     }
 
+@app.post("/webhook")
+async def webhook_endpoint(request: Request):
+    """TradingView Webhook エンドポイント"""
+    try:
+        data = await request.json()
+        logger.info(f"[Webhook] Received: {data}")
+        
+        symbol = data.get("symbol", "UNKNOWN")
+        direction = data.get("direction", "").upper()
+        price = float(data.get("price", 0))
+        
+        return {
+            "status": "received",
+            "symbol": symbol,
+            "direction": direction,
+            "price": price,
+            "message": f"Alert for {symbol} received",
+            "timestamp": datetime.now().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"[Webhook] Error: {e}")
+        return {
+            "status": "error",
+            "message": str(e),
+            "timestamp": datetime.now().isoformat()
+        }
+
 @app.post("/analyze/image")
 async def analyze_image_endpoint(file: UploadFile = File(...)):
     """画像アップロード＋解析エンドポイント"""
