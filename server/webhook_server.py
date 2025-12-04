@@ -474,11 +474,11 @@ async def webhook_endpoint(request: Request):
     try:
         data = await request.json()
         symbol = data.get("symbol", "UNKNOWN")
-        direction = data.get("direction", "").upper()
+        direction = data.get("direction", "NONE").upper()
         signal = data.get("signal", "GO")
         price = float(data.get("price", 0))
         time_str = data.get("time", "")
-        news_text = data.get("news", "")
+        news = data.get("news", "")
         
         # ステップ1: Webhook受信ログ
         log_entry = f"[Webhook] {time_str} - {symbol} ({direction}) @ {price}"
@@ -487,23 +487,40 @@ async def webhook_endpoint(request: Request):
             WEBHOOK_LOGS.pop()
         logger.info(f"[Webhook] Received signal {signal} for {symbol}")
         
-        # ステップ2: AIニュース解析
-        ai_result = None
-        if analyze_news_ai and news_text:
-            try:
-                ai_result = analyze_news_ai(symbol, news_text)
-                logger.info(f"[AI] News analyzed for {symbol} — Direction: {ai_result.get('direction')} / Impact: {ai_result.get('impact_score')} / Duration: {ai_result.get('duration')}")
-            except Exception as e:
-                logger.warning(f"[AI] Analysis failed: {e}")
+        # ステップ2: AI IFD生成（GPT-4o-mini）
+        plan = {"entry": price, "tp1": price * 1.01, "sl": price * 0.99, "comment": "デフォルト"}
         
-        # ステップ3: IFD自動生成（簡易版）
-        if price > 0:
-            atr = price * 0.01  # 簡易ATR
-            entry = price
-            sl = price - atr
-            tp1 = price + 2 * atr
-            tp2 = price + 3 * atr
-            logger.info(f"[AI] Generated IFD plan → Entry: {entry:.2f} / TP1: {tp1:.2f} / SL: {sl:.2f}")
+        try:
+            prompt = f"""
+銘柄: {symbol}
+シグナル: {signal}
+方向: {direction}
+現在価格: {price}
+ニュース: {news}
+
+この情報をもとに IFD 注文（エントリー / TP1 / SL）を提案してください。
+出力は **必ず** JSON 形式：
+{{ "entry": 数値, "tp1": 数値, "sl": 数値, "comment": "短い日本語コメント" }}
+"""
+            ai = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.1,
+                max_tokens=200
+            )
+            content = ai.choices[0].message.content.strip()
+            logger.info(f"[AI] Raw response: {content}")
+            
+            # JSON抽出
+            plan = json.loads(content)
+            
+        except json.JSONDecodeError as e:
+            logger.error(f"[AI] JSON parse error: {e}, using default plan")
+        except Exception as e:
+            logger.error(f"[AI Error] {e}")
+        
+        # ステップ3: 結果ログ出力
+        logger.info(f"[AI] Generated IFD plan → Entry: {plan.get('entry', price):.2f} / TP1: {plan.get('tp1', price*1.01):.2f} / SL: {plan.get('sl', price*0.99):.2f}")
         
         # 最新シグナル情報更新
         LATEST_SIGNALS[symbol] = {
@@ -513,17 +530,21 @@ async def webhook_endpoint(request: Request):
             "price": price,
             "time": time_str,
             "updated": datetime.now().strftime("%H:%M:%S"),
-            "ai_result": ai_result
+            "entry": plan.get("entry", price),
+            "tp1": plan.get("tp1", price * 1.01),
+            "sl": plan.get("sl", price * 0.99),
+            "comment": plan.get("comment", "")
         }
         
         return {
-            "status": "received",
+            "status": "ok",
             "symbol": symbol,
             "direction": direction,
             "signal": signal,
-            "price": price,
-            "message": f"Alert for {symbol} received",
-            "ai_analysis": ai_result,
+            "entry": plan.get("entry", price),
+            "tp1": plan.get("tp1", price * 1.01),
+            "sl": plan.get("sl", price * 0.99),
+            "comment": plan.get("comment", "AI生成成功"),
             "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
