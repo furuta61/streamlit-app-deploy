@@ -15,6 +15,7 @@ import os, json, random, base64, logging
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from collections import deque
 from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -36,7 +37,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("CFD3 FIXED")
 
 # Webhook受信ログ & 銘柄別状態管理
-WEBHOOK_LOGS = []
+WEBHOOK_LOGS = deque(maxlen=50)  # 最新50件を保持
 LATEST_SIGNALS = {}  # 銘柄別の最新状態を保持
 
 # ------------------------------------------------------------
@@ -442,6 +443,121 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ========== ルートページ（ダッシュボード） ==========
+
+@app.get("/", response_class=HTMLResponse)
+def home():
+    """CFD3 AutoSystem ダッシュボード"""
+    html = """
+    <html>
+    <head>
+        <title>CFD3 AutoSystem Dashboard</title>
+        <meta http-equiv="refresh" content="10">
+        <style>
+            body { 
+                font-family: 'Segoe UI', 'Courier New', sans-serif; 
+                margin: 0; 
+                padding: 40px; 
+                background: #f5f7fa; 
+                color: #222; 
+            }
+            h1 { color: #0366d6; margin-top: 0; }
+            h2 { color: #666; margin-top: 30px; }
+            table { 
+                border-collapse: collapse; 
+                width: 100%; 
+                margin-top: 20px; 
+                background: white;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            th { 
+                background: #0366d6; 
+                color: white; 
+                padding: 12px; 
+                text-align: left; 
+                font-weight: bold;
+            }
+            td { 
+                padding: 10px 12px; 
+                border-bottom: 1px solid #eee; 
+            }
+            tr:hover { background: #f9f9f9; }
+            .ok { color: green; font-weight: bold; }
+            .error { color: red; font-weight: bold; }
+            .frame-container {
+                margin-top: 20px;
+                background: white;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                padding: 10px;
+            }
+            .footer {
+                font-size: 12px; 
+                color: #666;
+                margin-top: 20px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>✅ CFD3 AutoSystem Dashboard</h1>
+        <p>Renderサーバーは <span class="ok">稼働中</span> です。</p>
+        
+        <h2>📊 最近の Webhook 受信ログ</h2>
+        <div class="frame-container">
+            <iframe src="/logs" width="100%" height="400" style="border:none; background:white;"></iframe>
+        </div>
+        <p class="footer">※10秒ごとに自動更新</p>
+        
+        <h2>🔗 利用可能なエンドポイント</h2>
+        <ul>
+            <li><strong>POST /webhook</strong> — TradingView アラート受信</li>
+            <li><strong>GET /logs</strong> — Webhook ログ表示</li>
+            <li><strong>GET /test</strong> — ヘルスチェック</li>
+        </ul>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html)
+
+# ========== Webhook ログ表示 ==========
+
+@app.get("/logs", response_class=HTMLResponse)
+def show_logs():
+    """Webhook ログをテーブル形式で表示"""
+    if not WEBHOOK_LOGS:
+        rows = "<tr><td colspan='5' style='text-align:center; color:#999;'>ログなし</td></tr>"
+    else:
+        rows = "".join([
+            f"<tr><td>{i+1}</td><td>{log}</td></tr>" 
+            for i, log in enumerate(reversed(WEBHOOK_LOGS))
+        ])
+    
+    html = f"""
+    <html>
+    <head>
+        <style>
+            body {{ margin: 0; padding: 10px; font-family: monospace; font-size: 12px; }}
+            table {{ width: 100%; border-collapse: collapse; }}
+            th {{ background: #333; color: white; padding: 8px; text-align: left; }}
+            td {{ padding: 6px; border-bottom: 1px solid #eee; }}
+            tr:nth-child(even) {{ background: #f9f9f9; }}
+        </style>
+        <meta http-equiv="refresh" content="5">
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th style="width: 40px;">#</th>
+                <th>ログ</th>
+            </tr>
+            {rows}
+        </table>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html)
+
 @app.get("/final", response_class=HTMLResponse)
 def ui_final(request: Request):
     """UI用エンドポイント（HTML表示）"""
@@ -481,10 +597,9 @@ async def webhook_endpoint(request: Request):
         news = data.get("news", "")
         
         # ステップ1: Webhook受信ログ
-        log_entry = f"[Webhook] {time_str} - {symbol} ({direction}) @ {price}"
-        WEBHOOK_LOGS.insert(0, log_entry)
-        if len(WEBHOOK_LOGS) > 50:
-            WEBHOOK_LOGS.pop()
+        timestamp = datetime.now().isoformat()
+        log_entry = f"{timestamp} | {symbol} | {direction} | {signal} | {price}"
+        WEBHOOK_LOGS.append(log_entry)
         logger.info(f"[Webhook] Received signal {signal} for {symbol}")
         
         # ステップ2: AI IFD生成（GPT-4o-mini）
