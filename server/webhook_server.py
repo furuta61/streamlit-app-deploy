@@ -96,10 +96,12 @@ def calc_tech(df):
     }
 
 # ------------------------------------------------------------
-# ニュース感情
+# ニュース感情（ダミー実装 - 外部依存削除）
 # ------------------------------------------------------------
 
-from server.analyze_swing_multi_core import analyze_news_sentiment
+def analyze_news_sentiment(news_text: str = ""):
+    """ニュース感情分析（ダミー実装）"""
+    return {"positive": 50, "negative": 50, "summary": news_text}
 
 # ------------------------------------------------------------
 # Weighted × GPT の Meta 判定
