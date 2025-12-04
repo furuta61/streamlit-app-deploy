@@ -446,6 +446,16 @@ def ui_final(request: Request):
         logger.error(f"/final error: {e}")
         return HTMLResponse(content=f"<h1>Error</h1><pre>{e}</pre>", status_code=500)
 
+@app.get("/test")
+def test_endpoint():
+    """テストエンドポイント"""
+    return {
+        "status": "ok",
+        "message": "CFD3 DawnAI is running",
+        "version": "200 (FIXED)",
+        "timestamp": datetime.now().isoformat()
+    }
+
 @app.post("/analyze/image")
 async def analyze_image_endpoint(file: UploadFile = File(...)):
     """画像アップロード＋解析エンドポイント"""
