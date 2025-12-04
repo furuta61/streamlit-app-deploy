@@ -14,3 +14,11 @@ jinja2
 pydantic
 lxml
 
+# training data generation
+yfinance
+
+# ML training
+scikit-learn
+lightgbm
+joblib
+

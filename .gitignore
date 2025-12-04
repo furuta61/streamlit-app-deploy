@@ -1,4 +1,72 @@
-.venv/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+server/logs/
+server/sync_diag.log
+
+# Output
+output/
+output_production/
+server/output/
+server/output_production/
+
+# Backup files
+*.bak
+*.backup
+*_backup.py
+
+# CSV data (large files)
+*.csv
+!sample*.csv
+
+# Training data
+training_dataset.csv
+
+# Screenshots
+*.png
+
+# JSON data
+current_positions.json
+symbol_summary.json
+
+# macOS
 .DS_Store

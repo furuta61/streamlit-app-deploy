@@ -1,339 +1,482 @@
-# =====================================================================
-# FastAPI Webhook Server Ver.109
-# TradingView Webhook + AI Swing IFD + News Sentiment + Correlation
-# =====================================================================
+# -*- coding: utf-8 -*-
+"""
+CFD3 DawnAI — Ver.200 (FIXED)
+ハイブリッド IFD（Vision価格 × テクニカル × ニュース × GPT判定）
+完全修正版
+"""
 
-import os
-import json
-import base64
-import logging
-from datetime import datetime
+import sys
 from pathlib import Path
-from typing import Optional, List, Dict
-from collections import deque
+BASE_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(BASE_DIR))
+sys.path.insert(0, str(BASE_DIR.parent))
 
+import os, json, random, base64, logging
 import pandas as pd
 import numpy as np
-import requests
-from bs4 import BeautifulSoup
-import feedparser
-
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request, WebSocket
-from fastapi.responses import HTMLResponse, FileResponse
+from datetime import datetime
+from fastapi import FastAPI, File, UploadFile, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 
-# =====================================================================
-# 環境変数・定数
-# =====================================================================
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
-client = OpenAI(api_key=OPENAI_API_KEY)
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY", ""))
 
-BASE_DIR = Path(__file__).resolve().parent
-OUTPUT_DIR = BASE_DIR / "output_production"
-OUTPUT_DIR.mkdir(exist_ok=True)
+DATA_DIR = BASE_DIR / "data"
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("CFD3 FIXED")
 
-SYMBOLS = ["JP225", "NAS100", "GER40", "XAUUSD"]
+# ------------------------------------------------------------
+# 前処理（インジ無視・OHLC だけ抽出）
+# ------------------------------------------------------------
 
-# =====================================================================
-# グローバル状態
-# =====================================================================
-tv_last_direction = {}
-tv_last_signal = {}
-high_volatility = False
-recent_image_requests = deque(maxlen=10)
-recent_30m_trades = deque(maxlen=20)
-tv_alerts = deque(maxlen=50)
+def clean_dataframe(df, symbol=None):
+    keep = ["time", "open", "high", "low", "close"]
+    df = df[keep].copy()
 
-# =====================================================================
-# ニュース取得（RSS）
-# =====================================================================
-def fetch_rss_news(max_items: int = 30) -> List[Dict[str, str]]:
-    """複数のRSSフィードから最新ニュースを取得"""
-    feeds = [
-        "https://www.reuters.com/rssFeed/topNews",
-        "https://www.cnbc.com/id/100003114/device/rss/rss.html",
-        "https://www.marketwatch.com/rss/topstories",
-        "https://www.fxstreet.com/rss/news",
-        "https://www.financialjuice.com/feed"
-    ]
-    items = []
-    for url in feeds:
-        try:
-            feed = feedparser.parse(url)
-            for entry in feed.entries[:10]:
-                items.append({
-                    "title": entry.get("title", ""),
-                    "link": entry.get("link", ""),
-                    "published": entry.get("published", "")
-                })
-        except Exception as e:
-            logger.warning(f"RSS取得失敗 {url}: {e}")
-    return items[:max_items]
+    for c in keep:
+        df[c] = pd.to_numeric(df[c], errors="coerce")
 
+    df = df.dropna()
 
-def scrape_financialjuice() -> List[Dict[str, str]]:
-    """FinancialJuiceをスクレイピング"""
-    try:
-        res = requests.get("https://www.financialjuice.com/", timeout=5)
-        soup = BeautifulSoup(res.content, "html.parser")
-        articles = soup.select(".article-title")
-        return [{"title": a.get_text(strip=True), "link": a.get("href", "")} for a in articles[:10]]
-    except Exception as e:
-        logger.warning(f"FinancialJuiceスクレイピング失敗: {e}")
-        return []
+    if len(df) < 100:
+        raise ValueError(f"{symbol}: CSV行数不足（{len(df)}）")
 
+    return df
 
-def analyze_sentiment(text: str) -> Dict[str, float]:
-    """GPT-4o-miniで感情分析"""
-    if not text:
-        return {"positive": 0.3, "neutral": 0.4, "negative": 0.3}
-    try:
-        res = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "あなたは金融ニュースの感情分析AIです。positive/neutral/negativeの割合をJSONで返してください。"},
-                {"role": "user", "content": text}
-            ],
-            temperature=0.0
-        )
-        content = res.choices[0].message.content
-        parsed = json.loads(content)
-        return {
-            "positive": parsed.get("positive", 0.3),
-            "neutral": parsed.get("neutral", 0.4),
-            "negative": parsed.get("negative", 0.3)
-        }
-    except Exception as e:
-        logger.error(f"Sentiment analysis failed: {e}")
-        return {"positive": 0.3, "neutral": 0.4, "negative": 0.3}
+# ------------------------------------------------------------
+# テクニカル（落ちない安全仕様）
+# ------------------------------------------------------------
 
+def calc_tech(df):
+    df = df.copy()
+    df = df.dropna(subset=["open","high","low","close"])
 
-# =====================================================================
-# テクニカルデータ読み込み
-# =====================================================================
-def load_latest_tech(symbol: str) -> Optional[Dict]:
-    """CSVから最新の4H足を取得し、ATR5も計算"""
-    csv_path = BASE_DIR / "data" / f"FOREXCOM_{symbol}_240.csv"
-    if not csv_path.exists():
-        logger.warning(f"CSV not found: {csv_path}")
-        return None
-    try:
-        df = pd.read_csv(csv_path)
-        if df.empty:
-            return None
-        df = df.sort_values("time").tail(20)
-        df["hl"] = df["high"] - df["low"]
-        df["atr5"] = df["hl"].rolling(5).mean()
-        last = df.iloc[-1]
-        recent_closes = df["close"].tail(10).tolist()
-        return {
-            "close": last["close"],
-            "high": last["high"],
-            "low": last["low"],
-            "atr5": last["atr5"],
-            "recent_closes": recent_closes
-        }
-    except Exception as e:
-        logger.error(f"Failed to load tech for {symbol}: {e}")
-        return None
+    close = df["close"].astype(float)
 
+    if len(close) < 100:
+        raise ValueError("行数が不足")
 
-def compute_correlation() -> float:
-    """JP225, NAS100, GER40の相関を計算"""
-    dfs = []
-    for sym in ["JP225", "NAS100", "GER40"]:
-        csv_path = BASE_DIR / "data" / f"FOREXCOM_{sym}_240.csv"
-        if csv_path.exists():
-            df = pd.read_csv(csv_path)
-            df = df.sort_values("time").tail(50)
-            dfs.append(df["close"].values)
-    if len(dfs) < 2:
-        return 0.0
-    corr_matrix = np.corrcoef(dfs)
-    return float(np.mean(corr_matrix))
+    sma25 = close.rolling(25).mean().iloc[-1]
+    sma75 = close.rolling(75).mean().iloc[-1]
 
+    if np.isnan(sma25): sma25 = close.iloc[-1]
+    if np.isnan(sma75): sma75 = close.iloc[-1]
 
-# =====================================================================
-# FastAPI アプリ初期化
-# =====================================================================
-app = FastAPI(title="CFD3 Trade System Ver.109")
+    macd = close.ewm(span=12).mean().iloc[-1] - close.ewm(span=26).mean().iloc[-1]
+    signal = (close.ewm(span=12).mean() - close.ewm(span=26).mean()).ewm(span=9).mean().iloc[-1]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+    if np.isnan(macd): macd = 0
+    if np.isnan(signal): signal = 0
 
-# =====================================================================
-# 共通関数:Markdown出力
-# =====================================================================
-def format_markdown_ifd(symbol: str, direction: str, entry: float, sl: float, tp1: float, tp2: float,
-                        decision: str, lots: int = 6, trade_mode: str = "DAY6H",
-                        news_score: float = 0.0, sentiment: Optional[dict] = None) -> str:
-    direction_jp = "買い" if direction == "buy" else "売り"
-    senti = sentiment or {"positive": 0.3, "neutral": 0.4, "negative": 0.3}
-    senti_str = f"🟢{senti['positive']*100:.0f}% ⚪️{senti['neutral']*100:.0f}% 🔴{senti['negative']*100:.0f}%"
-    markdown = f"""
-| trade_mode | 銘柄 | 方向 | entry_price | SL | TP1 | TP2 | order_type | 判定 | ニュースロック | 推奨度 | ロット | CUT条件 |
-|-------------|------|------|--------------|------|------|------|------------|--------|----------------|----------|--------|------------|
-| {trade_mode} | {symbol} | {direction_jp} | {entry:.1f} | {sl:.1f} | {tp1:.1f} | {tp2:.1f} | 指値 | {decision} | false | ★★★★★ | {lots} | SMA25 < SMA75 or MACD < Signal |
+    diff = close.diff()
+    gain = diff.clip(lower=0).rolling(14).mean()
+    loss = diff.clip(upper=0).abs().rolling(14).mean()
+    rsi = 100 - 100 / (1 + (gain / loss))
 
-### 📰 ニュース分析
-- 危険スコア: {news_score}
-- 感情: {senti_str}
+    rsi_val = rsi.iloc[-1]
+    if np.isnan(rsi_val):
+        rsi_val = 50
+
+    atr = close.diff().abs().rolling(14).mean().iloc[-1]
+    if np.isnan(atr):
+        atr = (close.max() - close.min()) * 0.01
+
+    return {
+        "close": close.iloc[-1],
+        "sma25": sma25,
+        "sma75": sma75,
+        "macd": macd,
+        "signal": signal,
+        "rsi": rsi_val,
+        "atr": atr
+    }
+
+# ------------------------------------------------------------
+# ニュース感情
+# ------------------------------------------------------------
+
+from server.analyze_swing_multi_core import analyze_news_sentiment
+
+# ------------------------------------------------------------
+# Weighted × GPT の Meta 判定
+# ------------------------------------------------------------
+
+def weighted_direction(t30, t240, news, price):
+    score_4h = (1 if t240["sma25"] > t240["sma75"] else -1) + \
+               (1 if t240["close"] > t240["sma25"] else -1)
+
+    score_30 = (1 if t30["rsi"] > 55 else -1 if t30["rsi"] < 45 else 0) + \
+               (1 if t30["macd"] > t30["signal"] else -1)
+
+    score_news = (news["positive"] - news["negative"]) / 20
+    score_gmo = 1 if price > t30["sma25"] else -1
+
+    final = score_4h*0.45 + score_30*0.25 + score_news*0.15 + score_gmo*0.15
+
+    if final > 0.8: return "buy", final
+    if final < -0.8: return "sell", final
+    return "stop", final
+
+def meta_decision(t30, t240, news, price, gpt_dir):
+    w_dir, score = weighted_direction(t30, t240, news, price)
+
+    long_dir = "buy" if t240["sma25"] > t240["sma75"] else "sell"
+    if abs(score) > 1.5:
+        return long_dir, score, "4H強トレンド優先"
+
+    if price > t30["sma25"] * 1.002:
+        return "buy", score, "GMO強上抜け"
+    if price < t30["sma25"] * 0.998:
+        return "sell", score, "GMO強下抜け"
+
+    if abs(score) < 0.8:
+        return "stop", score, "中立 → HOLD"
+
+    if gpt_dir == w_dir:
+        return w_dir, score + 0.3, "GPT一致 → 強化"
+
+    return w_dir, score, "GPT矛盾 → Weighted優先"
+
+# ------------------------------------------------------------
+# GPTコメント付き Dawn 判定
+# ------------------------------------------------------------
+
+def dawn_ai_decision(symbol, t30, t240, news, price):
+    prompt = f"""
+銘柄: {symbol}
+30分 RSI {t30['rsi']:.1f}, MACD {t30['macd']:.2f}
+4H SMA25 {t240['sma25']:.1f}, SMA75 {t240['sma75']:.1f}
+ニュース: +{news['positive']} / -{news['negative']}
+GMO価格: {price}
+buy / sell / stop で返答。
 """
-    return markdown
+    try:
+        gpt_raw = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role":"user","content":prompt}],
+            temperature=0.1
+        )
+        gpt_dir = gpt_raw.choices[0].message.content.strip().lower()
+        if gpt_dir not in ["buy","sell","stop"]:
+            gpt_dir="stop"
+    except:
+        gpt_dir="stop"
 
+    final_dir, score, reason = meta_decision(t30, t240, news, price, gpt_dir)
+    confidence = int(min(100, max(0, 50 + abs(score)*25)))
 
-# =====================================================================
-# 手動IFD(スクショ)解析エンドポイント
-# =====================================================================
-@app.post("/analyze/image")
-async def analyze_image(file: UploadFile = File(...)):
+    return {
+        "direction": final_dir,
+        "comment": f"{reason.replace('→',' → ')}",
+        "confidence": confidence
+    }
+
+# ------------------------------------------------------------
+# 強度判定 / 品質ゲート 拡張
+# ------------------------------------------------------------
+
+from typing import Dict, Tuple, Optional
+import time as _time
+
+# Gateしきい値
+GATE_MAX_AGE_SEC   = 90
+GATE_MAX_DRIFT_PCT = 0.0008   # 0.08%
+GATE_MIN_OCR_CONF  = 0.98
+
+def data_quality_gate(vision: Dict, ref_price: float) -> Tuple[bool, str]:
     """
-    GMOスクショを解析してIFDを生成（Vision失敗でもダミーで動作）
+    GMOスクショ由来の現在値が妥当かを確認。
+    vision: {"price": float, "ts": epoch_sec, "ocr_conf": float}
+    ref_price: feed_price等の比較対象
     """
-    img_bytes = await file.read()
-    if not img_bytes:
-        raise HTTPException(status_code=400, detail="No image uploaded")
+    if not vision or "price" not in vision:
+        return False, "DATA_NG: missing_vision_price"
+    price = float(vision.get("price", 0.0))
+    ts    = float(vision.get("ts", 0.0))
+    conf  = float(vision.get("ocr_conf", 0.0))
 
-    # --- Vision試行 ---
-    parsed = None
+    # 1) 時間
+    age = abs(_time.time() - ts) if ts > 0 else 1e9
+    if age > GATE_MAX_AGE_SEC:
+        return False, f"DATA_NG: stale({int(age)}s)"
+
+    # 2) 価格乖離
+    if ref_price > 0:
+        drift = abs(price - ref_price) / ref_price
+        if drift > GATE_MAX_DRIFT_PCT:
+            return False, f"DATA_NG: drift({drift:.4%})"
+
+    # 3) OCR信頼度
+    if conf < GATE_MIN_OCR_CONF:
+        return False, f"DATA_NG: ocr_conf({conf:.2f})"
+
+    return True, "DATA_OK"
+
+def direction_votes(long_dir: str, weighted_dir: str, gpt_dir: str, tv_dir: str, gmo_bias_dir: str) -> Tuple[str, int]:
+    """最頻値による方向コンセンサス"""
+    dirs = [d for d in [long_dir, weighted_dir, gpt_dir, tv_dir, gmo_bias_dir] if d in ("buy","sell")]
+    if not dirs:
+        return "stop", 0
+    # 最頻値
+    from collections import Counter
+    c = Counter(dirs).most_common(1)[0]
+    majority_dir, count = c[0], c[1]
+    return majority_dir, count
+
+def gmo_bias_direction(gmo_price: float, sma25_30: float, up_mult=1.0015, dn_mult=0.9985) -> str:
+    """GMO価格のSMA25からの乖離で方向判定"""
+    if sma25_30 <= 0:
+        return "stop"
+    if gmo_price > sma25_30 * up_mult:
+        return "buy"
+    if gmo_price < sma25_30 * dn_mult:
+        return "sell"
+    return "stop"
+
+def decide_go_level(
+    row: Dict,
+    t30: Dict,
+    t240: Dict,
+    news: Dict,
+    vision: Dict,        # {"price": float, "ts": epoch_sec, "ocr_conf": float}
+    ref_price: float,    # TVやfeedの直近価格
+    gpt_direction: str,
+    tv_dir: str,
+    atr_30m: Optional[float] = None,
+    price_for_atr: Optional[float] = None,
+    rr_rule: float = 1.5
+) -> Dict:
+    """
+    STOP/GO/STRONG_GO の3段階判定 + 理由と信頼度を返す。
+    前提: weighted_direction, meta_decision, data_quality_gate,
+          direction_votes, gmo_bias_direction が利用可能であること。
+    戻り: {"level": "STOP|GO|STRONG_GO", "reason": str, "confidence": int}
+    """
+    # 0) Data Quality Gate
+    ok, gate_reason = data_quality_gate(vision, ref_price)
+    if not ok:
+        return {"level": "STOP", "reason": gate_reason, "confidence": 35}
+
+    # 1) Weighted & Meta
+    gmo_price = float(vision["price"])
+    weighted_dir, score = weighted_direction(t30, t240, news, gmo_price)
+    final_dir, score2, meta_reason = meta_decision(t30, t240, news, gmo_price, gpt_direction)
+    score = score2  # metaで最終調整後を採用
+
+    # 2) コンセンサス（votes）
+    long_dir = "buy" if float(t240.get("sma25", 0.0)) > float(t240.get("sma75", 0.0)) else "sell"
+    gmo_dir  = gmo_bias_direction(gmo_price, float(t30.get("sma25", 0.0)))
+    tv_dir   = (tv_dir or "stop").strip().lower()
+    if tv_dir not in ("buy", "sell", "stop"):
+        tv_dir = "stop"
+    maj_dir, votes = direction_votes(long_dir, weighted_dir, gpt_direction, tv_dir, gmo_dir)
+
+    # 3) RRチェック
+    def _rr(entry, sl, tp, side):
+        # 既存の risk_reward と同等
+        if side == "buy":
+            risk   = max(entry - sl, 1e-9)
+            reward = max(tp - entry, 0.0)
+        elif side == "sell":
+            risk   = max(sl - entry, 1e-9)
+            reward = max(entry - tp, 0.0)
+        else:
+            return 0.0
+        return (reward / risk) if risk > 0 else 0.0
+
+    rr1 = _rr(row["entry"], row["sl"], row["tp1"], final_dir)
+    rr2 = _rr(row["entry"], row["sl"], row["tp2"], final_dir)
+    rr_ok = max(rr1, rr2) >= rr_rule
+
+    # 4) ボラ適合（任意）
+    vola_ok = True
+    if atr_30m and price_for_atr:
+        vola_ok = (atr_30m / price_for_atr) <= 0.015  # 1.5% 以内
+
+    # 5) レベル判定
+    if abs(score) < 0.8:
+        return {"level": "STOP", "reason": "score_neutral", "confidence": 45}
+
+    if rr_ok and vola_ok:
+        if abs(score) >= 1.5 and votes >= 3:
+            level = "STRONG_GO"
+        elif votes >= 2:
+            level = "GO"
+        else:
+            level = "STOP"
+    else:
+        level = "STOP"
+
+    # 6) 信頼度 0-100（簡易合成）
+    base = min(95, 60 + int(min(abs(score), 2.5) * 10))   # スコア寄与
+    base += (votes - 1) * 5                               # votes寄与
+    if not vola_ok:
+        base -= 10
+    confidence = max(0, min(100, base))
+
+    # 7) 説明文（reason）
+    reason = (
+        f"meta={final_dir} score={score:.2f} "
+        f"votes={votes} ({long_dir}/{weighted_dir}/{gpt_direction}/{tv_dir}/{gmo_dir}); "
+        f"RR1={rr1:.2f}, RR2={rr2:.2f}; {meta_reason}"
+    )
+
+    return {"level": level, "reason": reason, "confidence": confidence}
+
+# ------------------------------------------------------------
+# IFD
+# ------------------------------------------------------------
+
+def build_ifd(direction, price, atr):
+    if direction == "buy":
+        return price, price - atr, price*1.004, price*1.008
+    if direction == "sell":
+        return price, price + atr, price*0.996, price*0.992
+    return price, price, price, price
+
+# ------------------------------------------------------------
+# Dawn テーブル（空白行ゼロ）
+# ------------------------------------------------------------
+
+def build_dawn_table(rows):
+    html = []
+    html.append('<table class="dawn-table">')
+    html.append(
+        "<tr><th>trade_mode</th><th>銘柄</th><th>方向</th>"
+        "<th>entry</th><th>SL</th><th>TP1</th><th>TP2</th>"
+        "<th>判定</th><th>推奨度</th><th>コメント</th></tr>"
+    )
+
+    for r in rows:
+        d = r["direction"].upper()
+        conf = r["confidence"]
+        stars = "★★★★★" if conf>=85 else "★★★★☆" if conf>=70 else \
+                "★★★☆☆" if conf>=55 else "★★☆☆☆"
+
+        html.append(
+            f"<tr>"
+            f"<td>HYBRID</td>"
+            f"<td>{r['symbol']}</td>"
+            f"<td>{d}</td>"
+            f"<td>{r['entry']:.1f}</td>"
+            f"<td>{r['sl']:.1f}</td>"
+            f"<td>{r['tp1']:.1f}</td>"
+            f"<td>{r['tp2']:.1f}</td>"
+            f"<td>{d}</td>"
+            f"<td>{stars}</td>"
+            f"<td>{r['comment']}</td>"
+            f"</tr>"
+        )
+
+    html.append("</table>")
+    return "\n".join(html)
+
+# ------------------------------------------------------------
+# Vision 価格抽出（None を完全削除）
+# ------------------------------------------------------------
+
+def vision_extract_prices(img_bytes):
     try:
         b64 = base64.b64encode(img_bytes).decode()
-        prompt = "画像に表示されたCFD銘柄（日本225, 米国NQ100ミニ, ドイツ40, 金スポット）の価格を抽出しJSONで返してください。"
+        prompt = """
+GMOアプリ/PC画面から4銘柄の現在価格(BID or ASK)を読み取り、
+以下形式のJSONだけ返してください:
+
+{
+ "日本225": 数値,
+ "米国NQ100ミニ": 数値,
+ "ドイツ40": 数値,
+ "金スポット": 数値
+}
+"""
+
         res = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=[{
                 "role": "user",
                 "content": [
-                    {"type": "text", "text": prompt},
-                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}}
+                    {"type":"text","text":prompt},
+                    {"type":"image_url","image_url":{"url":f"data:image/png;base64,{b64}"}}
                 ]
             }],
             temperature=0
         )
-        parsed = json.loads(res.choices[0].message.content)
+
+        raw = res.choices[0].message.content
+        data = json.loads(raw)
+        cleaned = {k:v for k,v in data.items() if v is not None}
+        return cleaned
+
     except Exception as e:
-        print(f"[WARN] Vision失敗: {e}")
-        parsed = {
-            "銘柄": [
-                {"名": "日本225", "方向": "買い", "価格": 49550},
-                {"名": "米国NQ100ミニ", "方向": "売り", "価格": 25100},
-                {"名": "ドイツ40", "方向": "買い", "価格": 23650},
-                {"名": "金スポット", "方向": "買い", "価格": 4146}
-            ],
-            "note": f"Vision失敗, ダミー結果を返しました: {str(e)[:80]}"
+        logger.error(f"Vision error: {e}")
+        return {}
+
+# ------------------------------------------------------------
+# FastAPI
+# ------------------------------------------------------------
+
+app = FastAPI(title="CFD3 FIXED")
+
+# CORS設定を強化（credentials不要、全オリジン許可）
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/final", response_class=HTMLResponse)
+def ui_final(request: Request):
+    """UI用エンドポイント（HTML表示）"""
+    try:
+        from server.analyze_unified_ifd import analyze_unified_ifd
+        result = analyze_unified_ifd()
+        return templates.TemplateResponse(
+            "result.html",
+            {"request":request,
+             "results": result.get("dawn_table", ""),
+             "market_reports": []}
+        )
+    except Exception as e:
+        logger.error(f"/final error: {e}")
+        return HTMLResponse(content=f"<h1>Error</h1><pre>{e}</pre>", status_code=500)
+
+@app.post("/analyze/image")
+async def analyze_image_endpoint(file: UploadFile = File(...)):
+    """画像アップロード＋解析エンドポイント"""
+    try:
+        # ファイルサイズチェック（10MB制限）
+        img = await file.read()
+        if len(img) > 10 * 1024 * 1024:
+            return {"status": "error", "message": "ファイルサイズが10MBを超えています"}
+        
+        # Vision価格抽出
+        prices = vision_extract_prices(img)
+        logger.info(f"[Vision] {prices}")
+
+        # IFD解析
+        from server.analyze_unified_ifd import analyze_unified_ifd
+        result = analyze_unified_ifd(mode="hybrid", gmo_prices=prices)
+        result["vision_prices"] = prices
+        
+        return result
+    
+    except Exception as e:
+        logger.error(f"/analyze/image error: {e}", exc_info=True)
+        return {
+            "status": "error",
+            "message": str(e),
+            "results": [],
+            "dawn_table": "",
+            "day6h_table": ""
         }
 
-    # --- Markdown整形 ---
-    results = []
-    for item in parsed["銘柄"]:
-        name = item["名"]
-        direction = "buy" if "買" in item["方向"] else "sell"
-        entry = float(item["価格"])
-        tp1 = entry * (1.003 if direction == "buy" else 0.997)
-        tp2 = entry * (1.006 if direction == "buy" else 0.994)
-        sl = entry * (0.997 if direction == "buy" else 1.003)
-        markdown = format_markdown_ifd(name, direction, entry, sl, tp1, tp2, "GO")
-        results.append({"symbol": name, "entry": entry, "markdown": markdown})
-
-    return {"status": "ok", "count": len(results), "results": results}
-
-
-# =====================================================================
-# AIスイングIFD(4銘柄)
-# =====================================================================
-@app.post("/analyze/swing_multi")
-def analyze_swing_multi():
-    """
-    CSV + AI + ニュース + 相関 から4銘柄のAIスイングIFDを生成
-    """
-    import sys
-    sys.path.append(str(BASE_DIR.parent))
-    from analyze_swing_multi_core import analyze_swing_multi_core
-    
-    results = analyze_swing_multi_core(["JP225", "NAS100", "GER40", "XAUUSD"])
-    return {"status": "ok", "count": len(results), "results": results}
-
-
-# =====================================================================
-# TradingView Webhook受信
-# =====================================================================
-@app.post("/webhook")
-async def webhook(request: Request):
-    """
-    TradingView から送られるアラートを受信して、方向を保存・反映
-    """
-    data = await request.json()
-    symbol = data.get("symbol")
-    direction = data.get("direction")
-    signal = data.get("signal", "GO")
-
-    if not symbol or not direction:
-        raise HTTPException(status_code=400, detail="symbol/direction missing")
-
-    fp = OUTPUT_DIR / "tv_last_signal.json"
-    try:
-        if fp.exists():
-            old = json.load(open(fp, "r"))
-        else:
-            old = {}
-        old[symbol] = {"direction": direction, "signal": signal, "time": datetime.now().isoformat()}
-        json.dump(old, open(fp, "w"), ensure_ascii=False, indent=2)
-    except Exception as e:
-        logger.error(f"Failed to save TV signal: {e}")
-
-    return {"status": "updated", "symbol": symbol, "direction": direction, "signal": signal}
-
-
-# =====================================================================
-# WebSocket: AIスイングリアルタイム通知
-# =====================================================================
-clients = set()
-
-@app.websocket("/ws/live")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    clients.add(websocket)
-    try:
-        while True:
-            await websocket.receive_text()
-    except Exception:
-        clients.remove(websocket)
-
-
-async def broadcast_update(data: dict):
-    """解析結果をリアルタイムに送信"""
-    remove = []
-    for ws in clients:
-        try:
-            await ws.send_json(data)
-        except Exception:
-            remove.append(ws)
-    for ws in remove:
-        clients.remove(ws)
-
-
-# =====================================================================
-# UIエンドポイント
-# =====================================================================
-@app.get("/ui", response_class=HTMLResponse)
-def get_ui():
-    ui_path = BASE_DIR / "templates" / "ui.html"
-    if ui_path.exists():
-        return FileResponse(ui_path)
-    return HTMLResponse(content="<h1>UI not found</h1>", status_code=404)
-
-
-# =====================================================================
-# 起動メモ
-# =====================================================================
+# 起動
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("webhook_server:app", host="0.0.0.0", port=8080, reload=True)
