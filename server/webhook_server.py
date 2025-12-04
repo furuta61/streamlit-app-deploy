@@ -29,7 +29,10 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("CFD3 FIXED")
 
-# ------------------------------------------------------------
+# Webhook受信ログ（メモリ管理）
+WEBHOOK_LOGS = []
+
+# ---- 既存コード続く ------------------------------------------------------------
 # 前処理（インジ無視・OHLC だけ抽出）
 # ------------------------------------------------------------
 
@@ -463,11 +466,18 @@ async def webhook_endpoint(request: Request):
     """TradingView Webhook エンドポイント"""
     try:
         data = await request.json()
-        logger.info(f"[Webhook] Received: {data}")
-        
         symbol = data.get("symbol", "UNKNOWN")
         direction = data.get("direction", "").upper()
         price = float(data.get("price", 0))
+        time_str = data.get("time", "")
+        
+        # ログエントリ作成
+        log_entry = f"✓ [{time_str}] {symbol} {direction} @ {price}"
+        WEBHOOK_LOGS.insert(0, log_entry)
+        if len(WEBHOOK_LOGS) > 50:
+            WEBHOOK_LOGS.pop()
+        
+        logger.info(f"[Webhook] Received: {symbol} {direction} @ {price}")
         
         return {
             "status": "received",
@@ -479,11 +489,136 @@ async def webhook_endpoint(request: Request):
         }
     except Exception as e:
         logger.error(f"[Webhook] Error: {e}")
+        log_entry = f"✗ Error: {str(e)}"
+        WEBHOOK_LOGS.insert(0, log_entry)
         return {
             "status": "error",
             "message": str(e),
             "timestamp": datetime.now().isoformat()
         }
+
+@app.get("/test", response_class=HTMLResponse)
+async def test_ui_page():
+    """Webhook受信確認用UIページ"""
+    html_body = ""
+    for i, line in enumerate(WEBHOOK_LOGS[:30]):
+        if line.startswith("✓"):
+            html_body += f'<div class="log success">{line}</div>\n'
+        else:
+            html_body += f'<div class="log error">{line}</div>\n'
+    
+    if not WEBHOOK_LOGS:
+        html_body += '<div class="log empty">待機中... TradingView からアラートを送信してください</div>\n'
+    
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>CFD3 Webhook Monitor</title>
+        <meta http-equiv="refresh" content="3">
+        <style>
+            * {{ margin: 0; padding: 0; }}
+            body {{
+                font-family: 'Courier New', monospace;
+                background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+                color: #e0e0e0;
+                padding: 20px;
+                min-height: 100vh;
+            }}
+            .container {{
+                max-width: 900px;
+                margin: 0 auto;
+            }}
+            h1 {{
+                color: #00ff99;
+                margin-bottom: 10px;
+                text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+            }}
+            .status {{
+                background: #222;
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                border-left: 4px solid #00ff99;
+            }}
+            .status p {{
+                margin: 5px 0;
+                color: #aaa;
+            }}
+            .status .value {{
+                color: #00ff99;
+                font-weight: bold;
+            }}
+            .logs-container {{
+                background: #1a1a1a;
+                padding: 15px;
+                border-radius: 8px;
+                border: 1px solid #333;
+                max-height: 600px;
+                overflow-y: auto;
+            }}
+            .log {{
+                padding: 10px;
+                margin: 6px 0;
+                border-radius: 4px;
+                border-left: 3px solid #444;
+                font-size: 13px;
+                word-break: break-all;
+            }}
+            .log.success {{
+                background: #1a3a1a;
+                border-left-color: #00ff99;
+                color: #7fff7f;
+            }}
+            .log.error {{
+                background: #3a1a1a;
+                border-left-color: #ff6b6b;
+                color: #ff9999;
+            }}
+            .log.empty {{
+                background: #2a2a2a;
+                border-left-color: #666;
+                color: #999;
+                text-align: center;
+            }}
+            .footer {{
+                margin-top: 20px;
+                font-size: 12px;
+                color: #666;
+                text-align: center;
+            }}
+            .refresh-info {{
+                color: #666;
+                font-size: 12px;
+                margin-top: 10px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🚀 CFD3 Webhook Monitor</h1>
+            <div class="status">
+                <p>Server Status: <span class="value">🟢 RUNNING</span></p>
+                <p>Endpoint: <span class="value">/webhook</span></p>
+                <p>Received Alerts: <span class="value">{len(WEBHOOK_LOGS)}</span></p>
+                <div class="refresh-info">⏱️ 3秒ごと自動更新中...</div>
+            </div>
+            
+            <h2 style="color: #88ccff; margin: 20px 0 10px 0; font-size: 14px;">📡 Recent Alerts</h2>
+            <div class="logs-container">
+                {html_body}
+            </div>
+            
+            <div class="footer">
+                <p>CFD3 DawnAI v200 | TradingView Alert Monitor</p>
+                <p>最新更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S JST')}</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html)
 
 @app.post("/analyze/image")
 async def analyze_image_endpoint(file: UploadFile = File(...)):
