@@ -1,0 +1,26 @@
+{
+  "日本225": {
+    "vol_limit": 0.010,
+    "votes_strong": 4,
+    "score_go": 0.8,
+    "score_strong": 1.5,
+    "rr_go": 1.6,
+    "rr_strong": 2.1
+  },
+  "米国NQ100ミニ": {
+    "vol_limit": 0.012,
+    "votes_strong": 3,
+    "score_go": 0.8,
+    "score_strong": 1.5,
+    "rr_go": 1.5,
+    "rr_strong": 2.0
+  },
+  "ドイツ40": {
+    "vol_limit": 0.010,
+    "votes_strong": 3
+  },
+  "金スポット": {
+    "vol_limit": 0.015,
+    "votes_strong": 3
+  }
+}

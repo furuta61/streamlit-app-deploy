@@ -1,0 +1,221 @@
+# -*- coding: utf-8 -*-
+"""
+CFD3 Swing Multi Analyzer - Auto-Learning Profit Pro
+Ver.2025.12
+"""
+import os, json, random, re
+import pandas as pd, numpy as np
+from pathlib import Path
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY", ""))
+BASE_DIR = Path(__file__).resolve().parent
+LEARN_FILE = BASE_DIR / "output" / "ai_learning_state.json"
+
+# === 安全なJSON抽出 ===
+def safe_gpt_json(text):
+    """GPT出力からJSONだけを安全抽出"""
+    match = re.search(r'\{.*\}', text, re.DOTALL)
+    if match:
+        return json.loads(match.group(0))
+    raise ValueError("No JSON found in GPT response")
+
+# === ニュース分析 ===
+from news_fetcher import fetch_latest_rss
+
+def analyze_news_sentiment(symbol):
+    """銘柄別に異なるニュースをAIに分析させる"""
+    import random
+    news_items = fetch_latest_rss(limit=10)
+    if not news_items:
+        return {"summary":"ニュース取得なし","positive":40,"neutral":40,"negative":20,"risk_score":0,"bias":"buy"}
+
+    # --- 銘柄関連ニュースをフィルタリング ---
+    keywords = {
+        "JP225": ["日経","日本","円","東京","株"],
+        "NAS100": ["NASDAQ","米国","金利","FRB","ドル"],
+        "GER40": ["ドイツ","EU","ECB","欧州","ユーロ"],
+        "XAUUSD": ["金","ゴールド","インフレ","ドル","FOMC"],
+    }
+    kw = keywords.get(symbol, [])
+    related = [n for n in news_items if any(k in n["title"]+n["summary"] for k in kw)]
+    if not related:
+        related = random.sample(news_items, min(3, len(news_items)))
+
+    titles = [f"- {n['title']}" for n in related]
+    text = "\n".join(titles)
+
+    prompt = f"""
+あなたは市場アナリストです。以下のニュースを分析し、{symbol}市場への影響を評価してください。
+重要語: {', '.join(kw)}。
+
+出力形式(JSON):
+{{
+ "summary": "概要（40字以内）",
+ "positive": 0〜100,
+ "neutral": 0〜100,
+ "negative": 0〜100,
+ "risk_score": 0〜100,
+ "bias": "buy/sell/stop"
+}}
+ニュース一覧:
+{text}
+"""
+
+    try:
+        print(f"[DEBUG] Sending prompt to GPT ({symbol}):", prompt[:200])
+        res = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role":"user","content":prompt}],
+            temperature=0.7,
+            timeout=25
+        )
+        text = res.choices[0].message.content
+        print(f"[DEBUG] GPT raw response ({symbol}):", text[:300])
+        data = safe_gpt_json(text)
+        print(f"[INFO] {symbol} sentiment: {data}")
+        return data
+    except Exception as e:
+        print(f"[ERROR] GPT解析失敗 ({symbol}):", repr(e))
+        import traceback
+        traceback.print_exc()
+        return {"summary":f"解析失敗:{e}","positive":30,"neutral":40,"negative":30,"risk_score":0,"bias":"buy"}
+
+# === テクニカル指標 ===
+def calc_tech_indicators(df):
+    close = df["close"].astype(float)
+    sma25 = close.rolling(25).mean()
+    sma75 = close.rolling(75).mean()
+    macd = close.ewm(span=12).mean() - close.ewm(span=26).mean()
+    signal = macd.ewm(span=9).mean()
+    atr = close.diff().abs().rolling(14).mean().iloc[-1]
+    rsi = 100 - (100 / (1 + (close.diff().clip(lower=0).rolling(14).mean() /
+                             close.diff().clip(upper=0).abs().rolling(14).mean())))
+    trend_score = np.sign((sma25 - sma75).iloc[-15:]).sum()
+    return {
+        "close": float(close.iloc[-1]),
+        "sma25": float(sma25.iloc[-1]),
+        "sma75": float(sma75.iloc[-1]),
+        "macd": float(macd.iloc[-1]),
+        "signal": float(signal.iloc[-1]),
+        "rsi": float(rsi.iloc[-1]),
+        "atr": float(atr),
+        "trend_score": trend_score
+    }
+
+# === 第1層AI：方向判定 ===
+def ai_direction(symbol, tech, news):
+    prompt = f"""
+あなたはプロトレーダーAIです。
+次のデータを基に1〜3日間の方向を判断してください。
+
+終値:{tech['close']}
+SMA25/75:{tech['sma25']}/{tech['sma75']}
+MACD/Signal:{tech['macd']}/{tech['signal']}
+RSI:{tech['rsi']:.1f}
+トレンドスコア:{tech['trend_score']}
+ニュース:{news['summary']} (リスク:{news['risk_score']} バイアス:{news['bias']})
+
+JSON出力:
+{{"direction":"buy or sell or stop","confidence":0〜100,"comment":"理由"}}
+"""
+    try:
+        res = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role":"user","content":prompt}],
+            temperature=0.5,
+        )
+        return json.loads(res.choices[0].message.content)
+    except Exception as e:
+        return {"direction":"stop","confidence":50,"comment":f"AI失敗:{e}"}
+
+# === 第2層AI：信頼度補正＋自己学習 ===
+def adjust_confidence(symbol, ai_eval, tech, news):
+    conf = ai_eval.get("confidence", 60)
+
+    # --- ニュース＆トレンド補正 ---
+    conf += (news["positive"] - news["negative"]) / 25
+    conf += 5 if tech["trend_score"] > 5 else -5 if tech["trend_score"] < -5 else 0
+    if abs(tech["macd"] - tech["signal"]) < 0.2: conf -= 5
+    if news["risk_score"] > 70: conf -= 25
+    if news["bias"] == ai_eval["direction"]: conf += 10
+    conf += np.random.uniform(-3, 3)
+
+    # --- 自己学習補正 ---
+    learn_factor = load_learning(symbol)
+    conf *= learn_factor
+
+    return max(5, min(95, round(conf, 1)))
+
+# === 自己学習 ===
+def load_learning(symbol):
+    """過去の成功率でAI信頼度補正"""
+    if not LEARN_FILE.exists():
+        return 1.0
+    try:
+        data = json.load(open(LEARN_FILE))
+        return data.get(symbol, 1.0)
+    except:
+        return 1.0
+
+def update_learning(symbol, result):
+    """トレード結果で学習値更新"""
+    factor = load_learning(symbol)
+    new_factor = factor * 1.02 if result == "win" else factor * 0.97
+    data = {}
+    if LEARN_FILE.exists():
+        data = json.load(open(LEARN_FILE))
+    data[symbol] = round(min(1.3, max(0.7, new_factor)), 3)
+    json.dump(data, open(LEARN_FILE, "w"), indent=2, ensure_ascii=False)
+
+# === メイン ===
+def analyze_swing_multi_core(symbols):
+    results = []
+    for sym in symbols:
+        try:
+            csv = BASE_DIR / "data" / f"FOREXCOM_{sym}_240.csv"
+            if not csv.exists(): csv = BASE_DIR.parent / "data" / f"FOREXCOM_{sym}_240.csv"
+            df = pd.read_csv(csv)
+
+            tech = calc_tech_indicators(df)
+            news = analyze_news_sentiment(sym)
+            ai_eval = ai_direction(sym, tech, news)
+            conf = adjust_confidence(sym, ai_eval, tech, news)
+
+            # STOP判定
+            if ai_eval["direction"] == "stop" or news["risk_score"] >= 70:
+                decision = "STOP"
+                rec = "⛔️ STOP推奨"
+            elif conf > 80:
+                decision = "STRONG_GO"
+                rec = "★★★★★"
+            elif conf > 60:
+                decision = "GO"
+                rec = "★★★☆☆"
+            else:
+                decision = "HOLD"
+                rec = "★☆☆☆☆"
+
+            entry = tech["close"]
+            atr = tech["atr"]
+            rr = 1.5 if conf > 75 else 1.2
+            tp = entry + atr*rr if ai_eval["direction"]=="buy" else entry - atr*rr
+            sl = entry - atr if ai_eval["direction"]=="buy" else entry + atr
+
+            md = f"""
+| 銘柄 | 方向 | 判定 | 信頼度 | Entry | TP | SL | ニュース | トレンド | 推奨度 |
+|------|------|------|--------|--------|--------|--------|-----------|----------|----------|
+| {sym} | {'買い' if ai_eval['direction']=='buy' else '売り' if ai_eval['direction']=='sell' else '停止'} | {decision} | {conf} | {entry:.1f} | {tp:.1f} | {sl:.1f} | {news['bias']} | {tech['trend_score']} | {rec} |
+
+🧠 {ai_eval['comment']}
+📰 {news['summary']} (リスク:{news['risk_score']}, バイアス:{news['bias']})
+"""
+            results.append({
+                "symbol": sym,
+                "confidence": conf,
+                "decision": decision,
+                "markdown": md
+            })
+        except Exception as e:
+            results.append({"symbol": sym, "error": str(e)})
+    return {"status":"ok","results":results}
