@@ -21,6 +21,12 @@ from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 
+# AIニュース解析モジュールのインポート
+try:
+    from analyze_unified_ifd import analyze_news_ai
+except ImportError:
+    analyze_news_ai = None
+
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY", ""))
 
 DATA_DIR = BASE_DIR / "data"
@@ -464,37 +470,60 @@ def test_endpoint():
 
 @app.post("/webhook")
 async def webhook_endpoint(request: Request):
-    """TradingView Webhook エンドポイント"""
+    """TradingView Webhook エンドポイント + AIニュース解析 + IFD自動生成"""
     try:
         data = await request.json()
         symbol = data.get("symbol", "UNKNOWN")
         direction = data.get("direction", "").upper()
+        signal = data.get("signal", "GO")
         price = float(data.get("price", 0))
         time_str = data.get("time", "")
+        news_text = data.get("news", "")
         
-        # ログエントリ作成
+        # ステップ1: Webhook受信ログ
         log_entry = f"[Webhook] {time_str} - {symbol} ({direction}) @ {price}"
         WEBHOOK_LOGS.insert(0, log_entry)
         if len(WEBHOOK_LOGS) > 50:
             WEBHOOK_LOGS.pop()
+        logger.info(f"[Webhook] Received signal {signal} for {symbol}")
+        
+        # ステップ2: AIニュース解析
+        ai_result = None
+        if analyze_news_ai and news_text:
+            try:
+                ai_result = analyze_news_ai(symbol, news_text)
+                logger.info(f"[AI] News analyzed for {symbol} — Direction: {ai_result.get('direction')} / Impact: {ai_result.get('impact_score')} / Duration: {ai_result.get('duration')}")
+            except Exception as e:
+                logger.warning(f"[AI] Analysis failed: {e}")
+        
+        # ステップ3: IFD自動生成（簡易版）
+        if price > 0:
+            atr = price * 0.01  # 簡易ATR
+            entry = price
+            sl = price - atr
+            tp1 = price + 2 * atr
+            tp2 = price + 3 * atr
+            logger.info(f"[AI] Generated IFD plan → Entry: {entry:.2f} / TP1: {tp1:.2f} / SL: {sl:.2f}")
         
         # 最新シグナル情報更新
         LATEST_SIGNALS[symbol] = {
             "symbol": symbol,
-            "signal": direction,
+            "signal": signal,
+            "direction": direction,
             "price": price,
             "time": time_str,
-            "updated": datetime.now().strftime("%H:%M:%S")
+            "updated": datetime.now().strftime("%H:%M:%S"),
+            "ai_result": ai_result
         }
-        
-        logger.info(f"[Webhook] Received: {symbol} {direction} @ {price}")
         
         return {
             "status": "received",
             "symbol": symbol,
             "direction": direction,
+            "signal": signal,
             "price": price,
             "message": f"Alert for {symbol} received",
+            "ai_analysis": ai_result,
             "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
