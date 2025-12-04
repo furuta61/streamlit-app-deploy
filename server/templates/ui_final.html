@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>🧠 CFD3 AI Trade System Ver.116</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<style>
+body {
+  background: #0b0f17;
+  color: #00ffcc;
+  font-family: "Consolas", "Courier New", monospace;
+  text-align: center;
+  padding: 20px;
+}
+h1 {
+  color: #00eaff;
+  text-shadow: 0 0 10px #00eaff;
+}
+button {
+  background: #00eaff;
+  color: #00151a;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+button:hover {
+  background: #00c4ff;
+}
+#spinner {
+  display: none;
+  margin: 20px;
+  font-size: 22px;
+  color: #00eaff;
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.result {
+  background: #0d1824;
+  color: #00ffcc;
+  border: 1px solid #00eaff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 90%;
+  margin: 0 auto;
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+</style>
+
+</head>
+<body>
+
+<h1>🧠 CFD3 AI Trade System<br>Ver.116 Final</h1>
+
+<h3>📌 手動実行</h3>
+<input type="file" id="imgFile" accept="image/*" 
+       style="background:#001; color:#00d4ff; padding:12px; border:2px solid #00d4ff; border-radius:8px;" />
+<br>
+<button onclick="analyzeUnified()">📸 スクショ付きAI統合解析</button>
+<button onclick="analyzeUnified()">⚡ AI統合解析のみ</button>
+
+<div id="spinner">⏳ GPT-5 が解析中…</div>
+
+<h2>📊 統合分析結果</h2>
+<div id="result" class="result">
+  解析を実行するとここに結果が表示されます。
+</div>
+
+<script>
+async function analyzeUnified() {
+  const file = document.getElementById("imgFile").files[0];
+  const spinner = document.getElementById("spinner");
+  const result = document.getElementById("result");
+  
+  spinner.style.display = "block";
+  result.innerHTML = '<div style="text-align:center; color:#00d4ff;">解析中...</div>';
+
+  try {
+    let res, data;
+
+    // 🚀 画像がある → 強制的に /analyze/image のみに送る
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      res = await fetch("/analyze/image", {
+        method: "POST",
+        body: formData
+      });
+    } else {
+      // 🚀 画像なし → /analyze/unified
+      res = await fetch("/analyze/unified");
+    }
+
+    data = await res.json();
+    spinner.style.display = "none";
+    displayResults(data);
+
+  } catch (error) {
+    spinner.style.display = "none";
+    result.innerHTML = `
+      <div style="background:rgba(255,0,0,0.1); border:2px solid red; padding:20px;">
+        <h3>❌ エラー</h3>
+        ${error.message}
+      </div>`;
+  }
+}
+
+function displayResults(data) {
+  const out = document.getElementById("result");
+
+  if (!data || data.status === "error") {
+    out.innerHTML = `<b style="color:#ff6666;">❌ エラー:</b> ${data.message || "Unknown"}`;
+    return;
+  }
+
+  // Dawn形式テーブルがあれば優先表示
+  if (data.dawn_table) {
+    out.innerHTML = `<pre style="background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:8px;overflow-x:auto;">${data.dawn_table}</pre>`;
+    return;
+  }
+
+  if (!data.results || data.results.length === 0) {
+    out.innerHTML = `<b style="color:#ffaa00;">⚠ 結果なし</b>`;
+    return;
+  }
+
+  let md = `# 🔍 解析結果（${data.results.length}銘柄）\n\n`;
+  data.results.forEach(r => {
+    md += (r.markdown || "") + "\n---\n";
+  });
+
+  out.innerHTML = marked.parse(md);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🧠 CFD3 AI Trade System Ver.114</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+body {
+  background:#111;
+  color:#0f0;
+  font-family:monospace;
+  text-align:center;
+  margin: 20px;
+}
+h1 {
+  color:#00d4ff;
+  text-shadow: 0 0 10px #00d4ff;
+}
+p {
+  color: #00ff88;
+  font-size: 16px;
+}
+button {
+  background:#00d4ff;
+  color:#000;
+  padding:10px 24px;
+  border:none;
+  border-radius:8px;
+  margin:10px;
+  font-weight:bold;
+  cursor:pointer;
+  font-size: 14px;
+}
+button:hover {
+  background:#00b4ff;
+  transform: scale(1.05);
+}
+.result {
+  background:#000;
+  color:#0f0;
+  padding:15px;
+  border-radius:10px;
+  width:90%;
+  margin:20px auto;
+  text-align:left;
+  border: 2px solid #00d4ff;
+  min-height: 100px;
+  overflow-x: auto;
+}
+#spinner {
+  display:none;
+  font-size: 18px;
+  color: #00d4ff;
+  margin: 15px;
+}
+table {
+  border-collapse: collapse;
+  margin: 10px auto;
+  width: 100%;
+  background: #1a1a1a;
+}
+th, td {
+  border: 1px solid #00d4ff;
+  padding: 8px 12px;
+  text-align: left;
+}
+th {
+  background-color: #004050;
+  color: #00ffff;
+}
+td {
+  color: #00ff00;
+}
+h3 {
+  color: #00d4ff;
+  margin-top: 20px;
+}
+hr {
+  border: 1px solid #00d4ff;
+  margin: 25px 0;
+}
+input[type="file"] {
+  background: #222;
+  color: #00ff00;
+  padding: 8px;
+  border: 1px solid #00d4ff;
+  border-radius: 5px;
+  margin: 10px;
+}
+</style>
+</head>
+<body>
+<h1>🧠 CFD3 AI Trade System Ver.114</h1>
+<p>📸 統合分析（30分足＋4時間足＋ニュース感情）</p>
+
+<div style="margin: 20px;">
+  <input type="file" id="imgFile" accept="image/*" />
+  <button onclick="analyzeWithImage()">📸 スクショ付きAI統合解析</button>
+  <button onclick="analyzeUnified()">⚡ AI統合解析のみ実行</button>
+</div>
+
+<div id="spinner">🔄 解析中...</div>
+
+<h2 style="color:#00ff88; text-align:left; padding-left:5%;">📊 統合分析結果</h2>
+<div id="result" class="result">結果はここに表示されます</div>
+
+<script>
+async function analyzeWithImage() {
+  const file = document.getElementById("imgFile").files[0];
+  if (!file) {
+    alert("スクショを選択してください");
+    return;
+  }
+  
+  const formData = new FormData();
+  formData.append("file", file);
+  
+  document.getElementById("spinner").style.display = "block";
+  document.getElementById("result").innerHTML = "解析中...";
+  
+  try {
+    const res = await fetch("/analyze/image", { method: "POST", body: formData });
+    const data = await res.json();
+    document.getElementById("spinner").style.display = "none";
+    
+    let output = "";
+    if (data.results && data.results.length > 0) {
+      data.results.forEach(r => output += (r.markdown || "") + "\n---\n");
+      document.getElementById("result").innerHTML = marked.parse(output);
+    } else {
+      document.getElementById("result").innerHTML = "⚠️ 結果が取得できませんでした";
+    }
+  } catch (error) {
+    document.getElementById("spinner").style.display = "none";
+    document.getElementById("result").innerHTML = "❌ エラー: " + error.message;
+  }
+}
+
+async function analyzeUnified() {
+  document.getElementById("spinner").style.display = "block";
+  document.getElementById("result").innerHTML = "解析中...";
+  
+  try {
+    const res = await fetch("/analyze/unified");
+    const data = await res.json();
+    document.getElementById("spinner").style.display = "none";
+    
+    let output = "";
+    if (data.results && data.results.length > 0) {
+      data.results.forEach(r => output += (r.markdown || "") + "\n---\n");
+      document.getElementById("result").innerHTML = marked.parse(output);
+    } else {
+      document.getElementById("result").innerHTML = "⚠️ 結果が取得できませんでした";
+    }
+  } catch (error) {
+    document.getElementById("spinner").style.display = "none";
+    document.getElementById("result").innerHTML = "❌ エラー: " + error.message;
+  }
+}
+</script>
+</body>
+</html>
