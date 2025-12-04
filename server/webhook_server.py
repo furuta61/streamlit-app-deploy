@@ -29,10 +29,11 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("CFD3 FIXED")
 
-# Webhook受信ログ（メモリ管理）
+# Webhook受信ログ & 銘柄別状態管理
 WEBHOOK_LOGS = []
+LATEST_SIGNALS = {}  # 銘柄別の最新状態を保持
 
-# ---- 既存コード続く ------------------------------------------------------------
+# ------------------------------------------------------------
 # 前処理（インジ無視・OHLC だけ抽出）
 # ------------------------------------------------------------
 
@@ -472,10 +473,19 @@ async def webhook_endpoint(request: Request):
         time_str = data.get("time", "")
         
         # ログエントリ作成
-        log_entry = f"✓ [{time_str}] {symbol} {direction} @ {price}"
+        log_entry = f"[Webhook] {time_str} - {symbol} ({direction}) @ {price}"
         WEBHOOK_LOGS.insert(0, log_entry)
         if len(WEBHOOK_LOGS) > 50:
             WEBHOOK_LOGS.pop()
+        
+        # 最新シグナル情報更新
+        LATEST_SIGNALS[symbol] = {
+            "symbol": symbol,
+            "signal": direction,
+            "price": price,
+            "time": time_str,
+            "updated": datetime.now().strftime("%H:%M:%S")
+        }
         
         logger.info(f"[Webhook] Received: {symbol} {direction} @ {price}")
         
@@ -489,8 +499,6 @@ async def webhook_endpoint(request: Request):
         }
     except Exception as e:
         logger.error(f"[Webhook] Error: {e}")
-        log_entry = f"✗ Error: {str(e)}"
-        WEBHOOK_LOGS.insert(0, log_entry)
         return {
             "status": "error",
             "message": str(e),
@@ -499,120 +507,208 @@ async def webhook_endpoint(request: Request):
 
 @app.get("/test", response_class=HTMLResponse)
 async def test_ui_page():
-    """Webhook受信確認用UIページ"""
-    html_body = ""
-    for i, line in enumerate(WEBHOOK_LOGS[:30]):
-        if line.startswith("✓"):
-            html_body += f'<div class="log success">{line}</div>\n'
-        else:
-            html_body += f'<div class="log error">{line}</div>\n'
+    """Webhook受信確認UI（銘柄別最新ステータス＋履歴）"""
     
-    if not WEBHOOK_LOGS:
-        html_body += '<div class="log empty">待機中... TradingView からアラートを送信してください</div>\n'
+    # テーブルボディ生成
+    table_body = ""
+    if LATEST_SIGNALS:
+        for sym in sorted(LATEST_SIGNALS.keys()):
+            info = LATEST_SIGNALS[sym]
+            signal = info['signal']
+            # Signal に応じて色分け
+            if signal == "STRONG_GO":
+                signal_class = "signal-strong"
+            elif signal == "GO":
+                signal_class = "signal-go"
+            else:
+                signal_class = "signal-wait"
+            
+            table_body += f"""
+            <tr>
+                <td><strong>{sym}</strong></td>
+                <td class="{signal_class}">{signal}</td>
+                <td>{info['price']}</td>
+                <td class="timestamp">{info['time']}</td>
+                <td class="timestamp">{info['updated']}</td>
+            </tr>
+            """
+    else:
+        table_body = "<tr><td colspan='5' style='color: #666;'>データなし - TradingView からアラートを送信してください</td></tr>"
+    
+    # ログボディ生成
+    log_body = ""
+    if WEBHOOK_LOGS:
+        for line in WEBHOOK_LOGS[:30]:
+            if "Error" in line:
+                log_body += f'<div class="log error">{line}</div>\n'
+            else:
+                log_body += f'<div class="log">{line}</div>\n'
+    else:
+        log_body = '<div class="log" style="color: #666; text-align: center;">待機中...</div>\n'
     
     html = f"""
     <!DOCTYPE html>
     <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>CFD3 Webhook Monitor</title>
-        <meta http-equiv="refresh" content="3">
+        <meta http-equiv="refresh" content="5">
         <style>
-            * {{ margin: 0; padding: 0; }}
+            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
             body {{
-                font-family: 'Courier New', monospace;
-                background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
-                color: #e0e0e0;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                background: #0d1117;
+                color: #e6edf3;
                 padding: 20px;
                 min-height: 100vh;
             }}
             .container {{
-                max-width: 900px;
+                max-width: 1200px;
                 margin: 0 auto;
             }}
             h1 {{
-                color: #00ff99;
-                margin-bottom: 10px;
-                text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+                color: #58a6ff;
+                margin-bottom: 8px;
+                font-size: 28px;
             }}
-            .status {{
-                background: #222;
-                padding: 15px;
-                border-radius: 8px;
+            p {{
+                color: #8b949e;
                 margin-bottom: 20px;
-                border-left: 4px solid #00ff99;
             }}
-            .status p {{
-                margin: 5px 0;
-                color: #aaa;
+            hr {{
+                border: none;
+                border-top: 1px solid #30363d;
+                margin: 20px 0;
             }}
-            .status .value {{
+            h2 {{
+                color: #79c0ff;
+                font-size: 16px;
+                margin: 30px 0 15px 0;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                background: #0d1117;
+                border: 1px solid #30363d;
+                border-radius: 6px;
+                overflow: hidden;
+            }}
+            th {{
+                background-color: #161b22;
+                color: #58a6ff;
+                padding: 12px;
+                text-align: left;
+                font-weight: 600;
+                border-bottom: 2px solid #30363d;
+            }}
+            td {{
+                padding: 12px;
+                border-bottom: 1px solid #21262d;
+            }}
+            tr:last-child td {{
+                border-bottom: none;
+            }}
+            tr:hover {{
+                background-color: #161b22;
+            }}
+            .timestamp {{
+                color: #8b949e;
+                font-size: 12px;
+            }}
+            .signal-strong {{
                 color: #00ff99;
                 font-weight: bold;
+                background: rgba(0, 255, 153, 0.1);
+                padding: 4px 8px;
+                border-radius: 4px;
+            }}
+            .signal-go {{
+                color: #58a6ff;
+                font-weight: bold;
+                background: rgba(88, 166, 255, 0.1);
+                padding: 4px 8px;
+                border-radius: 4px;
+            }}
+            .signal-wait {{
+                color: #ffcc00;
+                font-weight: bold;
+                background: rgba(255, 204, 0, 0.1);
+                padding: 4px 8px;
+                border-radius: 4px;
             }}
             .logs-container {{
-                background: #1a1a1a;
+                background: #161b22;
+                border: 1px solid #30363d;
+                border-radius: 6px;
                 padding: 15px;
-                border-radius: 8px;
-                border: 1px solid #333;
-                max-height: 600px;
+                max-height: 500px;
                 overflow-y: auto;
             }}
             .log {{
-                padding: 10px;
-                margin: 6px 0;
-                border-radius: 4px;
-                border-left: 3px solid #444;
-                font-size: 13px;
-                word-break: break-all;
-            }}
-            .log.success {{
-                background: #1a3a1a;
-                border-left-color: #00ff99;
-                color: #7fff7f;
+                padding: 8px;
+                margin: 4px 0;
+                font-family: 'Courier New', monospace;
+                font-size: 12px;
+                color: #8b949e;
+                border-left: 3px solid #30363d;
+                padding-left: 12px;
             }}
             .log.error {{
-                background: #3a1a1a;
-                border-left-color: #ff6b6b;
-                color: #ff9999;
-            }}
-            .log.empty {{
-                background: #2a2a2a;
-                border-left-color: #666;
-                color: #999;
-                text-align: center;
+                color: #f85149;
+                border-left-color: #f85149;
             }}
             .footer {{
-                margin-top: 20px;
+                margin-top: 30px;
+                padding-top: 20px;
+                border-top: 1px solid #30363d;
                 font-size: 12px;
-                color: #666;
+                color: #8b949e;
                 text-align: center;
             }}
-            .refresh-info {{
-                color: #666;
+            .status-badge {{
+                display: inline-block;
+                padding: 4px 8px;
+                background: #1f6feb;
+                border-radius: 20px;
                 font-size: 12px;
-                margin-top: 10px;
+                color: #fff;
             }}
         </style>
     </head>
     <body>
         <div class="container">
             <h1>🚀 CFD3 Webhook Monitor</h1>
-            <div class="status">
-                <p>Server Status: <span class="value">🟢 RUNNING</span></p>
-                <p>Endpoint: <span class="value">/webhook</span></p>
-                <p>Received Alerts: <span class="value">{len(WEBHOOK_LOGS)}</span></p>
-                <div class="refresh-info">⏱️ 3秒ごと自動更新中...</div>
-            </div>
+            <p>TradingView リアルタイム受信状態（5秒ごと自動更新）</p>
+            <hr>
             
-            <h2 style="color: #88ccff; margin: 20px 0 10px 0; font-size: 14px;">📡 Recent Alerts</h2>
+            <h2>📊 最新シグナル一覧</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>銘柄</th>
+                        <th>Signal</th>
+                        <th>価格</th>
+                        <th>受信時刻</th>
+                        <th>更新</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {table_body}
+                </tbody>
+            </table>
+            
+            <h2>🕓 受信履歴（最新30件）</h2>
             <div class="logs-container">
-                {html_body}
+                {log_body}
             </div>
             
             <div class="footer">
-                <p>CFD3 DawnAI v200 | TradingView Alert Monitor</p>
-                <p>最新更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S JST')}</p>
+                <p><span class="status-badge">🟢 RUNNING</span></p>
+                <p>CFD3 DawnAI v200 | TradingView Webhook Monitor</p>
+                <p>最終更新: {datetime.now().strftime('%Y-%m-%d %H:%M:%S JST')}</p>
             </div>
         </div>
     </body>
