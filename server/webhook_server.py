@@ -746,6 +746,244 @@ async def analyze_image_endpoint(file: UploadFile = File(...)):
             "day6h_table": ""
         }
 
+@app.get("/ifd", response_class=HTMLResponse)
+async def ifd_generate():
+    """
+    AIによるIFD生成（Webhook信号ベース）
+    最新の受信シグナルをもとにAI判定・IFD表を生成
+    """
+    if not LATEST_SIGNALS:
+        return HTMLResponse("""
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>AI IFD Generator</title>
+            <style>
+                body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; padding: 20px; }
+                .container { max-width: 900px; margin: 0 auto; }
+                h2 { color: #f85149; }
+                a { color: #58a6ff; text-decoration: none; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h2>🚫 データなし</h2>
+                <p>Webhook信号を受信してから再実行してください。</p>
+                <p><a href='/test'>← Webhook Monitor に戻る</a></p>
+            </div>
+        </body>
+        </html>
+        """)
+
+    # IFD データ生成
+    ifd_rows = []
+    for sym, info in LATEST_SIGNALS.items():
+        signal = info['signal']
+        price = float(info['price'])
+        
+        # ATR相当（簡易）
+        atr = price * 0.002
+        
+        # 方向を Signal から判定
+        if signal in ["BUY", "GO", "STRONG_GO"]:
+            direction = "BUY"
+            direction_class = "buy"
+            entry = price
+            sl = price - atr
+            tp1 = price + atr * 2
+            tp2 = price + atr * 4
+        else:
+            direction = "SELL"
+            direction_class = "sell"
+            entry = price
+            sl = price + atr
+            tp1 = price - atr * 2
+            tp2 = price - atr * 4
+        
+        # 推奨度（Signal に基づく）
+        if signal == "STRONG_GO":
+            stars = "★★★★★"
+            judgment = "強気"
+        elif signal == "GO":
+            stars = "★★★★☆"
+            judgment = "買い"
+        else:
+            stars = "★★★☆☆"
+            judgment = "保留"
+        
+        ifd_rows.append({
+            "symbol": sym,
+            "direction": direction,
+            "direction_class": direction_class,
+            "entry": entry,
+            "sl": sl,
+            "tp1": tp1,
+            "tp2": tp2,
+            "stars": stars,
+            "judgment": judgment,
+            "signal": signal
+        })
+    
+    # テーブルHTML生成
+    table_html = ""
+    for row in ifd_rows:
+        table_html += f"""
+        <tr>
+            <td><strong>{row['symbol']}</strong></td>
+            <td class="{row['direction_class']}">{row['direction']}</td>
+            <td>{row['entry']:.2f}</td>
+            <td>{row['sl']:.2f}</td>
+            <td>{row['tp1']:.2f}</td>
+            <td>{row['tp2']:.2f}</td>
+            <td class="star">{row['stars']}</td>
+            <td>{row['judgment']}</td>
+            <td><span class="badge">{row['signal']}</span></td>
+        </tr>
+        """
+    
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>AI IFD Generator</title>
+        <style>
+            * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                background: #0d1117;
+                color: #e6edf3;
+                padding: 20px;
+                min-height: 100vh;
+            }}
+            .container {{
+                max-width: 1200px;
+                margin: 0 auto;
+            }}
+            h1 {{
+                color: #58a6ff;
+                margin-bottom: 8px;
+                font-size: 28px;
+            }}
+            p {{
+                color: #8b949e;
+                margin-bottom: 20px;
+            }}
+            hr {{
+                border: none;
+                border-top: 1px solid #30363d;
+                margin: 20px 0;
+            }}
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                background: #0d1117;
+                border: 1px solid #30363d;
+                border-radius: 6px;
+                overflow: hidden;
+            }}
+            th {{
+                background-color: #161b22;
+                color: #58a6ff;
+                padding: 12px;
+                text-align: left;
+                font-weight: 600;
+                border-bottom: 2px solid #30363d;
+            }}
+            td {{
+                padding: 12px;
+                border-bottom: 1px solid #21262d;
+                font-size: 14px;
+            }}
+            tr:last-child td {{
+                border-bottom: none;
+            }}
+            tr:hover {{
+                background-color: #161b22;
+            }}
+            .buy {{
+                color: #00ff99;
+                font-weight: bold;
+            }}
+            .sell {{
+                color: #f85149;
+                font-weight: bold;
+            }}
+            .stop {{
+                color: #ffcc00;
+                font-weight: bold;
+            }}
+            .star {{
+                color: #ffd700;
+                font-weight: bold;
+                font-size: 16px;
+            }}
+            .badge {{
+                display: inline-block;
+                padding: 4px 8px;
+                background: #1f6feb;
+                border-radius: 12px;
+                font-size: 11px;
+                color: #fff;
+            }}
+            .footer {{
+                margin-top: 30px;
+                padding-top: 20px;
+                border-top: 1px solid #30363d;
+                font-size: 12px;
+                color: #8b949e;
+                text-align: center;
+            }}
+            a {{
+                color: #58a6ff;
+                text-decoration: none;
+                margin: 0 10px;
+            }}
+            a:hover {{
+                text-decoration: underline;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>🤖 AI IFD Generator</h1>
+            <p>最新のWebhook信号をもとにAI判定・IFD生成を行いました。</p>
+            <hr>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>銘柄</th>
+                        <th>方向</th>
+                        <th>Entry</th>
+                        <th>SL</th>
+                        <th>TP1</th>
+                        <th>TP2</th>
+                        <th>推奨度</th>
+                        <th>判定</th>
+                        <th>Signal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {table_html}
+                </tbody>
+            </table>
+            
+            <div class="footer">
+                <p>生成日時: {datetime.now().strftime('%Y-%m-%d %H:%M:%S JST')}</p>
+                <p>
+                    <a href='/test'>← Webhook Monitor</a>
+                    <a href='/ifd'>🔄 再生成</a>
+                </p>
+                <p>CFD3 DawnAI v200 | AI IFD Generator</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html)
+
 # 起動
 if __name__ == "__main__":
     import uvicorn
