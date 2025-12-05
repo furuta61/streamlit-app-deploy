@@ -1,28 +1,6 @@
+# Minimal dependencies for webhook_server.py
 fastapi
-python-multipart
 uvicorn[standard]
 openai==1.12.0
-httpx==0.27.2
-
-python-dotenv
-requests
-pandas
-numpy==1.26.4
-beautifulsoup4
-feedparser
-jinja2
-pydantic
-lxml
-
-# メール通知機能
-fastapi-mail==1.4.1
-aiosmtplib
-
-# training data generation
-yfinance
-
-# ML training
-scikit-learn
-lightgbm
-joblib
+python-multipart
 
