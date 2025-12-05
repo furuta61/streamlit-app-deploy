@@ -1,1 +1,1 @@
-web: cd server && uvicorn webhook_server:app --host 0.0.0.0 --port $PORT
+web: uvicorn server.webhook_server:app --host 0.0.0.0 --port $PORT
