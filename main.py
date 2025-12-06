@@ -25,3 +25,8 @@ async def webhook(request: Request):
     logger.info(f"[Webhook] Received {signal} for {symbol} at {price}")
     return {"status": "ok", "symbol": symbol, "signal": signal, "price": price}
 
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=10000)
+
