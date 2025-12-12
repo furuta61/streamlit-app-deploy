@@ -36,11 +36,6 @@ class QuizRequest(BaseModel):
     unit: str
     tone: str = "standard"
 
-@app.get("/api/health")
-def health():
-    return {"ok": True}
-
-@app.post("/api/quiz")
 def _normalize_unit(unit: str) -> str:
     # 単元キー正規化: 「文法20」「G20」「mcq_G20」などから数字部分を抽出
     import re
@@ -48,6 +43,12 @@ def _normalize_unit(unit: str) -> str:
     return m.group(1) if m else unit
 
 
+@app.get("/api/health")
+def health():
+    return {"ok": True}
+
+
+@app.post("/api/quiz")
 def quiz(req: QuizRequest):
     u = _normalize_unit(req.unit)
     return {

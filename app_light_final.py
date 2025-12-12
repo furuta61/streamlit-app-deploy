@@ -14,7 +14,7 @@ st.caption("💡 現在：軽量モード（RAG・AI検索なし）で起動中"
 st.sidebar.header("⚙️ 設定")
 
 # ✅ デフォルトは Render の URL にする
-DEFAULT_API_BASE = "https://korean-grammar-api.onrender.com"
+DEFAULT_API_BASE = "https://korean-grammar-api-2.onrender.com"
 
 # ✅ セッションに API ベースURLがなければ、デフォルト値を入れる
 if "api_base" not in st.session_state:
