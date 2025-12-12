@@ -25,12 +25,19 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:8501",
         "https://korean-grammar-api.onrender.com",
+        "https://korean-grammar-api-2.onrender.com",
         "*",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/")
+def root():
+    """Simple landing to avoid 404 on root."""
+    return {"ok": True, "message": "Use /api/health or /docs"}
 
 class QuizRequest(BaseModel):
     unit: str
