@@ -1,17 +1,15 @@
 services:
   - type: web
-    name: cfd3-autosystem
+    name: korean-grammar-api
     env: python
+    region: singapore
     plan: free
-    region: oregon
-    branch: main
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
     startCommand: |
-      cd server && uvicorn webhook_server:app --host 0.0.0.0 --port $PORT
+      python -m uvicorn quiz_pack.backend.main:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true
     envVars:
-      - key: OPENAI_API_KEY
-        sync: false
       - key: PYTHON_VERSION
-        value: 3.11.7
+        value: 3.11

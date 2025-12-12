@@ -1,0 +1,33 @@
+ # --- Korean Grammar Quiz App requirements ---
+ # Web framework
+ fastapi==0.115.0
+ uvicorn[standard]==0.30.1
+
+ # Frontend
+ streamlit==1.39.0
+ requests==2.32.3
+
+ # NLP / Korean text processing
+ python-docx==1.1.2
+ pydantic==2.8.2
+ regex==2024.5.15
+
+ # Optional: sentence-transformers (将来の意訳・類似度用)
+ sentence-transformers==3.1.1
+
+# HTTP client required for FastAPI TestClient
+httpx==0.27.2
+
+ # Testing
+ pytest==8.3.3
+
+ # Typing / linting (optional)
+ mypy==1.11.1
+ ruff==0.5.7
+
+ # --- Optional Feature Dependencies (not installed by default) ---
+ # 距離ベース部分一致採点: python-Levenshtein
+ # 高度韓国語形態素解析: konlpy JPype1
+ # ベクトル類似度 / 意訳評価: sentence-transformers (上で指定)
+uvicorn==0.30.0
+pydantic==2.8.2
