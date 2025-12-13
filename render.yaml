@@ -13,3 +13,18 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11
+
+  - type: web
+    name: korean-grammar-frontend
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: |
+      streamlit run quiz_pack/app.py --server.port $PORT --server.headless true
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
