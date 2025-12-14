@@ -70,3 +70,7 @@ symbol_summary.json
 
 # macOS
 .DS_Store
+
+# Streamlit PID files
+.streamlit_pid
+.streamlit_*.pid
