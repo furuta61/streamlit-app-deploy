@@ -23,7 +23,7 @@ services:
       pip install --upgrade pip
       pip install -r requirements.txt
     startCommand: |
-      streamlit run quiz_pack/app.py --server.port $PORT --server.headless true
+      streamlit run quiz_pack/app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true
     autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
