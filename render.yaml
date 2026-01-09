@@ -1,20 +1,5 @@
 services:
   - type: web
-    name: korean-grammar-api
-    env: python
-    region: singapore
-    plan: free
-    buildCommand: |
-      pip install --upgrade pip
-      pip install -r requirements.txt
-    startCommand: |
-      python -m uvicorn quiz_pack.backend.main:app --host 0.0.0.0 --port $PORT
-    autoDeploy: true
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.11
-
-  - type: web
     name: korean-grammar-frontend
     env: python
     region: singapore
@@ -23,7 +8,7 @@ services:
       pip install --upgrade pip
       pip install -r requirements.txt
     startCommand: |
-      streamlit run quiz_pack/app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true
+      streamlit run app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true
     autoDeploy: true
     envVars:
       - key: PYTHON_VERSION
