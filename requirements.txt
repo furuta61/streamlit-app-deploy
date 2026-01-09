@@ -1,5 +1,1 @@
-fastapi
-uvicorn
-python-docx
 streamlit
-requests
