@@ -1507,19 +1507,13 @@ tab_exp, tab_quiz = st.tabs(["📖 解説編", "📝 問題編"])
 
 # ---- 解説タブ ----------------------------
 with tab_exp:
-    mode = st.radio(
-        "表示モード",
-        ["📘 スタンダード", "🎓 発展編（専門）", "🔶 大阪弁"],
-        horizontal=True,
-        label_visibility="collapsed",
-    )
-    st.divider()
-    if mode == "📘 スタンダード":
-        st.info(data["exp_std"])
-    elif mode == "🎓 発展編（専門）":
-        st.success(data.get("exp_adv", "専門解説準備中"))
-    else:
-        st.warning(data.get("exp_osa", "大阪弁解説準備中"))
+    st.info(data["exp_std"])
+
+    with st.expander("🎓 発展解説（専門・言語学的視点）"):
+        st.write(data.get("exp_adv", "専門解説準備中"))
+
+    with st.expander("🔶 大阪弁でざっくり理解"):
+        st.write(data.get("exp_osa", "大阪弁解説準備中"))
 
 # ---- 問題タブ ----------------------------
 with tab_quiz:
