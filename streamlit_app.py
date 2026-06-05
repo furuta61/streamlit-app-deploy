@@ -316,45 +316,64 @@ def generate_translation_quiz(examples, seed):
     return questions
 
 
-# ─── クイズ生成（받침カウント — 翻訳クイズが足りない場合のフォールバック）
+# ─── 穴埋め問題生成（学習目標の文法パターンを空欄に） ────────────
 
-def count_batchim(texts, batchim_idx):
-    count = 0
-    for text in texts:
-        for c in text:
-            if "가" <= c <= "힣":
-                if (ord(c) - 0xAC00) % 28 == batchim_idx:
-                    count += 1
-    return count
+def extract_key_patterns(text):
+    """テキストから韓国語の文法形式を抽出（2文字以上）"""
+    return [t for t in re.findall(r"[가-힣]+", text) if len(t) >= 2]
 
 
-def generate_counting_quiz(korean_texts, seed):
-    if not korean_texts:
+def generate_cloze_quiz(content, seed):
+    rng = random.Random(seed + 3000)
+
+    # サブタイトル → 学習目標の順でパターンを探す
+    patterns = extract_key_patterns(content.get("subtitle", ""))
+    if not patterns:
+        patterns = extract_key_patterns(content.get("learning_goal", ""))
+    if not patterns:
+        for g in content.get("grammar", []):
+            patterns = extract_key_patterns(g)
+            if patterns:
+                break
+    if not patterns:
         return []
-    rng = random.Random(seed + 1000)
-    candidates = list(BATCHIM.items())   # [(idx, char), ...]
-    rng.shuffle(candidates)
 
-    questions = []
-    for batchim_idx, batchim_char in candidates:
-        count = count_batchim(korean_texts, batchim_idx)
-        if count < 2:
+    patterns_sorted = sorted(set(patterns), key=len, reverse=True)
+
+    # 例文・対話から候補文を集める
+    all_sentences = []
+    for e in content.get("examples", []):
+        all_sentences.append({"korean": e["korean"], "japanese": e.get("japanese", "")})
+    for d in content.get("dialogues", []):
+        if d.get("japanese"):
+            all_sentences.append({"korean": d["korean"], "japanese": d["japanese"]})
+
+    candidates = []
+    used_answers = set()
+    for item in all_sentences:
+        ko = item["korean"]
+        jp = item.get("japanese", "")
+        if not ko or not jp:
             continue
-        spread = [max(0, count - 1), count, count + 1, count + 2]
-        opts = sorted(set(spread))[:4]
-        while len(opts) < 4:
-            opts.append(opts[-1] + 1)
-        rng.shuffle(opts)
-        questions.append({
-            "question": f"例文中に「{batchim_char}」の받침（パッチム）を持つ文字はいくつある？",
-            "options":  [f"{n}個" for n in opts],
-            "answer":   f"{count}個",
-            "explain":  f"「{batchim_char}」の받침を持つ文字は{count}個あります。",
-        })
-        if len(questions) == 2:
+        for pat in patterns_sorted:
+            if pat in ko and pat not in used_answers:
+                blanked = ko.replace(pat, "____", 1)
+                if blanked != ko:
+                    candidates.append({
+                        "question": blanked,
+                        "answer": pat,
+                        "original": ko,
+                        "hint": jp,
+                    })
+                    used_answers.add(pat)
+                    break
+        if len(candidates) >= 4:
             break
 
-    return questions
+    if not candidates:
+        return []
+
+    return rng.sample(candidates, min(2, len(candidates)))
 
 
 # ─── メイン ──────────────────────────────────────────────────────
@@ -448,6 +467,29 @@ def main():
 
         st.markdown("</div>", unsafe_allow_html=True)
 
+    # 穴埋め問題
+    cloze_qs = generate_cloze_quiz(content, seed=selected_num)
+    if cloze_qs:
+        st.markdown("### ✏️ 穴埋め問題")
+        st.caption("____に入る言葉を入力して「答えを見る」を押してください。")
+        for i, q in enumerate(cloze_qs):
+            st.write(f"**{BADGE[i]} 「{q['question']}」**")
+            if q.get("hint"):
+                st.caption(f"意味：{q['hint']}")
+            user_input = st.text_input(
+                "答えを入力：",
+                key=f"cloze_{selected_num}_{i}",
+                placeholder=f"例）{q['answer'][0]}..."
+            )
+            if st.button("答えを見る", key=f"cloze_btn_{selected_num}_{i}"):
+                if user_input.strip() == q["answer"]:
+                    st.success(f"✅ 正解！　→　{q['original']}")
+                elif user_input.strip():
+                    st.error(f"❌ 正解は「{q['answer']}」　→　{q['original']}")
+                else:
+                    st.info(f"💡 正解：「{q['answer']}」　→　{q['original']}")
+            st.write("")
+
     # セリフ解説
     if content["dialogues"]:
         with st.expander("💡 セリフの解説を見る"):
@@ -459,17 +501,32 @@ def main():
                     line += f"　：　{jp}"
                 st.write(line)
 
-    # 練習問題
+    # 作文・練習問題（Wordファイルの内容をそのまま表示）
     if content["basic"] or content["applied"]:
-        with st.expander("📝 練習問題"):
+        with st.expander("📝 作文・練習問題"):
             if content["basic"]:
                 st.markdown("**基本練習**")
-                for line in content["basic"]:
+                for j, line in enumerate(content["basic"]):
                     st.write(line)
+                    # 問題行（番号・記号で始まる行）には解答欄を設ける
+                    if re.match(r"^[\d①②③④⑤⑥⑦⑧⑨⑩（(]", line):
+                        st.text_area(
+                            "解答：",
+                            key=f"basic_{selected_num}_{j}",
+                            height=60,
+                            label_visibility="collapsed",
+                        )
             if content["applied"]:
                 st.markdown("**応用問題**")
-                for line in content["applied"]:
+                for j, line in enumerate(content["applied"]):
                     st.write(line)
+                    if re.match(r"^[\d①②③④⑤⑥⑦⑧⑨⑩（(]", line):
+                        st.text_area(
+                            "解答：",
+                            key=f"applied_{selected_num}_{j}",
+                            height=60,
+                            label_visibility="collapsed",
+                        )
 
 
 if __name__ == "__main__":
