@@ -172,6 +172,21 @@ _DIALOGUE_RE = re.compile(
 )
 
 
+def _is_valid_dialogue(text: str) -> bool:
+    """対話として有効な行かを判定する。
+    除外条件:
+      1. 韓国語文字が3文字未満（日本語のみの行など）
+      2. スラッシュ区切りの単語リスト（練習ヒント行）
+    """
+    ko_count = sum(1 for c in text if "가" <= c <= "힣")
+    if ko_count < 3:
+        return False
+    # 韓国語文字から3文字以内にスラッシュがある練習ヒント行を除外
+    if re.search(r"[가-힣].{0,3}[/／]", text):
+        return False
+    return True
+
+
 def parse_chapter(filepath):
     doc = docx.Document(filepath)
     paras = [p.text.strip() for p in doc.paragraphs if p.text.strip()]
@@ -221,8 +236,11 @@ def parse_chapter(filepath):
         if section == "grammar":
             dm = _DIALOGUE_RE.match(text)
             if dm:
+                raw = dm.group(2).strip()
+                if not _is_valid_dialogue(raw):
+                    continue
                 sp = dm.group(1).translate(str.maketrans("ＡＢＣＤabcd", "ABCDabcd")).upper()
-                ko, jp = split_ko_jp(dm.group(2).strip())
+                ko, jp = split_ko_jp(raw)
                 result["dialogues"].append({"speaker": sp, "korean": ko, "japanese": jp})
                 result["korean_texts"].append(ko)
                 if jp:
