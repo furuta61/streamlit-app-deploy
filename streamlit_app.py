@@ -6,6 +6,28 @@ import random
 
 WORD_DIR = os.path.join(os.path.dirname(__file__), "word_files")
 
+# 大阪弁バージョン（単元番号→内容）
+OSAKA_RULES = {
+    "12": {
+        "standard": "### 📘 第12課：〜してあげる／くれる (-아/어 주다)\n相手のために何かをする親切の表現です。",
+        "osaka": "### 🐙 第12課：〜したるわ／してくれへん？\n相手のために動くときの優しい表現やで。",
+        "advanced": "東京外大モジュールでは、日本語の「〜してもらう」に相当する独自の文法が韓国語にはない点を指摘しています。",
+    },
+    "13": {"standard": "### 📘 第13課：〜すれば／なら (-면/으면)", "osaka": "### 🐙 第13課：〜やったら／すれば"},
+    "14": {"standard": "### 📘 第14課：〜しましょうか／でしょうか (-ㄹ까요/을까요?)", "osaka": "### 🐙 第14課：〜しよか？／〜やろか？"},
+    "15": {"standard": "### 📘 第15課：〜でしょう？ (-지요/죠)", "osaka": "### 🐙 第15課：〜やんな？／〜やろ？"},
+    "16": {"standard": "### 📘 第16課：〜しましょう (-ㅂ시다/읍시다)", "osaka": "### 🐙 第16課：〜しよや！"},
+    "17": {"standard": "### 📘 第17課：〜するつもり／だろう (-겠)", "osaka": "### 🐙 第17課：〜するわ／〜やろなぁ"},
+    "18": {"standard": "### 📘 第18課：〜しに（行く・来る） (-러/으러)", "osaka": "### 🐙 第18課：〜しに（行くんや）"},
+    "19": {"standard": "### 📘 第19課：〜している（進行・習慣） (-고 있다)", "osaka": "### 🐙 第19課：〜してんねん！"},
+    "20": {"standard": "### 📘 第20課：〜している（結果の状態） (-아/어 있다)", "osaka": "### 🐙 第20課：〜しとる状態や"},
+    "21": {"standard": "### 📘 第21課：否定 (안 / -지 않다)", "osaka": "### 🐙 第21課：〜せえへん"},
+    "22": {"standard": "### 📘 第22課：尊敬 (-(으)시-)", "osaka": "### 🐙 第22課：〜してはる"},
+    "23": {"standard": "### 📘 第23課：名詞＋(이)요", "osaka": "### 🐙 第23課：〜やで／〜ですよ"},
+    "24": {"standard": "### 📘 第24課：〜ではあるけれど (-기는 하지만)", "osaka": "### 🐙 第24課：〜やけども"},
+    "25": {"standard": "### 📘 第25課：意志・約束 (-ㄹ게요)", "osaka": "### 🐙 第25課：〜するわ！"},
+}
+
 BADGE = ["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩","⑪","⑫"]
 
 # 받침インデックス→文字
@@ -354,6 +376,8 @@ def main():
         idx = labels.index(selected_label)
         selected_num, selected_path = chapters[idx]
         st.markdown("---")
+        tone = st.radio("🗣 バージョン", ["standard", "osaka"], horizontal=True)
+        st.markdown("---")
         st.caption(f"全 {len(chapters)} 課")
 
     content = parse_chapter(selected_path)
@@ -371,14 +395,30 @@ def main():
             for line in content["grammar"]:
                 st.write(line)
 
+    # 大阪弁補足説明
+    unit_key = str(selected_num)
+    if unit_key in OSAKA_RULES:
+        rule = OSAKA_RULES[unit_key]
+        if tone == "osaka" and rule.get("osaka"):
+            with st.expander("🐙 大阪弁バージョン", expanded=True):
+                st.markdown(rule["osaka"])
+        if rule.get("advanced"):
+            with st.expander("💡 発展解説（東京外国語大学 朝鮮語文法モジュール参考）"):
+                st.markdown(rule["advanced"])
+    else:
+        with st.expander("💡 発展解説（国立国語院・東京外国語大学 参考）"):
+            st.markdown(
+                "国立国語院（한국어문법 통합자료）および"
+                "東京外国語大学『朝鮮語文法モジュール』を参考に、"
+                "使い分けや補足情報を提供しています。"
+            )
+
     # チャット
     if content["dialogues"]:
         st.markdown(build_chat_html(content["dialogues"]), unsafe_allow_html=True)
 
-    # クイズ（翻訳 → 不足時はカウント形式）
+    # クイズ（翻訳のみ）
     questions = generate_translation_quiz(content["examples"], seed=selected_num)
-    if not questions:
-        questions = generate_counting_quiz(content["korean_texts"], seed=selected_num)
 
     if questions:
         st.markdown("### 📝 Work")
